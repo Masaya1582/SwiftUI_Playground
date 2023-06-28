@@ -28,7 +28,7 @@ struct HomeView: View {
                     HStack {
                         ZStack {
                             Circle()
-                                .foregroundColor(.orange)
+                                .foregroundColor(.green)
                                 .frame(width: 24)
                             Text("\(president[index].id)")
                                 .foregroundColor(.white)
