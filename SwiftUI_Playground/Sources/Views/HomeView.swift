@@ -8,14 +8,25 @@
 import SwiftUI
 
 struct HomeView: View {
+    @ObservedObject private var homeViewModel = HomeViewModel()
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        VStack(spacing: 20) {
+            ForEach(0..<homeViewModel.toastArray.count, id: \.self) { index in
+                Button {
+                    homeViewModel.toast = homeViewModel.toastArray[index]
+                } label: {
+                    Text("\(homeViewModel.toastTitleArray[index])")
+                        .font(.largeTitle)
+                        .foregroundColor(.white)
+                }
+                .padding()
+                .frame(width: 300, height: 80)
+                .background(homeViewModel.toastColorArray[index])
+                .cornerRadius(16)
+            }
         }
-        .padding()
+        .toastView(toast: $homeViewModel.toast)
     }
 }
 
