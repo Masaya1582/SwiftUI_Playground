@@ -8,19 +8,38 @@
 import SwiftUI
 
 struct HomeView: View {
+    let dismissAction: (() -> Void)
+    @State private var showWebView = false
+    private let url = URL(string: "http://abehiroshi.la.coocan.jp/")
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        NavigationView {
+            VStack {
+                NavigationLink(
+                    destination: SafariView(url: url!, onDismiss: { showWebView = false })
+                        .navigationBarHidden(true)
+                        .ignoresSafeArea(),
+                    isActive: $showWebView
+                ) {
+                    Button(action: {
+                        showWebView = true
+                    }, label: {
+                        Text("Show WebView")
+                            .font(.system(size: 32, weight: .bold))
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.orange)
+                    })
+                }
+            }
         }
-        .padding()
     }
 }
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        HomeView(
+            dismissAction: {}
+        )
     }
 }
