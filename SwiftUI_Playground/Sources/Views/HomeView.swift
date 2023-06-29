@@ -6,16 +6,20 @@
 //
 
 import SwiftUI
+import MapKit
+
+struct MapView: UIViewRepresentable {
+    func makeUIView(context: Context) -> MKMapView {
+        return MKMapView()
+    }
+    func updateUIView(_ uiView: MKMapView, context: Context) {
+    }
+}
 
 struct HomeView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
-        }
-        .padding()
+        MapView()
+            .ignoresSafeArea()
     }
 }
 
