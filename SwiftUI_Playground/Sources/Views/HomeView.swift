@@ -8,14 +8,35 @@
 import SwiftUI
 
 struct HomeView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+    @State private var name: String = ""
+    private let president: [String] = ["Joe Biden", "Donald Trump", "George Bush", "Barack Obama", "Thomas Jefferson"]
+    private var filterPresidents: [String] {
+        // TextField未入力時は全てを表示
+        if name.isEmpty {
+            return president
+        } else {
+            // 入力値をFilterして表示するものを指定する
+            return president.filter { $0.uppercased().contains(name.uppercased())}
         }
-        .padding()
+    }
+
+    var body: some View {
+        ScrollView {
+            LazyVStack(spacing: 48) {
+                TextField("Search US Presidents", text: $name)
+                    .modifier(ClearButton(name: $name))
+                    .padding(8)
+                    .frame(width: 320, height: 32)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                ForEach(filterPresidents, id: \.self) { president in
+                    VStack(alignment: .leading) {
+                        Text(president)
+                            .padding(.leading, 12)
+                        Divider()
+                    }
+                }
+            }
+        }
     }
 }
 
