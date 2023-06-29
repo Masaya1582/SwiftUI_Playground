@@ -8,12 +8,39 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var textFieldInput: String = ""
+    @FocusState private var foucusValue: Bool
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        VStack(spacing: 32) {
+            Text("Focus: \(foucusValue == true ? "True" : "False" )")
+                .font(.system(size: 24, weight: .bold))
+
+            TextField("Your Texts Here", text: $textFieldInput)
+                .focused($foucusValue)
+                .textFieldStyle(.roundedBorder)
+
+            Button(action: {
+                foucusValue = true
+            }, label: {
+                Text("Focus on TextField")
+                    .font(.system(size: 24, weight: .bold))
+                    .frame(width: 300, height: 60, alignment: .center)
+                    .foregroundColor(.white)
+                    .background(.orange)
+                    .cornerRadius(12)
+            })
+
+            Button(action: {
+                foucusValue = false
+            }, label: {
+                Text("Unfocus TextField")
+                    .font(.system(size: 24, weight: .bold))
+                    .frame(width: 300, height: 60, alignment: .center)
+                    .foregroundColor(.white)
+                    .background(.green)
+                    .cornerRadius(12)
+            })
         }
         .padding()
     }
