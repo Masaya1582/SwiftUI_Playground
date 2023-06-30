@@ -19,9 +19,11 @@
 		4011E88B2A4976DA003F06BF /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E88A2A4976DA003F06BF /* Fonts.swift */; };
 		4011E88D2A4976EC003F06BF /* Caprasimo-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4011E88C2A4976EC003F06BF /* Caprasimo-Regular.ttf */; };
 		4011E88F2A497727003F06BF /* DefaultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E88E2A497727003F06BF /* DefaultViewModel.swift */; };
+		CABC9E129CED010448D92EF8 /* Pods_SwiftUI_Playground.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3977D086BE021AF13A042E9A /* Pods_SwiftUI_Playground.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3977D086BE021AF13A042E9A /* Pods_SwiftUI_Playground.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftUI_Playground.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4011E8652A49759C003F06BF /* SwiftUI_Playground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftUI_Playground.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4011E8682A49759C003F06BF /* SwiftUI_PlaygroundApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUI_PlaygroundApp.swift; sourceTree = "<group>"; };
 		4011E86A2A49759C003F06BF /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -35,6 +37,8 @@
 		4011E88A2A4976DA003F06BF /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		4011E88C2A4976EC003F06BF /* Caprasimo-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Caprasimo-Regular.ttf"; sourceTree = "<group>"; };
 		4011E88E2A497727003F06BF /* DefaultViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultViewModel.swift; sourceTree = "<group>"; };
+		FB2CBA843BD61E4CE3D7815E /* Pods-SwiftUI_Playground.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftUI_Playground.release.xcconfig"; path = "Target Support Files/Pods-SwiftUI_Playground/Pods-SwiftUI_Playground.release.xcconfig"; sourceTree = "<group>"; };
+		FB37E298E5BFB61BA5FA76C3 /* Pods-SwiftUI_Playground.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftUI_Playground.debug.xcconfig"; path = "Target Support Files/Pods-SwiftUI_Playground/Pods-SwiftUI_Playground.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CABC9E129CED010448D92EF8 /* Pods_SwiftUI_Playground.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,6 +58,8 @@
 			children = (
 				4011E8672A49759C003F06BF /* SwiftUI_Playground */,
 				4011E8662A49759C003F06BF /* Products */,
+				8B41F3A400A6B794A15043A0 /* Pods */,
+				F7B1AEA285405458D0FBFE5C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -147,6 +154,24 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		8B41F3A400A6B794A15043A0 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				FB37E298E5BFB61BA5FA76C3 /* Pods-SwiftUI_Playground.debug.xcconfig */,
+				FB2CBA843BD61E4CE3D7815E /* Pods-SwiftUI_Playground.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		F7B1AEA285405458D0FBFE5C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3977D086BE021AF13A042E9A /* Pods_SwiftUI_Playground.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -154,9 +179,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4011E8732A49759D003F06BF /* Build configuration list for PBXNativeTarget "SwiftUI_Playground" */;
 			buildPhases = (
+				DFBBD629AC954EA4ABE7499C /* [CP] Check Pods Manifest.lock */,
 				4011E8612A49759C003F06BF /* Sources */,
 				4011E8622A49759C003F06BF /* Frameworks */,
 				4011E8632A49759C003F06BF /* Resources */,
+				5895DF3215DF711AF3BF577F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -214,6 +241,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5895DF3215DF711AF3BF577F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SwiftUI_Playground/Pods-SwiftUI_Playground-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SwiftUI_Playground/Pods-SwiftUI_Playground-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SwiftUI_Playground/Pods-SwiftUI_Playground-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DFBBD629AC954EA4ABE7499C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SwiftUI_Playground-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4011E8612A49759C003F06BF /* Sources */ = {
@@ -349,6 +418,7 @@
 		};
 		4011E8742A49759D003F06BF /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FB37E298E5BFB61BA5FA76C3 /* Pods-SwiftUI_Playground.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -381,6 +451,7 @@
 		};
 		4011E8752A49759D003F06BF /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FB2CBA843BD61E4CE3D7815E /* Pods-SwiftUI_Playground.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
