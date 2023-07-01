@@ -11,14 +11,16 @@
 		4011E86B2A49759C003F06BF /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E86A2A49759C003F06BF /* HomeView.swift */; };
 		4011E86D2A49759D003F06BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4011E86C2A49759D003F06BF /* Assets.xcassets */; };
 		4011E8702A49759D003F06BF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4011E86F2A49759D003F06BF /* Preview Assets.xcassets */; };
-		4011E87E2A497644003F06BF /* DefaultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E87D2A497644003F06BF /* DefaultModel.swift */; };
+		4011E87E2A497644003F06BF /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E87D2A497644003F06BF /* User.swift */; };
 		4011E8822A49769B003F06BF /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4011E8812A49769B003F06BF /* Colors.xcassets */; };
 		4011E8842A4976AA003F06BF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4011E8832A4976AA003F06BF /* Localizable.strings */; };
 		4011E8872A4976C9003F06BF /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E8862A4976C9003F06BF /* Assets.swift */; };
 		4011E8892A4976D0003F06BF /* LocalizableStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E8882A4976D0003F06BF /* LocalizableStrings.swift */; };
 		4011E88B2A4976DA003F06BF /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E88A2A4976DA003F06BF /* Fonts.swift */; };
 		4011E88D2A4976EC003F06BF /* Caprasimo-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4011E88C2A4976EC003F06BF /* Caprasimo-Regular.ttf */; };
-		4011E88F2A497727003F06BF /* DefaultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E88E2A497727003F06BF /* DefaultViewModel.swift */; };
+		4011E88F2A497727003F06BF /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E88E2A497727003F06BF /* HomeViewModel.swift */; };
+		40779B662A501FB400505ABD /* AddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40779B652A501FB400505ABD /* AddItemView.swift */; };
+		40779B682A501FDB00505ABD /* AddItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40779B672A501FDB00505ABD /* AddItemViewModel.swift */; };
 		CABC9E129CED010448D92EF8 /* Pods_SwiftUI_Playground.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3977D086BE021AF13A042E9A /* Pods_SwiftUI_Playground.framework */; };
 /* End PBXBuildFile section */
 
@@ -29,14 +31,16 @@
 		4011E86A2A49759C003F06BF /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		4011E86C2A49759D003F06BF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4011E86F2A49759D003F06BF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		4011E87D2A497644003F06BF /* DefaultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultModel.swift; sourceTree = "<group>"; };
+		4011E87D2A497644003F06BF /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		4011E8812A49769B003F06BF /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		4011E8832A4976AA003F06BF /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		4011E8862A4976C9003F06BF /* Assets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
 		4011E8882A4976D0003F06BF /* LocalizableStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizableStrings.swift; sourceTree = "<group>"; };
 		4011E88A2A4976DA003F06BF /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		4011E88C2A4976EC003F06BF /* Caprasimo-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Caprasimo-Regular.ttf"; sourceTree = "<group>"; };
-		4011E88E2A497727003F06BF /* DefaultViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultViewModel.swift; sourceTree = "<group>"; };
+		4011E88E2A497727003F06BF /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		40779B652A501FB400505ABD /* AddItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemView.swift; sourceTree = "<group>"; };
+		40779B672A501FDB00505ABD /* AddItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemViewModel.swift; sourceTree = "<group>"; };
 		FB2CBA843BD61E4CE3D7815E /* Pods-SwiftUI_Playground.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftUI_Playground.release.xcconfig"; path = "Target Support Files/Pods-SwiftUI_Playground/Pods-SwiftUI_Playground.release.xcconfig"; sourceTree = "<group>"; };
 		FB37E298E5BFB61BA5FA76C3 /* Pods-SwiftUI_Playground.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftUI_Playground.debug.xcconfig"; path = "Target Support Files/Pods-SwiftUI_Playground/Pods-SwiftUI_Playground.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -125,7 +129,8 @@
 		4011E87A2A497628003F06BF /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				4011E88E2A497727003F06BF /* DefaultViewModel.swift */,
+				4011E88E2A497727003F06BF /* HomeViewModel.swift */,
+				40779B672A501FDB00505ABD /* AddItemViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -134,6 +139,7 @@
 			isa = PBXGroup;
 			children = (
 				4011E86A2A49759C003F06BF /* HomeView.swift */,
+				40779B652A501FB400505ABD /* AddItemView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -141,7 +147,7 @@
 		4011E87C2A497630003F06BF /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				4011E87D2A497644003F06BF /* DefaultModel.swift */,
+				4011E87D2A497644003F06BF /* User.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -183,7 +189,6 @@
 				4011E8622A49759C003F06BF /* Frameworks */,
 				4011E8632A49759C003F06BF /* Resources */,
 				5895DF3215DF711AF3BF577F /* [CP] Embed Pods Frameworks */,
-				40779B5A2A4EDE0700505ABD /* SwiftLint */,
 			);
 			buildRules = (
 			);
@@ -243,26 +248,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		40779B5A2A4EDE0700505ABD /* SwiftLint */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = SwiftLint;
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint >/dev/null; then\n  swiftlint autocorrect --format # 自動修正の有効化\n  swiftlint\nelse\n  echo \"SwiftLint does not exist, download from https://github.com/realm/SwiftLint\"\nfi\n";
-			showEnvVarsInLog = 0;
-		};
 		5895DF3215DF711AF3BF577F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -312,10 +297,12 @@
 				4011E88B2A4976DA003F06BF /* Fonts.swift in Sources */,
 				4011E86B2A49759C003F06BF /* HomeView.swift in Sources */,
 				4011E8892A4976D0003F06BF /* LocalizableStrings.swift in Sources */,
-				4011E88F2A497727003F06BF /* DefaultViewModel.swift in Sources */,
-				4011E87E2A497644003F06BF /* DefaultModel.swift in Sources */,
+				4011E88F2A497727003F06BF /* HomeViewModel.swift in Sources */,
+				4011E87E2A497644003F06BF /* User.swift in Sources */,
 				4011E8872A4976C9003F06BF /* Assets.swift in Sources */,
 				4011E8692A49759C003F06BF /* SwiftUI_PlaygroundApp.swift in Sources */,
+				40779B682A501FDB00505ABD /* AddItemViewModel.swift in Sources */,
+				40779B662A501FB400505ABD /* AddItemView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
