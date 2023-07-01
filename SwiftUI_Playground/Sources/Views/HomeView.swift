@@ -9,13 +9,37 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        TabView {
+            FirstView()
+                .tabItem {
+                    // タブの画像
+                    Image(systemName: "face.smiling")
+                    // タブ下のテキスト
+                    Text("First")
+                }
+            SecondView()
+                .tabItem {
+                    Image(systemName: "play.rectangle.fill")
+                    Text("Second")
+                }
+            ThirdView()
+                .tabItem {
+                    Image(systemName: "mic.slash.fill")
+                    Text("Third")
+                }
+            ForthView()
+                .tabItem {
+                    Image(systemName: "sunrise.fill")
+                    Text("Forth")
+                }
+            FifthView()
+                .tabItem {
+                    Image(systemName: "bolt.circle.fill")
+                    Text("Fifth")
+                }
         }
-        .padding()
+        // タブのカラーを指定
+        .accentColor(.orange)
     }
 }
 
