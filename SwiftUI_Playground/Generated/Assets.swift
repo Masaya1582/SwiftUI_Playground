@@ -31,6 +31,9 @@ internal enum Asset {
   internal enum Colors {
     internal static let backgroundColor = ColorAsset(name: "background_color")
     internal static let mainColor = ColorAsset(name: "main_color")
+    internal static let signalCareful = ColorAsset(name: "signal_careful")
+    internal static let signalGo = ColorAsset(name: "signal_go")
+    internal static let signalStop = ColorAsset(name: "signal_stop")
   }
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
