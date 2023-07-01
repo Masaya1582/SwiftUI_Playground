@@ -8,14 +8,30 @@
 import SwiftUI
 
 struct HomeView: View {
+
+    @State private var isShowModalView = false
+
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+            NavigationView {
+                VStack(spacing: 60) {
+                    NavigationLink(destination: MyNavigationView().navigationTitle("遷移先だよ")) {
+                        Text("Navigation遷移する")
+                            .modifier(ButtonModifier(foregroundColor: .white, backgroundColor: .orange))
+                    }
+                    Button {
+                        isShowModalView.toggle()
+                    } label: {
+                        Text("Modal遷移する")
+                            .modifier(ButtonModifier(foregroundColor: .white, backgroundColor: .green))
+                    }
+                    .sheet(isPresented: $isShowModalView) {
+                        ModalView()
+                    }
+                }
+                .navigationTitle("HomeView")
+            }
         }
-        .padding()
     }
 }
 
