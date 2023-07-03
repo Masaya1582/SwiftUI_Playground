@@ -34,19 +34,19 @@ struct HomeView: View {
         }
     }
 
-    func convert(number: Double) -> String {
+    private func convert(number: Double) -> String {
         let integer: Int = Int(number)
         let fraction: Double = number.truncatingRemainder(dividingBy: 1)
         return intToBinaryNumberString(number: integer) + "." + doubleToBinaryNumberString(number: fraction)
     }
 
-    func intToBinaryNumberString(number: Int) -> String {
+    private func intToBinaryNumberString(number: Int) -> String {
         let remainder: Int = number % 2
         return number / 2 == 0 ? String(remainder) : String(remainder) + intToBinaryNumberString(number: number / 2)
         // or return String(num, radix: 2)
     }
 
-    func doubleToBinaryNumberString(number: Double) -> String {
+    private func doubleToBinaryNumberString(number: Double) -> String {
         var number = number
         var result: String = ""
         for _ in 0...6 {
