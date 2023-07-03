@@ -8,15 +8,42 @@
 import SwiftUI
 
 struct HomeView: View {
+    private let presidents: [String] = ["Joe Biden", "Donald Trump", "George W. Bush"]
+    @State private var resultString = "Left or Right"
+
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+            List(presidents, id: \.self) { president in
+                HStack(alignment: .center) {
+                    Text(president)
+                    Spacer()
+                    Button {
+                        resultString = "\(president) Left"
+                    } label: {
+                        Text("Left")
+                            .padding()
+                            .border(Color.black)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    Button {
+                        resultString = "\(president) Right"
+                    } label: {
+                        Text("Right")
+                            .padding()
+                            .border(Color.black)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    resultString = "\(president) Cell"
+                }
+            }
+            Text(resultString)
+                .font(.custom(FontFamily.Caprasimo.regular, size: 28))
         }
-        .padding()
     }
+
 }
 
 struct HomeView_Previews: PreviewProvider {
