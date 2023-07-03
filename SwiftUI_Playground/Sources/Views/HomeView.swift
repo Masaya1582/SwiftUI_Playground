@@ -8,14 +8,41 @@
 import SwiftUI
 
 struct HomeView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+    // MARK: - ModalSheetItem
+    enum ModalSheetItem: Identifiable {
+        case nonomura
+        case samuragochi
+        var id: Int {
+            hashValue
         }
-        .padding()
+    }
+
+    @State private var sheetItem: ModalSheetItem?
+
+    var body: some View {
+        VStack(spacing: 32) {
+            Button {
+                sheetItem = .nonomura
+            } label: {
+                Text("Show Nonomura")
+                    .modifier(ButtonModifier(foregroundColor: .white, backgroundColor: Asset.Colors.mainColor.swiftUIColor))
+            }
+
+            Button {
+                sheetItem = .samuragochi
+            } label: {
+                Text("Show Samuragochi")
+                    .modifier(ButtonModifier(foregroundColor: .white, backgroundColor: Asset.Colors.backgroundColor.swiftUIColor))
+            }
+        }
+        .sheet(item: $sheetItem) { modalItem in
+            switch modalItem {
+            case .nonomura:
+                NonomuraView()
+            case .samuragochi:
+                SamuragochiView()
+            }
+        }
     }
 }
 
