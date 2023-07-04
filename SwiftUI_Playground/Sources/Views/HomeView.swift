@@ -8,14 +8,26 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var name: String = ""
+    @State private var onEditing: Bool = false
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        ZStack {
+            Asset.Colors.backgroundColor.swiftUIColor
+                .ignoresSafeArea()
+            VStack {
+                Text(onEditing ? "On Editing" : "Not On Editing")
+                    .font(.custom(FontFamily.Caprasimo.regular, size: 20))
+                TextField("Your Name", text: $name, onEditingChanged: { onEditing in
+                    print("onEditingChanged: \(onEditing)")
+                    self.onEditing = onEditing
+                }, onCommit: {
+                    print("onCommit")
+                })
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
+            }
         }
-        .padding()
     }
 }
 
