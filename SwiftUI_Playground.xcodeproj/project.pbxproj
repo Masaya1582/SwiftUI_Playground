@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E5962BB2A53E60700A49CF0 /* TapplableMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5962BA2A53E60700A49CF0 /* TapplableMapView.swift */; };
 		4011E8692A49759C003F06BF /* SwiftUI_PlaygroundApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E8682A49759C003F06BF /* SwiftUI_PlaygroundApp.swift */; };
 		4011E86B2A49759C003F06BF /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E86A2A49759C003F06BF /* HomeView.swift */; };
 		4011E86D2A49759D003F06BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4011E86C2A49759D003F06BF /* Assets.xcassets */; };
@@ -24,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1E5962BA2A53E60700A49CF0 /* TapplableMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapplableMapView.swift; sourceTree = "<group>"; };
 		3977D086BE021AF13A042E9A /* Pods_SwiftUI_Playground.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftUI_Playground.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4011E8652A49759C003F06BF /* SwiftUI_Playground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftUI_Playground.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4011E8682A49759C003F06BF /* SwiftUI_PlaygroundApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUI_PlaygroundApp.swift; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				4011E86A2A49759C003F06BF /* HomeView.swift */,
+				1E5962BA2A53E60700A49CF0 /* TapplableMapView.swift */,
 				40779B7B2A528D2800505ABD /* Modifiers */,
 			);
 			path = Views;
@@ -325,6 +328,7 @@
 				40779B7D2A528D3200505ABD /* ButtonModifier.swift in Sources */,
 				4011E8892A4976D0003F06BF /* LocalizableStrings.swift in Sources */,
 				4011E88F2A497727003F06BF /* DefaultViewModel.swift in Sources */,
+				1E5962BB2A53E60700A49CF0 /* TapplableMapView.swift in Sources */,
 				4011E87E2A497644003F06BF /* DefaultModel.swift in Sources */,
 				4011E8872A4976C9003F06BF /* Assets.swift in Sources */,
 				4011E8692A49759C003F06BF /* SwiftUI_PlaygroundApp.swift in Sources */,
