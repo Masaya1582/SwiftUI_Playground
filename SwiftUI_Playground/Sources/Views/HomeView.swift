@@ -9,13 +9,13 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
-        }
-        .padding()
+        ScrollView {
+            VStack(spacing: 24) {
+                ShowMoreView(text: L10n.trumpOne)
+                ShowMoreView(text: L10n.trumpTwo)
+                ShowMoreView(text: L10n.trumpThree)
+            }
+        }        
     }
 }
 
