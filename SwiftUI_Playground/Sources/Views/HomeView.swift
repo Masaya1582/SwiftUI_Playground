@@ -8,14 +8,17 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var views = [
+        TutorialView(image: Asset.Assets.kizaki.image, text: "Kizaki"),
+        TutorialView(image: Asset.Assets.nonomura.image, text: "Nonomura"),
+        TutorialView(image: Asset.Assets.obokata.image, text: "Obokata"),
+        TutorialView(image: Asset.Assets.samuragochi.image, text: "Samuragochi")
+    ]
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
-        }
-        .padding()
+        PageView(views)
+            .background(Color.white)
+            .edgesIgnoringSafeArea(.all)
     }
 }
 
