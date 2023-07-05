@@ -5,8 +5,8 @@
 //  Created by MasayaNakakuki on 2023/06/26.
 //
 
- import RxSwift
- import RxCocoa
+import RxSwift
+import RxCocoa
 
 protocol DefaultViewModelInputs: AnyObject {
 
@@ -26,7 +26,7 @@ class DefaultViewModel: DefaultViewModelType, DefaultViewModelInputs, DefaultVie
     var inputs: DefaultViewModelInputs { return self }
     var outputs: DefaultViewModelOutputs { return self }
 
-     private let disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
 
     init() {
         
