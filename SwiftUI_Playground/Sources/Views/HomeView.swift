@@ -8,14 +8,34 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var pokemon = PokemonType(name: "ピカチュウ", type: "カミナリ", level: 50) // インスタンス化
+
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+            Text("名前: \(pokemon.name)")
+                .font(.largeTitle)
+                .padding()
+            Text("タイプ: \(pokemon.type)")
+                .font(.largeTitle)
+                .padding()
+            Text("レベル: \(pokemon.level)")
+                .font(.largeTitle)
+                .padding()
+            Button { // ボタンを押したらポッチャマの情報に変更する
+                pokemon.name = "ポッチャマ"
+                pokemon.type = "みず"
+                pokemon.level = 99
+            } label: {
+                Text("ポッチャマに変更")
+            }
+            .padding()
+            .frame(width: UIScreen.main.bounds.width / 1.2)
+            .font(.largeTitle)
+            .foregroundColor(Color.white)
+            .background(.orange)
+            .cornerRadius(18)
+            .padding()
         }
-        .padding()
     }
 }
 
