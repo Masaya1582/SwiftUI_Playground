@@ -8,45 +8,21 @@
 import SwiftUI
 
 struct HomeView: View {
+    private let touchTypes: [UIImpactFeedbackGenerator.FeedbackStyle] = [.light, .medium, .heavy, .soft, .rigid]
+    private let buttonLabels = ["Light Touch", "Medium Touch", "Heavy Touch", "Soft Touch", "Rigid Touch"]
+
     var body: some View {
         VStack(spacing: 40) {
-            Button {
-                let generator = UIImpactFeedbackGenerator(style: .light)
-                generator.impactOccurred()
-            } label: {
-                Text("Light Touch")
-                    .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            }
-            Button {
-                let generator = UIImpactFeedbackGenerator(style: .medium)
-                generator.impactOccurred()
-            } label: {
-                Text("Midium Touch")
-                    .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            }
-            Button {
-                let generator = UIImpactFeedbackGenerator(style: .heavy)
-                generator.impactOccurred()
-            } label: {
-                Text("Heavy Touch")
-                    .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            }
-            Button {
-                let generator = UIImpactFeedbackGenerator(style: .soft)
-                generator.impactOccurred()
-            } label: {
-                Text("Soft Touch")
-                    .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            }
-            Button {
-                let generator = UIImpactFeedbackGenerator(style: .rigid)
-                generator.impactOccurred()
-            } label: {
-                Text("Rigid Touch")
-                    .font(.custom(FontFamily.Caprasimo.regular, size: 42))
+            ForEach(0..<touchTypes.count, id: \.self) { index in
+                Button {
+                    let generator = UIImpactFeedbackGenerator(style: touchTypes[index])
+                    generator.impactOccurred()
+                } label: {
+                    Text(buttonLabels[index])
+                        .font(.custom(FontFamily.Caprasimo.regular, size: 42))
+                }
             }
         }
-        .padding()
     }
 }
 
