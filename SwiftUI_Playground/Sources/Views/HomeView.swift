@@ -8,14 +8,43 @@
 import SwiftUI
 
 struct HomeView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+    @State private var unreadNotifications: Int = 0
+
+    // 99以上の場合と0の時を考慮
+    var badgeValue: String? {
+        if unreadNotifications > 99 {
+            return "99+"
+        } else if unreadNotifications == 0 {
+            return nil
+        } else {
+            return unreadNotifications.description
         }
-        .padding()
+    }
+
+    var body: some View {
+        TabView {
+            Group {
+                Text("Home")
+                    .tabItem {
+                        Label("Home", systemImage: "house")
+                    }
+                Text("Search")
+                    .tabItem {
+                        Label("Search", systemImage: "magnifyingglass")
+                    }
+                    .badge("99+")
+                Text("Notification")
+                    .tabItem {
+                        Label("Notification", systemImage: "bell")
+                    }
+                    .badge(badgeValue)
+                Text("Settings")
+                    .tabItem {
+                        Label("Settings", systemImage: "gearshape")
+                    }
+                    .badge("New")
+            }
+        }
     }
 }
 
