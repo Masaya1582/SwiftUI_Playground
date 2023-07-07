@@ -8,14 +8,21 @@
 import SwiftUI
 
 struct HomeView: View {
+    private let touchTypes: [UIImpactFeedbackGenerator.FeedbackStyle] = [.light, .medium, .heavy, .soft, .rigid]
+    private let buttonLabels = ["Light Touch", "Medium Touch", "Heavy Touch", "Soft Touch", "Rigid Touch"]
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        VStack(spacing: 40) {
+            ForEach(0..<touchTypes.count, id: \.self) { index in
+                Button {
+                    let generator = UIImpactFeedbackGenerator(style: touchTypes[index])
+                    generator.impactOccurred()
+                } label: {
+                    Text(buttonLabels[index])
+                        .font(.custom(FontFamily.Caprasimo.regular, size: 42))
+                }
+            }
         }
-        .padding()
     }
 }
 
