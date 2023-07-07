@@ -8,14 +8,28 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var progress: Double = 0
+
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+            Spacer()
+            ZStack {
+                CircularProgressView(progress: progress)
+                Text("\(progress * 100, specifier: "%.0f")")
+                    .font(.largeTitle)
+                    .bold()
+            }
+            .frame(width: 240, height: 240)
+            Spacer()
+            HStack {
+                Slider(value: $progress, in: 0...1)
+                Button("Reset") {
+                    progress = 0
+                }
+                .buttonStyle(.borderedProminent)
+            }
+            .padding()
         }
-        .padding()
     }
 }
 
