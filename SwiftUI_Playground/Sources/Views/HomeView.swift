@@ -8,14 +8,23 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var presentAlert = false
+    @State private var username: String = ""
+    @State private var password: String = ""
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        Button("Show Alert") {
+            presentAlert = true
         }
-        .padding()
+        .alert("Login", isPresented: $presentAlert, actions: {
+            TextField("Username", text: $username)
+
+            SecureField("Password", text: $password)
+            Button("Login", action: {})
+            Button("Cancel", role: .cancel, action: {})
+        }, message: {
+            Text("Please enter your username and password.")
+        })
     }
 }
 
