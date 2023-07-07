@@ -8,14 +8,24 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var startDate = Date.now
+    @State private var timeElapsed: Int = 0
+    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        VStack(spacing: 20) {
+            Text("Time Elapsed: \(timeElapsed) sec")
+                .onReceive(timer) { firedDate in
+                    timeElapsed = Int(firedDate.timeIntervalSince(startDate))
+                }
+                .font(.custom(FontFamily.Caprasimo.regular, size: 32))
+            Button {
+                timer.upstream.connect().cancel() // Stop timer
+            } label: {
+                Text("Stop")
+                    .font(.custom(FontFamily.Caprasimo.regular, size: 32))
+            }
         }
-        .padding()
     }
 }
 
