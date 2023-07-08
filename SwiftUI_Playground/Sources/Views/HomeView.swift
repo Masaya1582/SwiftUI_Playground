@@ -16,7 +16,7 @@ struct HomeView: View {
                 .resizable()
                 .scaledToFill()
                 .frame(width: 200, height: 200)
-                .clipShape(RoundedRectangle(cornerRadius: 30))
+                .clipShape(NFTShape())
         }
     }
 }
