@@ -21,17 +21,22 @@ struct HomeView: View {
                 Label("Temperature (°F)", systemImage: "thermometer.medium")
             } currentValueLabel: {
                 Text(Int(fahrenheit), format: .number)
+                    .foregroundColor(.green)
             } minimumValueLabel: {
                 Text("32")
+                    .foregroundColor(.blue)
             } maximumValueLabel: {
                 Text("570")
+                    .foregroundColor(.pink)
             }
+            .tint(gradient)
             Gauge(value: fahrenheit, in: minValue...maxValue) {
                 Label("Temperature (°F)", systemImage: "thermometer.medium")
             }
+            .tint(.pink)
             Slider(value: $fahrenheit, in: minValue...maxValue)
         }
-        .gaugeStyle(.accessoryCircularCapacity)
+        .gaugeStyle(.accessoryCircular)
         .padding()
     }
 }
