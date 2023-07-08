@@ -13,9 +13,9 @@ struct HomeView: View {
     var body: some View {
         VStack {
             Picker("", selection: $selectedIndex) {
-                Text("赤のView")
+                Text("関係ない、行け")
                     .tag(0)
-                Text("青のView")
+                Text("だが断る")
                     .tag(1)
             }
             .pickerStyle(.segmented)
