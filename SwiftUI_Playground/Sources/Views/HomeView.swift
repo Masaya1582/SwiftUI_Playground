@@ -9,13 +9,32 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        NavigationView {
+            List {
+                Section {
+                    Text("iPhone Language")
+                }
+                Section {
+                    Text("English")
+                    Text("Thai")
+                } header: {
+                    Text("Preferred language order")
+                    // Fontをつけたい場合
+                    // .font(.custom(FontFamily.Caprasimo.regular, size: 16))
+                } footer: {
+                    Text("Apps and websites will use the first language in this list that they support.")
+                }
+                // ヘッダーを大きくしたい場合
+                // .headerProminence(.increased)
+                Section {
+                    Text("Region")
+                    Text("Calendar")
+                    Text("Temperature Unit")
+                }
+            }
+            .listStyle(.sidebar) // .plain, .inset, .grouped, .insetGrouped, .sidebarの5種類
+            .navigationTitle("Language & Region")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
