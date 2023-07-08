@@ -8,15 +8,27 @@
 import SwiftUI
 
 struct HomeView: View {
+    static let emoji = ["😀", "😬", "😄", "🙂", "😗", "🤓", "😏", "😕", "😟", "😎", "😜", "😍", "🤪"]
+
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        TimelineView(.periodic(from: .now, by: 0.2)) { timeline in
+            HStack(spacing: 120) {
+                let randomEmoji = HomeView.emoji.randomElement() ?? ""
+                Text(randomEmoji)
+                    .font(.largeTitle)
+                    .scaleEffect(4.0)
+                SubView()
+            }
         }
+    }
+}
+
+struct SubView: View {
+    var body: some View {
+        let randomEmoji = HomeView.emoji.randomElement() ?? ""
+        Text(randomEmoji)
+            .font(.largeTitle)
+            .scaleEffect(4.0)
     }
 }
 
