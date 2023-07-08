@@ -10,13 +10,25 @@ import SwiftUI
 struct HomeView: View {
     @State private var title: String = "Shake"
     @State private var number: Int = 0
+    @State private var imageName: String?
+    private let imageNames = ["img_dio", "img_hokuto", "img_laboratory"]
 
     var body: some View {
         Text("\(title): \(number)")
             .font(.custom(FontFamily.Caprasimo.regular, size: 32))
             .onReceive(NotificationCenter.default.publisher(for: .deviceDidShakeNotification)) { _ in
                 number += 1
+                if number.isMultiple(of: 3) {
+                    imageName = imageNames.randomElement()
+                } else {
+                    imageName = nil
+                }
             }
+        if let imageName = imageName {
+            Image(imageName)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+        }
     }
 }
 
