@@ -8,28 +8,30 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State private var speed = 50.0
+    @State private var fahrenheit = 32.0
+
+    private let minValue = 32.0
+    private let maxValue = 570.0
+
+    private let gradient = Gradient(colors: [.green, .orange, .pink])
 
     var body: some View {
         VStack {
-            Slider(value: $speed, in: 0...250) {
-                Text("Speed")
-            } minimumValueLabel: {
-                Text("0")
-            } maximumValueLabel: {
-                Text("250")
-            }
-
-            Gauge(value: speed, in: 0...250) {
-                Text("Speed")
+            Gauge(value: fahrenheit, in: minValue...maxValue) {
+                Label("Temperature (°F)", systemImage: "thermometer.medium")
             } currentValueLabel: {
-                Text(Int(speed), format: .number)
+                Text(Int(fahrenheit), format: .number)
             } minimumValueLabel: {
-                Text("0")
+                Text("32")
             } maximumValueLabel: {
-                Text("250")
+                Text("570")
             }
+            Gauge(value: fahrenheit, in: minValue...maxValue) {
+                Label("Temperature (°F)", systemImage: "thermometer.medium")
+            }
+            Slider(value: $fahrenheit, in: minValue...maxValue)
         }
+        .gaugeStyle(.accessoryCircularCapacity)
         .padding()
     }
 }
