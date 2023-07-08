@@ -8,27 +8,14 @@
 import SwiftUI
 
 struct HomeView: View {
-    static let emoji = ["😀", "😬", "😄", "🙂", "😗", "🤓", "😏", "😕", "😟", "😎", "😜", "😍", "🤪"]
+    private let bpm: Double = 60
 
     var body: some View {
-        TimelineView(.periodic(from: .now, by: 0.2)) { timeline in
-            HStack(spacing: 120) {
-                let randomEmoji = HomeView.emoji.randomElement() ?? ""
-                Text(randomEmoji)
-                    .font(.largeTitle)
-                    .scaleEffect(4.0)
-                SubView()
-            }
+        TimelineView(.periodic(from: .now, by: 60 / bpm)) { timeline in
+            MetronomeBack()
+                .overlay(MetronomePendulum(bpm: bpm, date: timeline.date))
+                .overlay(MetronomeFront(), alignment: .bottom)
         }
-    }
-}
-
-struct SubView: View {
-    var body: some View {
-        let randomEmoji = HomeView.emoji.randomElement() ?? ""
-        Text(randomEmoji)
-            .font(.largeTitle)
-            .scaleEffect(4.0)
     }
 }
 
