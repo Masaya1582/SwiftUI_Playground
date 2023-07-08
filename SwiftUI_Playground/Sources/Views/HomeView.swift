@@ -8,14 +8,25 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var selectedIndex = 0
+
     var body: some View {
         VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+            Picker("", selection: $selectedIndex) {
+                Text("赤のView")
+                    .tag(0)
+                Text("青のView")
+                    .tag(1)
+            }
+            .pickerStyle(.segmented)
+            .padding()
+            if selectedIndex == 0 {
+                Asset.Assets.imgDio.swiftUIImage
+                    .resizable()
+            } else {
+                Asset.Assets.imgKotowaru.swiftUIImage
+                    .resizable()
+            }
         }
     }
 }
