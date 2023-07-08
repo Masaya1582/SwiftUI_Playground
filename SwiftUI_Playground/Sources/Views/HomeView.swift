@@ -8,15 +8,29 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var speed = 50.0
+
     var body: some View {
         VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+            Slider(value: $speed, in: 0...250) {
+                Text("Speed")
+            } minimumValueLabel: {
+                Text("0")
+            } maximumValueLabel: {
+                Text("250")
+            }
+
+            Gauge(value: speed, in: 0...250) {
+                Text("Speed")
+            } currentValueLabel: {
+                Text(Int(speed), format: .number)
+            } minimumValueLabel: {
+                Text("0")
+            } maximumValueLabel: {
+                Text("250")
+            }
         }
+        .padding()
     }
 }
 
