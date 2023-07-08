@@ -8,15 +8,35 @@
 import SwiftUI
 
 struct HomeView: View {
+    @ObservedObject var scannerModel = ScannerModel()
+
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        NavigationView {
+            List {
+                ForEach(scannerModel.imageArray, id: \.self) { image in
+                    Image(uiImage: image)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                }
+            }
+            .navigationTitle("VinsonkitSample")
+            .toolbar {
+                ToolbarItem {
+                    Button {
+                        openCamera()
+                    } label: {
+                        Text("Scan")
+                            .font(.custom(FontFamily.Caprasimo.regular, size: 24))
+                    }
+                }
+            }
         }
+    }
+
+    private func openCamera() {
+        let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+        let window = windowScene?.windows
+        window?.filter({ $0.isKeyWindow }).first?.rootViewController?.present(scannerModel.getDocumentCameraViewController(), animated: true)
     }
 }
 
