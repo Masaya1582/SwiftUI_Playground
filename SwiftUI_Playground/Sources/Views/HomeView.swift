@@ -8,15 +8,36 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var fahrenheit = 32.0
+
+    private let minValue = 32.0
+    private let maxValue = 570.0
+
+    private let gradient = Gradient(colors: [.green, .orange, .pink])
+
     var body: some View {
         VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+            Gauge(value: fahrenheit, in: minValue...maxValue) {
+                Label("Temperature (°F)", systemImage: "thermometer.medium")
+            } currentValueLabel: {
+                Text(Int(fahrenheit), format: .number)
+                    .foregroundColor(.green)
+            } minimumValueLabel: {
+                Text("32")
+                    .foregroundColor(.blue)
+            } maximumValueLabel: {
+                Text("570")
+                    .foregroundColor(.pink)
+            }
+            .tint(gradient)
+            Gauge(value: fahrenheit, in: minValue...maxValue) {
+                Label("Temperature (°F)", systemImage: "thermometer.medium")
+            }
+            .tint(.pink)
+            Slider(value: $fahrenheit, in: minValue...maxValue)
         }
+        .gaugeStyle(.accessoryCircular)
+        .padding()
     }
 }
 
