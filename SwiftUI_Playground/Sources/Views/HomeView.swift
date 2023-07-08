@@ -10,13 +10,16 @@ import SwiftUI
 struct HomeView: View {
     var body: some View {
         VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
             Asset.Assets.imgDio.swiftUIImage
                 .resizable()
                 .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+            Asset.Assets.imgDio.swiftUIImage
+                .resizable()
+                .frame(width: 320, height: 280)
         }
+        .overlay(RoundedRectangle(cornerRadius: 30)
+            .stroke(Color.black, lineWidth: 3))
+        .clipShape(RoundedRectangle(cornerRadius: 30))
     }
 }
 
