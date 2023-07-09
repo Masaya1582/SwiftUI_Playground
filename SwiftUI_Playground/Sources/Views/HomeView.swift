@@ -8,14 +8,23 @@
 import SwiftUI
 
 struct HomeView: View {
+    @ObservedObject var viewModel = RepositoryViewModel()
+
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        NavigationView {
+            List(viewModel.repositories, id: \.name) { repository in
+                VStack(alignment: .leading) {
+                    Text(repository.name)
+                        .font(.headline)
+                    Text(repository.description)
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                }
+            }
+            .navigationTitle("Repositories")
+        }
+        .onAppear {
+            viewModel.fetchRepositories()
         }
     }
 }
