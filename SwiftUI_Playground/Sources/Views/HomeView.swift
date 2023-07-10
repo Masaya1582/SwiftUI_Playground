@@ -8,21 +8,19 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State private var isButtonDisabled = false
+    @State private var userName: String = ""
     var body: some View {
         VStack(spacing: 20) {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
+            TextField("Username", text: $userName)
+                .textFieldStyle(.roundedBorder)
+                .padding()
             Button {
-                isButtonDisabled = isButtonDisabled ? false : true
+
             } label: {
                 Text("Button")
-                    .modifier(ButtonModifier(foregroundColor: .white, backgroundColor: isButtonDisabled ? .gray.opacity(0.3) : .green))
+                    .modifier(ButtonModifier(foregroundColor: .white, backgroundColor: userName.isEmpty ? .gray.opacity(0.3) : .green))
             }
-            .disabled(isButtonDisabled)
+            .disabled(userName.isEmpty)
         }
     }
 }
