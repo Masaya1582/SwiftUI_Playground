@@ -8,14 +8,19 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var userName: String = ""
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        VStack(spacing: 20) {
+            TextField("Username", text: $userName)
+                .textFieldStyle(.roundedBorder)
+                .padding()
+            Button {
+
+            } label: {
+                Text("Button")
+                    .modifier(ButtonModifier(foregroundColor: .white, backgroundColor: userName.isEmpty ? .gray.opacity(0.3) : .green))
+            }
+            .disabled(userName.isEmpty)
         }
     }
 }
