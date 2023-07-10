@@ -8,14 +8,21 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var isButtonDisabled = false
     var body: some View {
-        VStack {
+        VStack(spacing: 20) {
             Text("Dio")
                 .font(.custom(FontFamily.Caprasimo.regular, size: 42))
             Asset.Assets.imgDio.swiftUIImage
                 .resizable()
                 .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+            Button {
+                isButtonDisabled = isButtonDisabled ? false : true
+            } label: {
+                Text("Button")
+                    .modifier(ButtonModifier(foregroundColor: .white, backgroundColor: isButtonDisabled ? .gray.opacity(0.3) : .green))
+            }
+            .disabled(isButtonDisabled)
         }
     }
 }
