@@ -25,6 +25,7 @@ struct HomeView: View {
             }
             Spacer()
             Text("Home View")
+                .font(.custom(FontFamily.Caprasimo.regular, size: 32))
             Spacer()
         }
         .padding(.horizontal, 24)

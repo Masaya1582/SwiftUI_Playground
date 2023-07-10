@@ -1,5 +1,5 @@
 //
-//  MainTabbedView.swift
+//  MainTabView.swift
 //  SwiftUI_Playground
 //
 //  Created by 中久木 雅哉(Nakakuki Masaya) on 2023/07/10.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct MainTabbedView: View {
+struct MainTabView: View {
     @State var presentSideMenu = false
     @State var selectedSideMenuTab = 0
 
@@ -29,8 +29,8 @@ struct MainTabbedView: View {
     }
 }
 
-struct MainTabbedView_Previews: PreviewProvider {
+struct MainTabView_Previews: PreviewProvider {
     static var previews: some View {
-        MainTabbedView()
+        MainTabView()
     }
 }

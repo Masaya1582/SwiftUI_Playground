@@ -29,13 +29,13 @@ enum SideMenuRowType: Int, CaseIterable {
     var iconName: String {
         switch self {
         case .home:
-            return "home"
+            return "house"
         case .favorite:
-            return "favorite"
+            return "heart"
         case .chat:
-            return "chat"
+            return "cup.and.saucer"
         case .profile:
-            return "profile"
+            return "face.smiling"
         }
     }
 }

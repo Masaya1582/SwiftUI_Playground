@@ -12,6 +12,7 @@ struct SideMenu: View {
     @Binding var isShowing: Bool
     var content: AnyView
     var edgeTransition: AnyTransition = .move(edge: .leading)
+    
     var body: some View {
         ZStack(alignment: .bottom) {
             if isShowing {
@@ -36,6 +37,6 @@ struct SideMenu: View {
 
 struct SideMenu_Previews: PreviewProvider {
     static var previews: some View {
-        SideMenu(isShowing: .constant(false), content: AnyView(MainTabbedView()))
+        SideMenu(isShowing: .constant(false), content: AnyView(MainTabView()))
     }
 }

@@ -9,7 +9,6 @@
 import SwiftUI
 
 struct SideMenuView: View {
-
     @Binding var selectedSideMenuTab: Int
     @Binding var presentSideMenu: Bool
 
@@ -30,7 +29,6 @@ struct SideMenuView: View {
                             presentSideMenu.toggle()
                         }
                     }
-
                     Spacer()
                 }
                 .padding(.top, 100)
@@ -44,7 +42,7 @@ struct SideMenuView: View {
         .background(.clear)
     }
 
-    func profileImageView() -> some View {
+    private func profileImageView() -> some View {
         VStack(alignment: .center) {
             HStack {
                 Spacer()
@@ -70,7 +68,7 @@ struct SideMenuView: View {
         }
     }
 
-    func rowView(isSelected: Bool, imageName: String, title: String, hideDivider: Bool = false, action: @escaping (() -> Void)) -> some View {
+    private func rowView(isSelected: Bool, imageName: String, title: String, hideDivider: Bool = false, action: @escaping (() -> Void)) -> some View {
         Button {
             action()
         } label: {
@@ -79,9 +77,8 @@ struct SideMenuView: View {
                     Rectangle()
                         .fill(isSelected ? .purple : .white)
                         .frame(width: 5)
-
                     ZStack {
-                        Image(imageName)
+                        Image(systemName: imageName)
                             .resizable()
                             .renderingMode(.template)
                             .foregroundColor(isSelected ? .black : .gray)
