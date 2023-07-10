@@ -8,14 +8,19 @@
 import SwiftUI
 
 struct HomeView: View {
+    @StateObject private var viewModel = TextFieldViewModel()
+
     var body: some View {
         VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+            Text(viewModel.enteredText)
+                .font(.title)
+                .padding()
+
+            TextField("Enter text", text: $viewModel.enteredText)
+                .padding()
+        }
+        .onAppear {
+            viewModel.setupDebounce()
         }
     }
 }
