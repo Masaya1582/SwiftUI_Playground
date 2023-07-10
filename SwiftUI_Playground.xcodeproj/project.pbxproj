@@ -25,7 +25,7 @@
 		4011E88B2A4976DA003F06BF /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E88A2A4976DA003F06BF /* Fonts.swift */; };
 		4011E88D2A4976EC003F06BF /* Caprasimo-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4011E88C2A4976EC003F06BF /* Caprasimo-Regular.ttf */; };
 		4011E88F2A497727003F06BF /* DefaultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E88E2A497727003F06BF /* DefaultViewModel.swift */; };
-		40779B7D2A528D3200505ABD /* ButtonModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40779B7C2A528D3200505ABD /* ButtonModifier.swift */; };
+		40779B7D2A528D3200505ABD /* CustomModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40779B7C2A528D3200505ABD /* CustomModifier.swift */; };
 		CABC9E129CED010448D92EF8 /* Pods_SwiftUI_Playground.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3977D086BE021AF13A042E9A /* Pods_SwiftUI_Playground.framework */; };
 /* End PBXBuildFile section */
 
@@ -50,7 +50,7 @@
 		4011E88A2A4976DA003F06BF /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		4011E88C2A4976EC003F06BF /* Caprasimo-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Caprasimo-Regular.ttf"; sourceTree = "<group>"; };
 		4011E88E2A497727003F06BF /* DefaultViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultViewModel.swift; sourceTree = "<group>"; };
-		40779B7C2A528D3200505ABD /* ButtonModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonModifier.swift; sourceTree = "<group>"; };
+		40779B7C2A528D3200505ABD /* CustomModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomModifier.swift; sourceTree = "<group>"; };
 		FB2CBA843BD61E4CE3D7815E /* Pods-SwiftUI_Playground.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftUI_Playground.release.xcconfig"; path = "Target Support Files/Pods-SwiftUI_Playground/Pods-SwiftUI_Playground.release.xcconfig"; sourceTree = "<group>"; };
 		FB37E298E5BFB61BA5FA76C3 /* Pods-SwiftUI_Playground.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftUI_Playground.debug.xcconfig"; path = "Target Support Files/Pods-SwiftUI_Playground/Pods-SwiftUI_Playground.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -226,7 +226,7 @@
 		40779B7B2A528D2800505ABD /* Modifiers */ = {
 			isa = PBXGroup;
 			children = (
-				40779B7C2A528D3200505ABD /* ButtonModifier.swift */,
+				40779B7C2A528D3200505ABD /* CustomModifier.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -389,7 +389,7 @@
 				4011E88B2A4976DA003F06BF /* Fonts.swift in Sources */,
 				4011E86B2A49759C003F06BF /* HomeView.swift in Sources */,
 				1E61F1F52A5BDC820009DF2D /* SideMenuView.swift in Sources */,
-				40779B7D2A528D3200505ABD /* ButtonModifier.swift in Sources */,
+				40779B7D2A528D3200505ABD /* CustomModifier.swift in Sources */,
 				1E61F1F92A5BDCC20009DF2D /* FavoriteView.swift in Sources */,
 				1E61F1F32A5BDC300009DF2D /* SideMenu.swift in Sources */,
 				1E61F1FB2A5BDCC90009DF2D /* ChatView.swift in Sources */,

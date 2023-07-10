@@ -11,24 +11,8 @@ struct HomeView: View {
     @Binding var presentSideMenu: Bool
 
     var body: some View {
-        VStack {
-            HStack {
-                Button {
-                    presentSideMenu.toggle()
-                } label: {
-                    Image(systemName: "list.bullet")
-                        .resizable()
-                        .frame(width: 32, height: 32)
-                        .foregroundColor(.black)
-                }
-                Spacer()
-            }
-            Spacer()
-            Text("Home View")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 32))
-            Spacer()
-        }
-        .padding(.horizontal, 24)
+        TabItemView(presentSideMenu: $presentSideMenu, title: "Home")
+            .padding(.horizontal, 24)
     }
 }
 

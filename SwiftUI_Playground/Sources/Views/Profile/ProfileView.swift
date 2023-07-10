@@ -12,23 +12,7 @@ struct ProfileView: View {
     @Binding var presentSideMenu: Bool
 
     var body: some View {
-        VStack {
-            HStack {
-                Button {
-                    presentSideMenu.toggle()
-                } label: {
-                    Image(systemName: "list.bullet")
-                        .resizable()
-                        .frame(width: 32, height: 32)
-                        .foregroundColor(.black)
-                }
-                Spacer()
-            }
-            Spacer()
-            Text("Profile View")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 32))
-            Spacer()
-        }
+        TabItemView(presentSideMenu: $presentSideMenu, title: "Profile")
         .padding(.horizontal, 24)
     }
 }
