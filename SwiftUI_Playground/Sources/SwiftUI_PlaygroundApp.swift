@@ -9,9 +9,10 @@ import SwiftUI
 
 @main
 struct SwiftUI_PlaygroundApp: App {
+    @State static var presentSideMenu = false
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            MainTabbedView()
         }
     }
 }
