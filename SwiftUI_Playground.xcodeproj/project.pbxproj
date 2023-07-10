@@ -67,6 +67,55 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1E61F1FE2A5BE3910009DF2D /* Tab */ = {
+			isa = PBXGroup;
+			children = (
+				1E61F1F62A5BDC9D0009DF2D /* MainTabbedView.swift */,
+			);
+			path = Tab;
+			sourceTree = "<group>";
+		};
+		1E61F1FF2A5BE3AD0009DF2D /* Favorite */ = {
+			isa = PBXGroup;
+			children = (
+				1E61F1F82A5BDCC20009DF2D /* FavoriteView.swift */,
+			);
+			path = Favorite;
+			sourceTree = "<group>";
+		};
+		1E61F2002A5BE3B40009DF2D /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				1E61F1FA2A5BDCC90009DF2D /* ChatView.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		1E61F2012A5BE3B90009DF2D /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				1E61F1FC2A5BDCD00009DF2D /* ProfileView.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		1E61F2022A5BE3BD0009DF2D /* SideMenu */ = {
+			isa = PBXGroup;
+			children = (
+				1E61F1F42A5BDC820009DF2D /* SideMenuView.swift */,
+				1E61F1F22A5BDC300009DF2D /* SideMenu.swift */,
+			);
+			path = SideMenu;
+			sourceTree = "<group>";
+		};
+		1E61F2032A5BE3C90009DF2D /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				4011E86A2A49759C003F06BF /* HomeView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
 		4011E85C2A49759C003F06BF = {
 			isa = PBXGroup;
 			children = (
@@ -147,13 +196,12 @@
 		4011E87B2A49762D003F06BF /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				4011E86A2A49759C003F06BF /* HomeView.swift */,
-				1E61F1F22A5BDC300009DF2D /* SideMenu.swift */,
-				1E61F1F42A5BDC820009DF2D /* SideMenuView.swift */,
-				1E61F1F62A5BDC9D0009DF2D /* MainTabbedView.swift */,
-				1E61F1FC2A5BDCD00009DF2D /* ProfileView.swift */,
-				1E61F1FA2A5BDCC90009DF2D /* ChatView.swift */,
-				1E61F1F82A5BDCC20009DF2D /* FavoriteView.swift */,
+				1E61F2032A5BE3C90009DF2D /* Home */,
+				1E61F2022A5BE3BD0009DF2D /* SideMenu */,
+				1E61F2012A5BE3B90009DF2D /* Profile */,
+				1E61F2002A5BE3B40009DF2D /* Chat */,
+				1E61F1FF2A5BE3AD0009DF2D /* Favorite */,
+				1E61F1FE2A5BE3910009DF2D /* Tab */,
 				40779B7B2A528D2800505ABD /* Modifiers */,
 			);
 			path = Views;

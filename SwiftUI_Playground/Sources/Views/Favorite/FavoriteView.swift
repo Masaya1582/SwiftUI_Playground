@@ -16,9 +16,10 @@ struct FavoriteView: View {
                 Button {
                     presentSideMenu.toggle()
                 } label: {
-                    Image(systemName: "list.bullet.circle.fill")
+                    Image(systemName: "list.bullet")
                         .resizable()
                         .frame(width: 32, height: 32)
+                        .foregroundColor(.black)
                 }
                 Spacer()
             }
