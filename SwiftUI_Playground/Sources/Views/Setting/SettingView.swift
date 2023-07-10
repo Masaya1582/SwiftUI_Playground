@@ -1,5 +1,5 @@
 //
-//  FavoriteView.swift
+//  SettingView.swift
 //  SwiftUI_Playground
 //
 //  Created by 中久木 雅哉(Nakakuki Masaya) on 2023/07/10.
@@ -8,17 +8,17 @@
 
 import SwiftUI
 
-struct FavoriteView: View {
+struct SettingView: View {
     @Binding var presentSideMenu: Bool
 
     var body: some View {
-        TabItemView(presentSideMenu: $presentSideMenu, title: "Favorite")
-            .padding(.horizontal, 24)
+        TabItemView(presentSideMenu: $presentSideMenu, title: "Setting")
+        .padding(.horizontal, 24)
     }
 }
 
-struct FavoriteView_Previews: PreviewProvider {
+struct SettingView_Previews: PreviewProvider {
     static var previews: some View {
-        FavoriteView(presentSideMenu: .constant(false))
+        SettingView(presentSideMenu: .constant(false))
     }
 }

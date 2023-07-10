@@ -1,5 +1,5 @@
 //
-//  ProfileView.swift
+//  PostView.swift
 //  SwiftUI_Playground
 //
 //  Created by 中久木 雅哉(Nakakuki Masaya) on 2023/07/10.
@@ -8,17 +8,17 @@
 
 import SwiftUI
 
-struct ProfileView: View {
+struct PostView: View {
     @Binding var presentSideMenu: Bool
 
     var body: some View {
-        TabItemView(presentSideMenu: $presentSideMenu, title: "Profile")
-        .padding(.horizontal, 24)
+        TabItemView(presentSideMenu: $presentSideMenu, title: "Post")
+            .padding(.horizontal, 24)
     }
 }
 
-struct ProfileView_Previews: PreviewProvider {
+struct PostView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileView(presentSideMenu: .constant(false))
+        PostView(presentSideMenu: .constant(false))
     }
 }

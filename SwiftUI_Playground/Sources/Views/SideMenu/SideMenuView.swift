@@ -18,7 +18,7 @@ struct SideMenuView: View {
                 Rectangle()
                     .fill(.white)
                     .frame(width: 270)
-                    .shadow(color: .purple.opacity(0.1), radius: 5, x: 0, y: 3)
+                    .shadow(color: Asset.Colors.mainColor.swiftUIColor, radius: 5, x: 0, y: 3)
                 VStack(alignment: .leading, spacing: 0) {
                     profileImageView()
                         .frame(height: 140)
@@ -52,7 +52,7 @@ struct SideMenuView: View {
                     .frame(width: 100, height: 100)
                     .overlay(
                         RoundedRectangle(cornerRadius: 50)
-                            .stroke(.purple.opacity(0.5), lineWidth: 10)
+                            .stroke(Asset.Colors.mainColor.swiftUIColor, lineWidth: 10)
                     )
                     .cornerRadius(50)
                 Spacer()
@@ -75,7 +75,7 @@ struct SideMenuView: View {
             VStack(alignment: .leading) {
                 HStack(spacing: 20) {
                     Rectangle()
-                        .fill(isSelected ? .purple : .white)
+                        .fill(isSelected ? Asset.Colors.mainColor.swiftUIColor : .white)
                         .frame(width: 5)
                     ZStack {
                         Image(systemName: imageName)
@@ -94,7 +94,7 @@ struct SideMenuView: View {
         }
         .frame(height: 50)
         .background(
-            LinearGradient(colors: [isSelected ? .purple.opacity(0.5) : .white, .white], startPoint: .leading, endPoint: .trailing)
+            LinearGradient(colors: [isSelected ? Asset.Colors.mainColor.swiftUIColor : .white, .white], startPoint: .leading, endPoint: .trailing)
         )
     }
 

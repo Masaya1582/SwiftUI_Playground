@@ -9,20 +9,20 @@ import Foundation
 
 enum SideMenuRowType: Int, CaseIterable {
     case home = 0
-    case favorite
-    case chat
-    case profile
+    case post
+    case news
+    case setting
 
     var title: String {
         switch self {
         case .home:
             return "Home"
-        case .favorite:
-            return "Favorite"
-        case .chat:
-            return "Chat"
-        case .profile:
-            return "Profile"
+        case .post:
+            return "Post"
+        case .news:
+            return "News"
+        case .setting:
+            return "Setting"
         }
     }
 
@@ -30,12 +30,12 @@ enum SideMenuRowType: Int, CaseIterable {
         switch self {
         case .home:
             return "house"
-        case .favorite:
-            return "heart"
-        case .chat:
-            return "cup.and.saucer"
-        case .profile:
-            return "face.smiling"
+        case .post:
+            return "camera.viewfinder"
+        case .news:
+            return "newspaper"
+        case .setting:
+            return "gear"
         }
     }
 }

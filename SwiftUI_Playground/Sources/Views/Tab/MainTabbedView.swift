@@ -17,11 +17,11 @@ struct MainTabView: View {
             TabView(selection: $selectedSideMenuTab) {
                 HomeView(presentSideMenu: $presentSideMenu)
                     .tag(0)
-                FavoriteView(presentSideMenu: $presentSideMenu)
+                PostView(presentSideMenu: $presentSideMenu)
                     .tag(1)
-                ChatView(presentSideMenu: $presentSideMenu)
+                NewsView(presentSideMenu: $presentSideMenu)
                     .tag(2)
-                ProfileView(presentSideMenu: $presentSideMenu)
+                SettingView(presentSideMenu: $presentSideMenu)
                     .tag(3)
             }
             SideMenu(isShowing: $presentSideMenu, content: AnyView(SideMenuView(selectedSideMenuTab: $selectedSideMenuTab, presentSideMenu: $presentSideMenu)))
