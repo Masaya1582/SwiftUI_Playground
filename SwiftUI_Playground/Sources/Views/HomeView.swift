@@ -6,16 +6,20 @@
 //
 
 import SwiftUI
+import Combine
 
 struct HomeView: View {
+    @StateObject private var viewModel = ZipViewModel()
+
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        VStack(spacing: 28) {
+            ForEach(viewModel.zipResult, id: \.0) { value in
+                Text("\(value.0) - \(value.1)")
+                    .font(.custom(FontFamily.Caprasimo.regular, size: 32))
+            }
+        }
+        .onAppear {
+            viewModel.performZip()
         }
     }
 }
