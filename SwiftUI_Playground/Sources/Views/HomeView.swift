@@ -9,13 +9,15 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        NavigationView {
+            List(0..<10) { i in
+                Text("Row \(i.description)")
+                    .font(.custom(FontFamily.Caprasimo.regular, size: 20))
+                    .listRowSeparatorTint(.red)
+                    // .listRowSeparatorTint(.pink, edges: .top)
+
+            }
+            .navigationTitle("List")
         }
     }
 }
