@@ -8,14 +8,18 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var isPresented = false
+
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        Button {
+            isPresented = true
+        } label: {
+            Text("Show Modal")
+                .modifier(ButtonModifier(foregroundColor: .white, backgroundColor: Asset.Colors.backgroundColor.swiftUIColor))
+        }
+        .sheet(isPresented: $isPresented) {
+            NextView()
+                .interactiveDismissDisabled()
         }
     }
 }
