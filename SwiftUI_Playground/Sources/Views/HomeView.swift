@@ -6,17 +6,20 @@
 //
 
 import SwiftUI
+import SpriteKit
 
 struct HomeView: View {
+    private var scene: SKScene {
+        let scene = GameScene()
+        scene.size = CGSize(width: 300, height: 400)
+        scene.scaleMode = .fill
+        return scene
+    }
+
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
-        }
+        SpriteView(scene: scene)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .ignoresSafeArea()
     }
 }
 
