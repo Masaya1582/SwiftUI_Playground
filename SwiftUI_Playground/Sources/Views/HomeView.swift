@@ -8,15 +8,21 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var username = ""
+
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
-        }
+        TextField("Username", text: $username)
+            .submitLabel(.join)
+            .padding()
+//            .submitLabel(.continue)
+//            .submitLabel(.done)
+//            .submitLabel(.go)
+//            .submitLabel(.join)
+//            .submitLabel(.next)
+//            .submitLabel(.return)
+//            .submitLabel(.route)
+//            .submitLabel(.search)
+//            .submitLabel(.send)
     }
 }
 
