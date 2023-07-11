@@ -9,14 +9,20 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
-        }
+        Text("Options")
+            .font(.custom(FontFamily.Caprasimo.regular, size: 32))
+            .contextMenu {
+                Button {
+                    print("Change country setting")
+                } label: {
+                    Label("Choose Country", systemImage: "globe")
+                }
+                Button {
+                    print("Enable geolocation")
+                } label: {
+                    Label("Detect Location", systemImage: "location.circle")
+                }
+            }
     }
 }
 
