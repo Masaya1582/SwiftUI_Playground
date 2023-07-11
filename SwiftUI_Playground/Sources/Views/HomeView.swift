@@ -8,15 +8,24 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var status: String = "Active"
+    @Environment(\.scenePhase) var scenePhase
+
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
-        }
+        Text("Status: \(status)")
+            .font(.custom(FontFamily.Caprasimo.regular, size: 40))
+            .onChange(of: scenePhase) { newPhase in
+                if newPhase == .inactive {
+                    status = "Inactive"
+                    print("Inactive")
+                } else if newPhase == .active {
+                    status = "Active"
+                    print("Active")
+                } else if newPhase == .background {
+                    status = "Background"
+                    print("Background")
+                }
+            }
     }
 }
 
