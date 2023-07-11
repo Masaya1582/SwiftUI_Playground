@@ -8,15 +8,50 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var notes: [Note] = []
+    @State private var isPresentingAddNoteSheet = false
+
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        NavigationView {
+            List {
+                ForEach(notes, id: \.title) { note in
+                    VStack(alignment: .leading) {
+                        Text(note.title)
+                            .font(.headline)
+                        Text(note.content)
+                            .font(.subheadline)
+                    }
+                }
+                .onDelete(perform: deleteNotes)
+            }
+            .navigationTitle("Notes")
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button(action: {
+                        isPresentingAddNoteSheet = true
+                    }) {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
+            .sheet(isPresented: $isPresentingAddNoteSheet) {
+                AddNoteView { note in
+                    NoteManager.shared.saveMemo(note: note)
+                    notes = NoteManager.shared.fetchNotes()
+                }
+            }
         }
+        .onAppear {
+            notes = NoteManager.shared.fetchNotes()
+        }
+    }
+
+    private func deleteNotes(at offsets: IndexSet) {
+        notes.remove(atOffsets: offsets)
+        // Update UserDefaults
+        let updatedNotes = notes.map { $0 }
+        let encodedNotes = try? JSONEncoder().encode(updatedNotes)
+        UserDefaults.standard.set(encodedNotes, forKey: "notes")
     }
 }
 
