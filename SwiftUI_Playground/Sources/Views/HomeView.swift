@@ -9,13 +9,13 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        NavigationStack {
+            List(1..<100) { row in
+                Text("Row \(row)")
+            }
+            .refreshable {
+                // リフレッシュ時に処理したいこと
+            }
         }
     }
 }
