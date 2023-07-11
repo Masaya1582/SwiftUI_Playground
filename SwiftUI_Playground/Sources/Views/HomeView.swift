@@ -6,16 +6,17 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct HomeView: View {
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        if let videoURL = Bundle.main.url(forResource: "River", withExtension: "MOV") {
+            VideoPlayer(player: AVPlayer(url: videoURL))
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .ignoresSafeArea()
+        } else {
+            Text("Video not found")
+                .foregroundColor(.red)
         }
     }
 }
