@@ -8,15 +8,24 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var text: String = ""
+    @ObservedObject var keyboard: KeyboardObserver = KeyboardObserver()
+
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        VStack(spacing: 32) {
+            TextField("Input Your Text", text: $text)
+                .padding()
+            Text("KeyboardHeight: \(keyboard.height)")
+                .font(.custom(FontFamily.Caprasimo.regular, size: 20))
+            Text("\(keyboard.isShowing ? "Keyboard Is Showing" : "Keyboard Is Not Showing")")
+                .font(.custom(FontFamily.Caprasimo.regular, size: 20))
+            Spacer()
+        }.onAppear {
+            self.keyboard.addObserver()
+        }.onDisappear {
+            self.keyboard.removeObserver()
         }
+        .padding()
     }
 }
 
