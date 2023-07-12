@@ -1,22 +1,18 @@
 //
-//  DefaultModel.swift
+//  Joke.swift
 //  SwiftUI_Playground
 //
 //  Created by MasayaNakakuki on 2023/06/26.
 //
 
-import Foundation
+import SwiftUI
 
-class DefaultModel {
-    var name: String
-    var age: Int
-    var height: Double
-    var isMan: Bool
+struct Joke: Codable {
+    let setup: String
+    let punchline: String
 
-    init(name: String, age: Int, height: Double, isMen: Bool) {
-        self.name = name
-        self.age = age
-        self.height = height
-        self.isMan = isMen
+    init(setup: String, punchline: String) {
+        self.setup = setup
+        self.punchline = punchline
     }
 }

@@ -8,14 +8,34 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var joke: Joke?
+
     var body: some View {
         VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+            if let joke = joke {
+                Text(joke.setup)
+                    .font(.title)
+                    .padding()
+
+                Text(joke.punchline)
+                    .font(.headline)
+                    .padding()
+            } else {
+                ProgressView()
+            }
+        }
+        .task {
+            await fetchJoke()
+        }
+    }
+
+    func fetchJoke() async {
+        guard let url = URL(string: "https://official-joke-api.appspot.com/random_joke") else { return }
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            joke = try JSONDecoder().decode(Joke.self, from: data)
+        } catch {
+            print("Error fetching joke: \(error)")
         }
     }
 }
