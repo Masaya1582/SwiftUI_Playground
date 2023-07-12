@@ -8,15 +8,17 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var blurAmount = 0.0
+
     var body: some View {
         VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
+            Asset.Assets.imgHeadmaster.swiftUIImage
                 .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+                .frame(width: 300, height: 300)
+                .blur(radius: blurAmount)
+            Slider(value: $blurAmount, in: 0...20)
         }
+        .padding()
     }
 }
 
