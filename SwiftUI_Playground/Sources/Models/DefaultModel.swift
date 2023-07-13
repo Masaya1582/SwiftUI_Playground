@@ -6,17 +6,16 @@
 //
 
 import Foundation
+import SwiftUI
 
-class DefaultModel {
+struct Movie: Identifiable {
+    var id = UUID()
     var name: String
-    var age: Int
-    var height: Double
-    var isMan: Bool
+    var genre: String
+}
 
-    init(name: String, age: Int, height: Double, isMen: Bool) {
-        self.name = name
-        self.age = age
-        self.height = height
-        self.isMan = isMen
-    }
+// Holds one token that we want the user to filter by. This *must* conform to Identifiable.
+struct Token: Identifiable {
+    var id: String { name }
+    var name: String
 }
