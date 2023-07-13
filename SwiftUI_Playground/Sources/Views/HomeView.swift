@@ -8,14 +8,15 @@
 import SwiftUI
 
 struct HomeView: View {
+    @Environment(\.colorScheme) var colorScheme
+
     var body: some View {
         VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
+            Image(colorScheme == .dark ? "img_black" : "img_white")
                 .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+                .frame(width: 200, height: 200)
+            Text(colorScheme == .dark ? "In dark mode" : "In light mode")
+                .font(.custom(FontFamily.Caprasimo.regular, size: 32))
         }
     }
 }
