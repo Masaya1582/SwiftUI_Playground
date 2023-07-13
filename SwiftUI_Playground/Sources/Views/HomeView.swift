@@ -9,13 +9,11 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        if let image = UIImage(named: "img_dio") {
+            PhotoDetailView(image: image)
+                .ignoresSafeArea()
+        } else {
+            EmptyView()
         }
     }
 }
