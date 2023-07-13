@@ -8,14 +8,30 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var searchText = ""
+    private let names = ["Holly", "Josh", "Rhonda", "Ted"]
+
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        NavigationStack {
+            List {
+                ForEach(searchResults, id: \.self) { name in
+                    NavigationLink {
+                        Text(name)
+                    } label: {
+                        Text(name)
+                    }
+                }
+            }
+            .navigationTitle("Contacts")
+        }
+        .searchable(text: $searchText)
+    }
+
+    var searchResults: [String] {
+        if searchText.isEmpty {
+            return names
+        } else {
+            return names.filter { $0.contains(searchText) }
         }
     }
 }
