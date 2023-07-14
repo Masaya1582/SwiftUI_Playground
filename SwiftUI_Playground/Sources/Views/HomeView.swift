@@ -10,15 +10,15 @@ import QGrid
 
 struct HomeView: View {
     private let predident = [
-        President(firstName: "Joe", lastName: "Biden", imageName: "img_biden"),
-        President(firstName: "Donald", lastName: "Trump", imageName: "img_donald"),
-        President(firstName: "Barack", lastName: "Obama", imageName: "img_barack"),
-        President(firstName: "George.W", lastName: "Bush", imageName: "img_george_w"),
-        President(firstName: "Bill", lastName: "Clinton", imageName: "img_bill"),
-        President(firstName: "George.H.W", lastName: "Bush", imageName: "img_george_hw"),
-        President(firstName: "Ronald", lastName: "Reagan", imageName: "img_ronald"),
-        President(firstName: "Jimmy", lastName: "Carter", imageName: "img_jimmy"),
-        President(firstName: "Gerald", lastName: "Ford", imageName: "img_gerald")
+        President(firstName: "Joe", lastName: "Biden", image: Asset.Assets.imgBiden.swiftUIImage),
+        President(firstName: "Donald", lastName: "Trump", image: Asset.Assets.imgDonald.swiftUIImage),
+        President(firstName: "Barack", lastName: "Obama", image: Asset.Assets.imgBarack.swiftUIImage),
+        President(firstName: "George.W", lastName: "Bush", image: Asset.Assets.imgGeorgeW.swiftUIImage),
+        President(firstName: "Bill", lastName: "Clinton", image: Asset.Assets.imgBill.swiftUIImage),
+        President(firstName: "George.H.W", lastName: "Bush", image: Asset.Assets.imgGeorgeHw.swiftUIImage),
+        President(firstName: "Ronald", lastName: "Reagan", image: Asset.Assets.imgRonald.swiftUIImage),
+        President(firstName: "Jimmy", lastName: "Carter", image: Asset.Assets.imgJimmy.swiftUIImage),
+        President(firstName: "Gerald", lastName: "Ford", image: Asset.Assets.imgGerald.swiftUIImage)
     ]
 
     var body: some View {

@@ -11,12 +11,12 @@ struct President: Identifiable {
     let id = UUID()
     let firstName: String
     let lastName: String
-    let imageName: String
+    let image: Image
 
-    init(firstName: String, lastName: String, imageName: String) {
+    init(firstName: String, lastName: String, image: Image) {
         self.firstName = firstName
         self.lastName = lastName
-        self.imageName = imageName
+        self.image = image
     }
 }
 
@@ -25,7 +25,7 @@ struct GridCell: View {
 
     var body: some View {
         VStack {
-            Image(president.imageName)
+            president.image
                 .resizable()
                 .scaledToFit()
                 .clipShape(Circle())
