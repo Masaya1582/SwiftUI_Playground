@@ -11,7 +11,7 @@
 		4011E86B2A49759C003F06BF /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E86A2A49759C003F06BF /* HomeView.swift */; };
 		4011E86D2A49759D003F06BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4011E86C2A49759D003F06BF /* Assets.xcassets */; };
 		4011E8702A49759D003F06BF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4011E86F2A49759D003F06BF /* Preview Assets.xcassets */; };
-		4011E87E2A497644003F06BF /* DefaultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E87D2A497644003F06BF /* DefaultModel.swift */; };
+		4011E87E2A497644003F06BF /* Pokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E87D2A497644003F06BF /* Pokemon.swift */; };
 		4011E8822A49769B003F06BF /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4011E8812A49769B003F06BF /* Colors.xcassets */; };
 		4011E8842A4976AA003F06BF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4011E8832A4976AA003F06BF /* Localizable.strings */; };
 		4011E8872A4976C9003F06BF /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E8862A4976C9003F06BF /* Assets.swift */; };
@@ -30,7 +30,7 @@
 		4011E86A2A49759C003F06BF /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		4011E86C2A49759D003F06BF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4011E86F2A49759D003F06BF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		4011E87D2A497644003F06BF /* DefaultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultModel.swift; sourceTree = "<group>"; };
+		4011E87D2A497644003F06BF /* Pokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pokemon.swift; sourceTree = "<group>"; };
 		4011E8812A49769B003F06BF /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		4011E8832A4976AA003F06BF /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		4011E8862A4976C9003F06BF /* Assets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
@@ -144,7 +144,7 @@
 		4011E87C2A497630003F06BF /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				4011E87D2A497644003F06BF /* DefaultModel.swift */,
+				4011E87D2A497644003F06BF /* Pokemon.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -325,7 +325,7 @@
 				40779B7D2A528D3200505ABD /* ButtonModifier.swift in Sources */,
 				4011E8892A4976D0003F06BF /* LocalizableStrings.swift in Sources */,
 				4011E88F2A497727003F06BF /* DefaultViewModel.swift in Sources */,
-				4011E87E2A497644003F06BF /* DefaultModel.swift in Sources */,
+				4011E87E2A497644003F06BF /* Pokemon.swift in Sources */,
 				4011E8872A4976C9003F06BF /* Assets.swift in Sources */,
 				4011E8692A49759C003F06BF /* SwiftUI_PlaygroundApp.swift in Sources */,
 			);
