@@ -8,15 +8,44 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var activeTabIndex = 1
+
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        TabView(selection: $activeTabIndex) {
+            Tab1()
+                .tabItem {
+                    Image(systemName: "square.and.arrow.up")
+                    Text("TabA")
+                }
+                .tag(1)
+            Tab2()
+                .tabItem {
+                    Image(systemName: "pencil.circle")
+                    Text("TabB")
+                }
+                .tag(2)
         }
+        .onChange(of: activeTabIndex) { selection in
+            switch selection {
+            case 1:
+                print("TabA Tapped")
+            case 2:
+                print("TabB Tapped")
+            default:
+                break
+            }
+        }
+    }
+}
+
+struct Tab1: View {
+    var body: some View {
+        Text("HomeView")
+    }
+}
+struct Tab2: View {
+    var body: some View {
+        Text("NewsListView")
     }
 }
 
