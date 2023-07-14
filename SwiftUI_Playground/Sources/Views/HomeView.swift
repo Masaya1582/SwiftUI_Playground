@@ -9,14 +9,10 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
-        }
+        Asset.Assets.imgDonald.swiftUIImage
+            .resizable()
+            .frame(width: 300, height: 300)
+            .shadow(color: Color.gray.opacity(0.6), radius: 4, x: 10, y: 10)
     }
 }
 
