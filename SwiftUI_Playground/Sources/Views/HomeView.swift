@@ -8,14 +8,53 @@
 import SwiftUI
 
 struct HomeView: View {
+    @StateObject private var store = TodoStore()
+    @State private var newTodoTitle = ""
+
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        NavigationView {
+            VStack {
+                List {
+                    ForEach(store.todos) { todo in
+                        Button(action: {
+                            store.toggleTodoCompletion(todo)
+                        }) {
+                            HStack {
+                                Image(systemName: todo.isCompleted ? "checkmark.square.fill" : "square")
+                                Text(todo.title)
+                                    .strikethrough(todo.isCompleted)
+                            }
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    }
+                    .onDelete(perform: deleteTodo)
+                }
+
+                HStack {
+                    TextField("New Todo", text: $newTodoTitle)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+
+                    Button(action: {
+                        store.addTodoWithTitle(newTodoTitle)
+                        newTodoTitle = ""
+                    }) {
+                        Text("Add")
+                    }
+                }
+                .padding()
+            }
+            .navigationTitle("ToDo List")
+            .toolbar {
+#if os(iOS)
+                EditButton()
+#endif
+            }
+        }
+    }
+
+    private func deleteTodo(at offsets: IndexSet) {
+        offsets.forEach { index in
+            store.removeTodoAtIndex(index)
         }
     }
 }
