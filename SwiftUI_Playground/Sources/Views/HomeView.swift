@@ -9,13 +9,48 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        NavigationView {
+            List {
+                HStack {
+                    ProgrammaticNavigationView {
+                        Text("View1")
+                    } label: {
+                        Text("Go to View1")
+                    }
+
+                    ProgrammaticNavigationView {
+                        Text("View2")
+                    } label: {
+                        Text("Go to View2")
+                    }
+
+                    ProgrammaticNavigationView {
+                        Text("View3")
+                    } label: {
+                        Text("Go to View3")
+                    }
+                }
+            }
+            .onTapGesture {
+                return
+            }
+        }
+    }
+}
+
+struct ProgrammaticNavigationView<Content>: View where Content: View {
+    let destination: () -> Content
+    let label: () -> Content
+    @State var isActive = false
+    var body: some View {
+        ZStack {
+            Button(action: { isActive = true }) {
+                label()
+            }
+            .buttonStyle(PlainButtonStyle())
+            NavigationLink(destination: destination(), isActive: $isActive) {
+                EmptyView()
+            }
         }
     }
 }
