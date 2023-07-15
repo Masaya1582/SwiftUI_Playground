@@ -7,15 +7,24 @@
 
 import SwiftUI
 
+class HomeViewViewModel: ObservableObject {
+    @Published var toggleValue: Bool = true {
+        didSet {
+            print("value did change")
+        }
+    }
+}
+
 struct HomeView: View {
+    @ObservedObject(initialValue: HomeViewViewModel()) var viewModel: HomeViewViewModel
+
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        Toggle(isOn: $viewModel.toggleValue) {
+            HStack {
+                Text("Value = " + String(viewModel.toggleValue))
+                    .font(.custom(FontFamily.Caprasimo.regular, size: 24))
+                    .padding()
+            }
         }
     }
 }
