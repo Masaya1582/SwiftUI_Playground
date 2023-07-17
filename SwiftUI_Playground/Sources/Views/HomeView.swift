@@ -9,13 +9,27 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        VStack(spacing: 32) {
+            Button("Buy: $0.99") {
+                print("Buying…")
+            }
+            .buttonStyle(.bordered)
+
+            Button("Buy: $0.99") {
+                print("Buying for $0.99")
+            }
+            .buttonStyle(.borderedProminent)
+
+            Button("Submit") {
+                print("Submitting…")
+            }
+            .tint(.indigo)
+            .buttonStyle(.borderedProminent)
+
+            Button("Delete", role: .destructive) {
+                print("Deleting…")
+            }
+            .buttonStyle(.borderedProminent)
         }
     }
 }
