@@ -8,15 +8,20 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var username = ""
+
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        VStack(spacing: 32) {
+            TextField("Username", text: $username)
+                .textFieldStyle(.roundedBorder)
+
+            PasteButton(payloadType: String.self) { strings in
+                guard let first = strings.first else { return }
+                username = first
+            }
+            .buttonBorderShape(.capsule)
         }
+        .padding()
     }
 }
 
