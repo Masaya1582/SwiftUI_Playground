@@ -8,14 +8,26 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var dragAmount = CGSize.zero
+
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 0) {
+                ForEach(1..<20) { num in
+                    VStack {
+                        GeometryReader { geo in
+                            Text("Number \(num)")
+                                .font(.largeTitle)
+                                .padding()
+                                .foregroundColor(.white)
+                                .background(.orange)
+                                .rotation3DEffect(.degrees(-Double(geo.frame(in: .global).minX) / 8), axis: (x: 0, y: 1, z: 0))
+                                .frame(width: 200, height: 200)
+                        }
+                        .frame(width: 200, height: 200)
+                    }
+                }
+            }
         }
     }
 }
