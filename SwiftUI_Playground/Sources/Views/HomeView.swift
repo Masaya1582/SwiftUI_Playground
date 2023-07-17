@@ -5,17 +5,48 @@
 //  Created by MasayaNakakuki on 2023/06/26.
 //
 
+import AVKit
+import PhotosUI
 import SwiftUI
 
 struct HomeView: View {
+    enum LoadState {
+        case unknown, loading, loaded(Movie), failed
+    }
+
+    @State private var selectedItem: PhotosPickerItem?
+    @State private var loadState = LoadState.unknown
+
     var body: some View {
         VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+            PhotosPicker("Select movie", selection: $selectedItem, matching: .videos)
+                .font(.custom(FontFamily.Caprasimo.regular, size: 32))
+            switch loadState {
+            case .unknown:
+                EmptyView()
+            case .loading:
+                ProgressView()
+            case .loaded(let movie):
+                VideoPlayer(player: AVPlayer(url: movie.url))
+                    .scaledToFit()
+                    .frame(width: 400, height: 400)
+            case .failed:
+                Text("Import failed")
+            }
+        }
+        .onChange(of: selectedItem) { _ in
+            Task {
+                do {
+                    loadState = .loading
+                    if let movie = try await selectedItem?.loadTransferable(type: Movie.self) {
+                        loadState = .loaded(movie)
+                    } else {
+                        loadState = .failed
+                    }
+                } catch {
+                    loadState = .failed
+                }
+            }
         }
     }
 }
