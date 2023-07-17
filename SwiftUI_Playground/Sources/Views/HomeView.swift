@@ -8,14 +8,26 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var orientation = UIDeviceOrientation.unknown
+
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        Group {
+            if orientation.isPortrait {
+                Text("Portrait")
+                    .font(.custom(FontFamily.Caprasimo.regular, size: 32))
+            } else if orientation.isLandscape {
+                Text("Landscape")
+                    .font(.custom(FontFamily.Caprasimo.regular, size: 32))
+            } else if orientation.isFlat {
+                Text("Flat")
+                    .font(.custom(FontFamily.Caprasimo.regular, size: 32))
+            } else {
+                Text("Unknown")
+                    .font(.custom(FontFamily.Caprasimo.regular, size: 32))
+            }
+        }
+        .onRotate { newOrientation in
+            orientation = newOrientation
         }
     }
 }
