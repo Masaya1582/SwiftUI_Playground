@@ -8,14 +8,23 @@
 import SwiftUI
 
 struct HomeView: View {
+    @ObservedObject var viewModel = PostViewModel()
+
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        NavigationView {
+            List(viewModel.posts, id: \.id) { post in
+                VStack(alignment: .leading) {
+                    Text(post.title)
+                        .font(.headline)
+                    Text(post.body)
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                }
+            }
+            .navigationBarTitle("Posts")
+        }
+        .onAppear {
+            viewModel.fetchPosts()
         }
     }
 }
