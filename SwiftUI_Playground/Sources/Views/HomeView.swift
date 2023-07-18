@@ -8,15 +8,35 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var selectedHour: Int = 8
+    @State private var selectedMinute: Int = 30
+
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
-        }
+        GeometryReader { geometry in
+            HStack {
+                Picker(selection: self.$selectedHour, label: EmptyView()) {
+                    ForEach(0 ..< 24) {
+                        Text("\($0)")
+                    }
+                }.pickerStyle(WheelPickerStyle())
+                    .onReceive([self.selectedHour].publisher.first()) { (value) in
+                        print("hour: \(value)")
+                    }.labelsHidden()
+                    .frame(width: geometry.size.width / 2, height: geometry.size.height)
+                    .clipped()
+
+                Picker(selection: self.$selectedMinute, label: EmptyView()) {
+                    ForEach(0 ..< 60) {
+                        Text("\($0)")
+                    }
+                }.pickerStyle(WheelPickerStyle())
+                    .onReceive([self.selectedMinute].publisher.first()) { (value) in
+                        print("minute: \(value)")
+                    }.labelsHidden()
+                    .frame(width: geometry.size.width / 2, height: geometry.size.height)
+                    .clipped()
+            }
+        }.padding()
     }
 }
 
