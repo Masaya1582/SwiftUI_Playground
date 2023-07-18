@@ -8,14 +8,48 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var selectedTheme = "Dark"
+    private let themes = ["Dark", "Light", "Automatic"]
+
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        NavigationStack {
+            Form {
+                Section {
+                    // デフォルト
+                    Picker("Appearance", selection: $selectedTheme) {
+                        ForEach(themes, id: \.self) {
+                            Text($0)
+                        }
+                    }
+                }
+
+                // インラインスタイル
+                Picker("Appearance", selection: $selectedTheme) {
+                    ForEach(themes, id: \.self) {
+                        Text($0)
+                    }
+                }
+                .pickerStyle(.inline)
+
+
+                // Wheel style
+                Picker("Appearance", selection: $selectedTheme) {
+                    ForEach(themes, id: \.self) {
+                        Text($0)
+                    }
+                }
+                .pickerStyle(.wheel)
+
+                // Segmentedスタイル
+                Picker("Appearance", selection: $selectedTheme) {
+                    ForEach(themes, id: \.self) {
+                        Text($0)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .pickerStyle(.navigationLink)
+            }
+            .navigationTitle("Display & Brightness")
         }
     }
 }
