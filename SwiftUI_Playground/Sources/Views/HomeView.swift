@@ -8,14 +8,20 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var isShowHalfView = false
+
     var body: some View {
         VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+            Button {
+                isShowHalfView = true
+            } label: {
+                Text("Show HalfModalView")
+                    .font(.custom(FontFamily.Caprasimo.regular, size: 32))
+            }
+        }
+        .sheet(isPresented: $isShowHalfView) {
+            CustomHalfView()
+                .presentationDetents([.medium])
         }
     }
 }
