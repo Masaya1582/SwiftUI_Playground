@@ -8,14 +8,25 @@
 import SwiftUI
 
 struct HomeView: View {
+    @StateObject var viewModel = PokemonViewModel()
+
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        VStack(spacing: 24) {
+            Text(viewModel.name.isEmpty ? "Name" : "Name: \(viewModel.name)")
+                .font(.custom(FontFamily.Caprasimo.regular, size: 24))
+            Text(viewModel.type.isEmpty ? "Type" : "Type: \(viewModel.type)")
+                .font(.custom(FontFamily.Caprasimo.regular, size: 24))
+            Text(viewModel.ability.isEmpty ? "Ability" : "Ability: \(viewModel.ability)")
+                .font(.custom(FontFamily.Caprasimo.regular, size: 24))
+            Button {
+                viewModel.decodePokemon()
+            } label: {
+                Text("Decode Pokemon")
+                    .modifier(ButtonModifier(foregroundColor: .white, backgroundColor: .orange))
+            }
+        }
+        .onAppear {
+            viewModel.encodePokemon()
         }
     }
 }
