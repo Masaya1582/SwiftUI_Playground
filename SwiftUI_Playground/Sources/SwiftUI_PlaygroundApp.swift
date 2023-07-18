@@ -11,7 +11,8 @@ import SwiftUI
 struct SwiftUI_PlaygroundApp: App {
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            CalculatorView()
+                .environmentObject(CalculatorView.ViewModel())
         }
     }
 }
