@@ -8,14 +8,25 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var searchText = ""
+    @ObservedObject var followerViewModel = FollowerViewModel()
+
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        NavigationView {
+            VStack {
+                SearchBar(text: $searchText)
+                List(followerViewModel.followers.filter { searchText.isEmpty ? true : $0.login.contains(searchText) }) { follower in
+                    NavigationLink(destination: FollowerDetailView(avatarURL: follower.avatarURL, userName: follower.login)) {
+                        FollowerRow(follower: follower)
+                    }
+                }
+            }
+            .onAppear {
+                Task {
+                    await followerViewModel.fetchFollowers()
+                }
+            }
+            .navigationBarTitle("Followers")
         }
     }
 }
