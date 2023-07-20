@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct HomeView: View {
+    @ObservedObject var defaultViewModel = DefaultViewModel()
+
     var body: some View {
         VStack {
             Text("Dio")

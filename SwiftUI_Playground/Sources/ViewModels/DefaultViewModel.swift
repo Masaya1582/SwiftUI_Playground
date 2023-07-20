@@ -8,28 +8,9 @@
 import RxSwift
 import RxCocoa
 
-protocol DefaultViewModelInputs: AnyObject {
-
-}
-
-protocol DefaultViewModelOutputs: AnyObject {
-
-}
-
-protocol DefaultViewModelType: AnyObject {
-    var inputs: DefaultViewModelInputs { get }
-    var outputs: DefaultViewModelOutputs { get }
-}
-
-class DefaultViewModel: DefaultViewModelType, DefaultViewModelInputs, DefaultViewModelOutputs {
-
-    var inputs: DefaultViewModelInputs { return self }
-    var outputs: DefaultViewModelOutputs { return self }
-
-    private let disposeBag = DisposeBag()
-
-    init() {
-        
-    }
-
+class DefaultViewModel: ObservableObject {
+    @Published var name = ""
+    @Published var age = 24
+    @Published var height = 174.5
+    @Published var isHuman = false
 }
