@@ -9,13 +9,30 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .frame(width: 320, height: 280)
-            Spacer().frame(height: 100)
+        TabView {
+            NavigationStack {
+                ZStack(alignment: .bottomTrailing) {
+                    List(0..<100) { i in
+                        Text("Item \(i)")
+                    }
+                    .navigationTitle("Home")
+                    Button {
+                        // Action
+                    } label: {
+                        Image(systemName: "plus")
+                            .font(.title.weight(.semibold))
+                            .padding()
+                            .background(Color.pink)
+                            .foregroundColor(.white)
+                            .clipShape(Circle())
+                            .shadow(radius: 4, x: 0, y: 4)
+                    }
+                    .padding()
+                }
+            }
+            .tabItem {
+                Label("Home", systemImage: "house")
+            }
         }
     }
 }
