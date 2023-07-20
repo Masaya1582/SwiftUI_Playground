@@ -16,7 +16,13 @@ struct HomeView: View {
                 .font(.custom(FontFamily.Caprasimo.regular, size: 42))
             Asset.Assets.imgDio.swiftUIImage
                 .resizable()
-                .frame(width: 320, height: 280)
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 200, height: 200)
+                .clipShape(Circle())
+                .overlay(
+                    Circle()
+                        .stroke(Color.black, lineWidth: 2)
+                )
             Spacer().frame(height: 100)
         }
     }
