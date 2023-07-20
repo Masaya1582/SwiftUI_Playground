@@ -11,20 +11,15 @@ struct HomeView: View {
     @ObservedObject var defaultViewModel = DefaultViewModel()
 
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+        ZStack {
+            FancyLoadingView()
+                .opacity(isContentLoading ? 1 : 0)
         }
+    }
+
+    var isContentLoading: Bool {
+        // Return true when your content is loading
+        return true
     }
 }
 
