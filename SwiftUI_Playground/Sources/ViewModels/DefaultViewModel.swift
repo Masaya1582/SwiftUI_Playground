@@ -5,8 +5,7 @@
 //  Created by MasayaNakakuki on 2023/06/26.
 //
 
-import RxSwift
-import RxCocoa
+import SwiftUI
 
 class DefaultViewModel: ObservableObject {
     @Published var name = ""
