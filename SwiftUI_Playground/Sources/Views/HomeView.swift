@@ -8,23 +8,62 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var defaultViewModel = DefaultViewModel()
+    @StateObject private var viewModel = ReminderViewModel()
+    @State private var newReminderTitle = ""
+    @State private var selectedDate = Date()
 
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+        NavigationView {
+            VStack {
+                if viewModel.notificationStatus == .notDetermined {
+                    Button("Ask for Permission") {
+                        viewModel.requestNotificationPermission()
+                    }
+                } else if viewModel.notificationStatus == .denied {
+                    Text("Please enable notification permissions in Settings to use the reminder feature.")
+                        .padding()
+                } else {
+                    List {
+                        Section(header: Text("Reminders")) {
+                            ForEach(viewModel.reminders) { reminder in
+                                HStack {
+                                    Text(reminder.title)
+                                    Spacer()
+                                    Text(formattedDate(reminder.date))
+                                        .font(.subheadline)
+                                }
+                            }
+                            .onDelete(perform: deleteReminder)
+                        }
+                        Section {
+                            TextField("Enter reminder", text: $newReminderTitle)
+                            DatePicker("Select Date", selection: $selectedDate, displayedComponents: [.date, .hourAndMinute])
+                        }
+
+                        Section {
+                            Button("Add Reminder") {
+                                let newReminder = Reminder(title: newReminderTitle, date: selectedDate)
+                                viewModel.scheduleNotification(for: newReminder)
+                                newReminderTitle = ""
+                            }
+                        }
+                    }
+                    .listStyle(InsetGroupedListStyle())
+                }
+            }
+            .navigationTitle("Reminder App")
         }
+    }
+
+    private func deleteReminder(at offsets: IndexSet) {
+        viewModel.reminders.remove(atOffsets: offsets)
+    }
+
+    private func formattedDate(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .short
+        return dateFormatter.string(from: date)
     }
 }
 
