@@ -6,25 +6,42 @@
 //
 
 import SwiftUI
+import CoreMotion
 
 struct HomeView: View {
-    @StateObject var defaultViewModel = DefaultViewModel()
+    private let altimator = Altimator()
+    @State var pressureValue = 0.0
 
     var body: some View {
         VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+            Text(String(format: "%.2f", pressureValue))
+                .font(.custom(FontFamily.Caprasimo.regular, size: 32))
+            Text("hPa")
+                .font(.title)
+                .fontWeight(.semibold)
+            startButton
+            stopButton
         }
+    }
+
+    private var startButton: some View {
+        Button {
+            altimator.startUpdate { value in
+                self.pressureValue = value
+            }
+        } label: {
+            Text("測定開始")
+        }
+        .modifier(ButtonModifier(foregroundColor: .white, backgroundColor: .orange))
+    }
+
+    private var stopButton: some View {
+        Button {
+            altimator.stopUpdate()
+        } label: {
+            Text("測定終了")
+        }
+        .modifier(ButtonModifier(foregroundColor: .white, backgroundColor: .gray))
     }
 }
 

@@ -6,18 +6,36 @@
 //
 
 import Foundation
-import SwiftUI
+import CoreMotion
 
-class DefaultModel {
-    var name: String
-    var age: Int
-    var height: Double
-    var isMan: Bool
+final class Altimator {
+    var altimeter: CMAltimeter?
 
-    init(name: String, age: Int, height: Double, isMen: Bool) {
-        self.name = name
-        self.age = age
-        self.height = height
-        self.isMan = isMen
+    init() {
+        altimeter = CMAltimeter()
+    }
+
+    func startUpdate(completion: @escaping (Double) -> Void) {
+        guard let altimeter = altimeter else {
+            return
+        }
+
+        if CMAltimeter.isRelativeAltitudeAvailable() {
+            altimeter.startRelativeAltitudeUpdates(to: OperationQueue.main) { data, error in
+                if error == nil {
+                    guard let pressure = data?.pressure.doubleValue else {
+                        return
+                    }
+                    print("気圧", pressure * 10)
+                    completion(pressure * 10)
+                } else {
+                    // Handle error here
+                }
+            }
+        }
+    }
+
+    func stopUpdate() {
+        altimeter?.stopRelativeAltitudeUpdates()
     }
 }
