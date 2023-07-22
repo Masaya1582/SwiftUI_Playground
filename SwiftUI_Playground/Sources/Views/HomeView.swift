@@ -8,23 +8,40 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var defaultViewModel = DefaultViewModel()
+    @State private var name: String = ""
+    @State private var ageString: String = ""
+    @State private var age: Int?
 
     var body: some View {
         VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+            TextField("Name", text: $name)
+                .padding()
+
+            TextField("Age", text: $ageString)
+                .keyboardType(.numberPad)
+                .padding()
+
+            Button("Submit") {
+                // Convert the ageString to an Int using the Int initializer, which returns an optional Int.
+                age = Int(ageString)
+
+                // Check if age is nil (not provided by the user) or if it's less than or equal to 0 (invalid age).
+                if let age = age, age > 0 {
+                    showMessage("Hello, \(name)! You are \(age) years old.")
+                } else {
+                    showMessage("Please provide a valid age.")
+                }
+            }
+            .modifier(ButtonModifier(foregroundColor: .white, backgroundColor: .orange))
         }
+        .padding()
+    }
+
+    private func showMessage(_ message: String) {
+        // Create a SwiftUI alert to show the message.
+        let alert = UIAlertController(title: "Message", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        UIApplication.shared.windows.first?.rootViewController?.present(alert, animated: true, completion: nil)
     }
 }
 
