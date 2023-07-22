@@ -8,22 +8,20 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var defaultViewModel = DefaultViewModel()
+    private let pokemonManager = PokemonManager()
 
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+        NavigationView {
+            List(pokemonManager.pokemons, id: \.name) { pokemon in
+                VStack(alignment: .leading) {
+                    Text(pokemon.name)
+                        .font(.headline)
+                    Text(pokemon.type)
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                }
+            }
+            .navigationBarTitle("Pokémon List")
         }
     }
 }
