@@ -8,24 +8,45 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var pokemons: [Pokemon] = []
+    @State private var errorMessage: String = ""
 
     var body: some View {
         VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+            if !pokemons.isEmpty {
+                List(pokemons) { pokemon in
+                    VStack(alignment: .leading) {
+                        Text(pokemon.name)
+                            .font(.headline)
+                        Text(pokemon.type)
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                    }
+                }
+            } else if !errorMessage.isEmpty {
+                Text(errorMessage)
+                    .foregroundColor(.red)
+            } else {
+                Text("Loading Pokémon...")
+            }
+        }
+        .onAppear {
+            fetchPokemons()
         }
     }
+
+    private func fetchPokemons() {
+        let manager = PokemonManager()
+        manager.fetchPokemons { result in
+            switch result {
+            case .success(let pokemons):
+                self.pokemons = pokemons
+            case .failure(let error):
+                self.errorMessage = "Error fetching Pokémon data: \(error)"
+            }
+        }
+    }
+
 }
 
 struct HomeView_Previews: PreviewProvider {
