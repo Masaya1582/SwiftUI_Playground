@@ -9,5 +9,7 @@ target 'SwiftUI_Playground' do
     pod 'SwiftGen', '~> 6.0'
     pod 'RxSwift'
     pod 'RxCocoa'
+    pod 'Alamofire'
+    pod 'SwiftyJSON', '~> 4.0'
 
 end
