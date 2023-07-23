@@ -8,22 +8,15 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    private let pokemons = [
+        Pokemon(name: "Bulbasaur", type: "Grass", ability: OvergrowAbility()),
+        Pokemon(name: "Charmander", type: "Fire", ability: BlazeAbility()),
+        Pokemon(name: "Pikachu", type: "Electric", ability: StaticAbility())
+    ]
 
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+        NavigationView {
+            PokemonListView(pokemons: pokemons)
         }
     }
 }
