@@ -1,5 +1,5 @@
 //
-//  DefaultModel.swift
+//  HomeModel.swift
 //  SwiftUI_Playground
 //
 //  Created by MasayaNakakuki on 2023/06/26.
@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-class DefaultModel {
+class HomeModel {
     var name: String
     var age: Int
     var height: Double

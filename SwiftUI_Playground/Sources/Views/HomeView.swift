@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var defaultViewModel = DefaultViewModel()
+    @StateObject var viewModel = HomeViewModel()
 
     var body: some View {
         VStack {
