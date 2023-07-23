@@ -7,24 +7,35 @@
 
 import SwiftUI
 
+protocol PokemonSelectionDelegate {
+    func didSelectPokemon(_ pokemon: Pokemon)
+}
+
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var selectedPokemon: Pokemon?
+    private let pokemons = [
+        Pokemon(name: "Bulbasaur", type: "Grass/Poison"),
+        Pokemon(name: "Charmander", type: "Fire"),
+        Pokemon(name: "Squirtle", type: "Water")
+    ]
 
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+        NavigationView {
+            List(pokemons) { pokemon in
+                NavigationLink(destination: DetailView(pokemon: pokemon, delegate: self)) {
+                    Text(pokemon.name)
+                        .font(.headline)
+                }
+            }
+            .navigationBarTitle("Pokémon List")
         }
+        .navigationViewStyle(StackNavigationViewStyle())
+    }
+}
+
+extension HomeView: PokemonSelectionDelegate {
+    func didSelectPokemon(_ pokemon: Pokemon) {
+        selectedPokemon = pokemon
     }
 }
 
