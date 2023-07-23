@@ -8,22 +8,34 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var defaultViewModel = DefaultViewModel()
+    @StateObject private var viewModel = HomeViewModel()
 
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+        NavigationView {
+            VStack {
+                List(viewModel.weatherData, id: \.temperature) { data in
+                    VStack(alignment: .leading) {
+                        let formattedTemperature = String(format: "%.1f", data.temperature)
+                        Text("\(data.locationName)")
+                            .font(.title)
+                        Text("\(formattedTemperature)℃")
+                            .font(.title)
+                        Text(data.description)
+                            .font(.headline)
+                    }
+                }
+                Button {
+                    viewModel.weatherData.removeAll()
+                    viewModel.getWeatherData()
+                } label: {
+                    Text("Refresh")
+                        .font(.largeTitle)
+                }
+            }
+            .navigationTitle("Weather")
+            .onAppear {
+                viewModel.getWeatherData()
+            }
         }
     }
 }
