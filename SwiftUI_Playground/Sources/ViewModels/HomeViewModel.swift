@@ -5,11 +5,21 @@
 //  Created by MasayaNakakuki on 2023/06/26.
 //
 
-import SwiftUI
+import Combine
 
 class HomeViewModel: ObservableObject {
-    @Published var name = ""
-    @Published var age = 24
-    @Published var height = 174.5
-    @Published var isHuman = false
+    @Published var numbers: [Int] = [1, 2, 3, 4, 5]
+    @Published var squaredNumbers: [Int] = []
+
+    private var cancellables: Set<AnyCancellable> = []
+
+    func squareNumbers() {
+        numbers.publisher
+            .map { $0 * $0 }
+            .collect()
+            .sink(receiveValue: { [weak self] squaredNumbers in
+                self?.squaredNumbers = squaredNumbers
+            })
+            .store(in: &cancellables)
+    }
 }
