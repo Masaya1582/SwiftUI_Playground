@@ -5,11 +5,27 @@
 //  Created by MasayaNakakuki on 2023/06/26.
 //
 
-import SwiftUI
+import Combine
 
 class HomeViewModel: ObservableObject {
-    @Published var name = ""
-    @Published var age = 24
-    @Published var height = 174.5
-    @Published var isHuman = false
+    @Published var pokemons: [Pokemon] = [
+        Pokemon(name: "Charmander", type: "Fire"),
+        Pokemon(name: "Squirtle", type: "Water"),
+        Pokemon(name: "Bulbasaur", type: "Grass"),
+        Pokemon(name: "Vulpix", type: "Fire"),
+        Pokemon(name: "Pikachu", type: "Electric")
+    ]
+    @Published var fireTypePokemons: [Pokemon] = []
+
+    private var cancellables: Set<AnyCancellable> = []
+
+    func filterFireTypePokemons() {
+        pokemons.publisher
+            .filter { $0.type == "Fire" }
+            .collect()
+            .sink(receiveValue: { [weak self] fireTypePokemons in
+                self?.fireTypePokemons = fireTypePokemons
+            })
+            .store(in: &cancellables)
+    }
 }
