@@ -5,11 +5,21 @@
 //  Created by MasayaNakakuki on 2023/06/26.
 //
 
-import SwiftUI
+import Combine
 
 class HomeViewModel: ObservableObject {
-    @Published var name = ""
-    @Published var age = 24
-    @Published var height = 174.5
-    @Published var isHuman = false
+    @Published var strings: [String] = ["1", "2", "3", "4", "5"]
+    @Published var integers: [Int] = []
+
+    private var cancellables: Set<AnyCancellable> = []
+
+    func convertToIntegers() {
+        strings.publisher
+            .compactMap { Int($0) }
+            .collect()
+            .sink(receiveValue: { [weak self] integers in
+                self?.integers = integers
+            })
+            .store(in: &cancellables)
+    }
 }
