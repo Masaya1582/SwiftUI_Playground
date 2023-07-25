@@ -8,23 +8,25 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @AppStorage("isDarkModeOn") var isDarkModeOn: Bool = false
 
     var body: some View {
         VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+            Toggle("Dark Mode", isOn: $isDarkModeOn)
+                .padding()
+                .foregroundColor(isDarkModeOn ? .white : .black)
+                .background(isDarkModeOn ? Color.black : Color.white)
+                .cornerRadius(10)
+                .padding()
+
+            Text(isDarkModeOn ? "Dark Mode is On" : "Dark Mode is Off")
+                .font(.custom(FontFamily.Caprasimo.regular, size: 24))
+                .foregroundColor(isDarkModeOn ? .white : .black)
+                .padding()
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(isDarkModeOn ? Color.black : Color.white)
+        .ignoresSafeArea()
     }
 }
 
