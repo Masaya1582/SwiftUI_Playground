@@ -9,7 +9,6 @@
 import Foundation
 
 struct Calculator {
-
     private struct ArithmeticExpression: Equatable {
         var number: Decimal
         var operation: ArithmeticOperation
@@ -28,8 +27,7 @@ struct Calculator {
         }
     }
 
-    // MARK: - PROPERTIES
-
+    // MARK: - Properties
     private var newNumber: Decimal? {
         didSet {
             guard newNumber != nil else { return }
@@ -48,8 +46,7 @@ struct Calculator {
 
     private var pressedClear: Bool = false
 
-    // MARK: - COMPUTED PROPERTIES
-
+    // MARK: - Computed Properties
     var displayText: String {
         return getNumberString(forNumber: number, withCommas: true)
     }
@@ -69,8 +66,7 @@ struct Calculator {
         return getNumberString(forNumber: number).contains(".")
     }
 
-    // MARK: - OPERATIONS
-
+    // MARK: - Operations
     mutating func setDigit(_ digit: Digit) {
         if containsDecimal && digit == .zero {
             carryingZeroCount += 1
@@ -143,8 +139,7 @@ struct Calculator {
         pressedClear = true
     }
 
-    // MARK: - HELPERS
-
+    // MARK: - Helpers
     func operationIsHighlighted(_ operation: ArithmeticOperation) -> Bool {
         return expression?.operation == operation && newNumber == nil
     }

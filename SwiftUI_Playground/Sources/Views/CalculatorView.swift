@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - BODY
 struct CalculatorView: View {
     @EnvironmentObject private var viewModel: ViewModel
-    var buttonTypes: [[ButtonType]] {
+    private var buttonTypes: [[ButtonType]] {
         [[.allClear, .negative, .percent, .operation(.division)],
          [.digit(.seven), .digit(.eight), .digit(.nine), .operation(.multiplication)],
          [.digit(.four), .digit(.five), .digit(.six), .operation(.subtraction)],
@@ -38,7 +38,6 @@ struct CalculatorView_Previews: PreviewProvider {
 
 // MARK: - COMPONENTS
 extension CalculatorView {
-
     private var displayText: some View {
         Text(viewModel.displayText)
             .padding()

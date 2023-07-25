@@ -10,9 +10,7 @@ import Combine
 
 extension CalculatorView {
     final class ViewModel: ObservableObject {
-
-        // MARK: - PROPERTIES
-
+        // MARK: - Properties
         @Published private var calculator = Calculator()
 
         var displayText: String {
@@ -30,8 +28,7 @@ extension CalculatorView {
             ]
         }
 
-        // MARK: - ACTIONS
-
+        // MARK: - Actions
         func performAction(for buttonType: ButtonType) {
             switch buttonType {
             case .digit(let digit):
@@ -53,7 +50,7 @@ extension CalculatorView {
             }
         }
 
-        // MARK: - HELPERS
+        // MARK: - Helpers
         func buttonTypeIsHighlighted(buttonType: ButtonType) -> Bool {
             guard case .operation(let operation) = buttonType else { return false}
             return calculator.operationIsHighlighted(operation)

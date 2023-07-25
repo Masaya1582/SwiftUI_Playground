@@ -10,7 +10,6 @@ import SwiftUI
 
 extension CalculatorView {
     struct CalculatorButton: View {
-
         let buttonType: ButtonType
         @EnvironmentObject private var viewModel: ViewModel
 
