@@ -11,19 +11,22 @@ struct HomeView: View {
     @StateObject var viewModel = HomeViewModel()
 
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+        VStack(spacing: 40) {
+            // show just the date
+            Text(Date.now.addingTimeInterval(600), style: .date)
+                .font(.custom(FontFamily.Caprasimo.regular, size: 32))
+
+            // show just the time
+            Text(Date.now.addingTimeInterval(600), style: .time)
+                .font(.custom(FontFamily.Caprasimo.regular, size: 32))
+
+            // show the relative distance from now, automatically updating
+            Text(Date.now.addingTimeInterval(600), style: .relative)
+                .font(.custom(FontFamily.Caprasimo.regular, size: 32))
+
+            // make a timer style, automatically updating
+            Text(Date.now.addingTimeInterval(600), style: .timer)
+                .font(.custom(FontFamily.Caprasimo.regular, size: 32))
         }
     }
 }
