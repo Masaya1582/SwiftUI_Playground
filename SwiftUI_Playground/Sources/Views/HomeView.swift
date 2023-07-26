@@ -8,23 +8,39 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var offset: CGSize = .zero
+    @State private var isDragging = false
 
     var body: some View {
         VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
+            Rectangle()
                 .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
+                .foregroundColor(.blue)
+                .offset(offset)
+                .gesture(DragGesture()
+                    .onChanged { value in
+                        self.offset = value.translation
+                        self.isDragging = true
+                    }
+                    .onEnded { value in
+                        withAnimation {
+                            self.offset = .zero
+                            self.isDragging = false
+                        }
+                    }
                 )
-            Spacer().frame(height: 100)
+
+            if isDragging {
+                Text("Dragging!")
+                    .font(.title)
+                    .padding()
+                    .background(Color.yellow)
+                    .foregroundColor(.black)
+                    .cornerRadius(10)
+                    .offset(y: -30)
+            }
         }
+        .padding()
     }
 }
 
