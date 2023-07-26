@@ -8,22 +8,30 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    private let items: [Item] = [
+        Item(imageName: "img_barack", title: "Obama"),
+        Item(imageName: "img_biden", title: "Biden"),
+        Item(imageName: "img_bill", title: "Clinton"),
+        Item(imageName: "img_donald", title: "Trump"),
+        Item(imageName: "img_george_hw", title: "George.HW"),
+        Item(imageName: "img_george_w", title: "George.W"),
+        Item(imageName: "img_gerald", title: "Ford"),
+        Item(imageName: "img_jimmy", title: "Carter"),
+        Item(imageName: "img_ronald", title: "Reagan"),
+        Item(imageName: "img_washington", title: "Washington"),
+        Item(imageName: "img_thomas", title: "Jefferson"),
+        Item(imageName: "img_abraham", title: "Lincoln")
+    ]
+    private let gridItems = [GridItem(.adaptive(minimum: 180))]
 
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+        ScrollView(.horizontal) {
+            LazyHGrid(rows: gridItems, spacing: 16) {
+                ForEach(items) { item in
+                    FancyGridItem(item: item)
+                }
+            }
+            .padding(.horizontal, 16)
         }
     }
 }
