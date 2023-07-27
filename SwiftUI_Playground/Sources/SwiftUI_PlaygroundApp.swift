@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct SwiftUI_PlaygroundApp: App {
+    @StateObject var themeSettings = ThemeSettings()
+
     var body: some Scene {
         WindowGroup {
             HomeView()
+                .environmentObject(themeSettings)
         }
     }
 }

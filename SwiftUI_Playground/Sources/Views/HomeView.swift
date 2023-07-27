@@ -8,22 +8,20 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @EnvironmentObject var themeSettings: ThemeSettings
 
     var body: some View {
         VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
+            Text("Color Theme Changer App")
+                .font(.title)
+                .padding()
+
+            Rectangle()
+                .foregroundColor(themeSettings.themeColor)
                 .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+                .padding()
+
+            ThemeListView()
         }
     }
 }
