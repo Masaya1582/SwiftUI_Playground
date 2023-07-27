@@ -8,22 +8,38 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @EnvironmentObject var taskManager: TaskManager
 
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+        NavigationView {
+            VStack {
+                List {
+                    ForEach(taskManager.tasks.indices, id: \.self) { index in // Add id: \.self
+                        TaskRow(task: taskManager.tasks[index], taskIndex: index) // Provide the task index
+                    }
+                    .onDelete(perform: taskManager.deleteTask)
+                }
+                AddTaskView()
+            }
+            .navigationBarTitle("Task Manager")
+        }
+    }
+}
+
+struct TaskRow: View {
+    @EnvironmentObject var taskManager: TaskManager
+    let task: Task
+    let taskIndex: Int
+
+    var body: some View {
+        HStack {
+            Text(task.name)
+            Spacer()
+            Image(systemName: task.isCompleted ? "checkmark.circle.fill" : "circle")
+                .foregroundColor(task.isCompleted ? .green : .gray)
+                .onTapGesture {
+                    taskManager.toggleTaskCompleted(at: taskIndex)
+                }
         }
     }
 }

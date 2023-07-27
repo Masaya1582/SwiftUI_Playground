@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct SwiftUI_PlaygroundApp: App {
+    @StateObject var taskManager = TaskManager()
+
     var body: some Scene {
         WindowGroup {
             HomeView()
+                .environmentObject(taskManager)
         }
     }
 }
