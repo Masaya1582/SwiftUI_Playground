@@ -8,20 +8,38 @@
 import SwiftUI
 
 struct HomeView: View {
-    @EnvironmentObject var themeSettings: ThemeSettings
+    @EnvironmentObject var taskManager: TaskManager
 
     var body: some View {
-        VStack {
-            Text("Color Theme Changer App")
-                .font(.title)
-                .padding()
+        NavigationView {
+            VStack {
+                List {
+                    ForEach(taskManager.tasks.indices, id: \.self) { index in // Add id: \.self
+                        TaskRow(task: taskManager.tasks[index], taskIndex: index) // Provide the task index
+                    }
+                    .onDelete(perform: taskManager.deleteTask)
+                }
+                AddTaskView()
+            }
+            .navigationBarTitle("Task Manager")
+        }
+    }
+}
 
-            Rectangle()
-                .foregroundColor(themeSettings.themeColor)
-                .frame(width: 200, height: 200)
-                .padding()
+struct TaskRow: View {
+    @EnvironmentObject var taskManager: TaskManager
+    let task: Task
+    let taskIndex: Int
 
-            ThemeListView()
+    var body: some View {
+        HStack {
+            Text(task.name)
+            Spacer()
+            Image(systemName: task.isCompleted ? "checkmark.circle.fill" : "circle")
+                .foregroundColor(task.isCompleted ? .green : .gray)
+                .onTapGesture {
+                    taskManager.toggleTaskCompleted(at: taskIndex)
+                }
         }
     }
 }
