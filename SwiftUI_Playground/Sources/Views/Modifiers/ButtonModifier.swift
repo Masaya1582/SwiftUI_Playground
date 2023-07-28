@@ -14,7 +14,7 @@ struct ButtonModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(.custom(FontFamily.Caprasimo.regular, size: 24))
-            .frame(width: UIScreen.main.bounds.width / 1.3, height: UIScreen.main.bounds.height / 28, alignment: .center)
+            .frame(width: UIScreen.main.bounds.width / 1.3, height: 20, alignment: .center)
             .padding()
             .foregroundColor(foregroundColor)
             .background(backgroundColor)
