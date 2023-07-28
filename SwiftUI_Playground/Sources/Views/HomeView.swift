@@ -6,24 +6,47 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var email = ""
+    @State private var password = ""
+    @State private var errorMessage = ""
+    @State private var isLoginSuccessful = false
 
     var body: some View {
         VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+            TextField("Email", text: $email)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
+
+            SecureField("Password", text: $password)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
+
+            Button {
+                signIn()
+            } label: {
+                Text("Login")
+            }
+            .modifier(ButtonModifier(foregroundColor: .white, backgroundColor: .orange))
+
+            Text(errorMessage)
+                .foregroundColor(.red)
+        }
+        .padding()
+        .sheet(isPresented: $isLoginSuccessful) {
+            PopupView()
+        }
+    }
+
+    private func signIn() {
+        Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
+            if let error = error {
+                errorMessage = error.localizedDescription
+            } else {
+                isLoginSuccessful = true
+            }
         }
     }
 }

@@ -9,5 +9,6 @@ target 'SwiftUI_Playground' do
     pod 'SwiftGen', '~> 6.0'
     pod 'RxSwift'
     pod 'RxCocoa'
+    pod 'Firebase/Auth'
 
 end
