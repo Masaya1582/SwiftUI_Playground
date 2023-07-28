@@ -8,22 +8,26 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var isAnimating = false
 
     var body: some View {
         VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
+            Asset.Assets.imgMrsalt.swiftUIImage
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 200, height: 200)
+                .offset(y: isAnimating ? 300 : -300)
+                .animation(.easeInOut(duration: 2))
                 .clipShape(Circle())
                 .overlay(
                     Circle()
                         .stroke(Color.black, lineWidth: 2)
                 )
-            Spacer().frame(height: 100)
+            Button {
+                isAnimating.toggle()
+            } label: {
+                Text("Drop an image")
+            }
         }
     }
 }
