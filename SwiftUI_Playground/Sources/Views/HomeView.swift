@@ -8,22 +8,16 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    private let fruits = ["Apple", "Banana", "Orange", "Grapes", "Watermelon", "Mango"]
 
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+        NavigationView {
+            List {
+                ForEach(Array(fruits.enumerated()), id: \.element) { index, fruit in
+                    Text("\(index + 1). \(fruit)")
+                }
+            }
+            .navigationBarTitle("Fruits List")
         }
     }
 }
