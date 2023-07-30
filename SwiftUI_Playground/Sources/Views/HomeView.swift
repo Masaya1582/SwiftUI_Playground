@@ -8,23 +8,34 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @StateObject private var taskManagerViewModel = TaskManagerViewModel()
 
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+        NavigationView {
+            VStack {
+                List {
+                    ForEach(taskManagerViewModel.categories, id: \.name) { category in
+                        Section(header: Text(category.name)) {
+                            ForEach(category.tasks) { task in
+                                TaskRow(task: task)
+                            }
+                        }
+                    }
+                }
+
+                Button(action: addNewTask) {
+                    Text("Add New Task")
+                        .font(.custom(FontFamily.Caprasimo.regular, size: 24))
+                }
+                .padding()
+            }
+            .navigationBarTitle("Task Manager")
         }
+    }
+
+    private func addNewTask() {
+        let newTask = Task(id: UUID(), title: "New Task", isCompleted: false)
+        taskManagerViewModel.addTask(newTask)
     }
 }
 
