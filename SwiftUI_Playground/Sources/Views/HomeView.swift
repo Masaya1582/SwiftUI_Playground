@@ -11,20 +11,27 @@ struct HomeView: View {
     @StateObject var viewModel = HomeViewModel()
 
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+        ScrollViewReader { value in
+            ScrollView {
+                Button("Jump to #8") {
+                    withAnimation(.spring()) {
+                        value.scrollTo(8)
+                        // value.scrollTo(8, anchor: .top)
+                    }
+                }
+                .font(.custom(FontFamily.Caprasimo.regular, size: 24))
+                .padding()
+
+                ForEach(0..<100) { i in
+                    Text("Example \(i)")
+                        .font(.title)
+                        .frame(width: 200, height: 200)
+                        .background(viewModel.colors[i % viewModel.colors.count])
+                        .id(i)
+                }
+            }
         }
+        .frame(height: 350)
     }
 }
 
