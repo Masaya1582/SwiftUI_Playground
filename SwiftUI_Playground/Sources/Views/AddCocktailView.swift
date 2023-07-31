@@ -28,11 +28,21 @@ struct AddCocktailView: View {
                 .sheet(isPresented: $isShowImagePicker) {
                     ImagePicker(selectedImage: $selectedImage)
                 }
+                if let image = selectedImage {
+                    Image(uiImage: image)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 200, height: 200)
+                }
             }
             .navigationBarTitle("Add Cocktail")
             .navigationBarItems(trailing: Button("Save") {
-                viewModel.addCocktail(name: name, description: description, selectedImage: selectedImage)
-                presentationMode.wrappedValue.dismiss()
+                if let image = selectedImage {
+                    if !name.isEmpty && !description.isEmpty {
+                        viewModel.addCocktail(name: name, description: description, selectedImage: selectedImage)
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
             })
         }
     }
