@@ -8,22 +8,30 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @ObservedObject var viewModel = CocktailViewModel()
+    @State private var showingAddSheet = false
 
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+        NavigationView {
+            List(viewModel.cocktails) { cocktail in
+                NavigationLink(destination: CocktailDetail(cocktail: cocktail)) {
+                    HStack {
+                        Image(cocktail.imageName)
+                            .resizable()
+                            .frame(width: 60, height: 60)
+                        Text(cocktail.name)
+                    }
+                }
+            }
+            .navigationBarTitle("Cocktail List")
+            .navigationBarItems(trailing: Button(action: {
+                showingAddSheet = true
+            }) {
+                Image(systemName: "plus")
+            })
+        }
+        .sheet(isPresented: $showingAddSheet) {
+            AddCocktailView(viewModel: viewModel)
         }
     }
 }
