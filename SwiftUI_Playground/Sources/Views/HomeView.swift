@@ -16,9 +16,18 @@ struct HomeView: View {
             List(viewModel.cocktails) { cocktail in
                 NavigationLink(destination: CocktailDetail(cocktail: cocktail)) {
                     HStack {
-                        Image(cocktail.imageName)
-                            .resizable()
-                            .frame(width: 60, height: 60)
+                        if let uiImage = UIImage(data: cocktail.imageName!), let image = Image(uiImage: uiImage) {
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 60, height: 60)
+                        } else {
+                            // Placeholder image in case the conversion fails or image is nil
+                            Image("default_image_name")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(maxHeight: 200)
+                        }
                         Text(cocktail.name)
                     }
                 }

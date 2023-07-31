@@ -14,17 +14,24 @@ struct AddCocktailView: View {
     @State private var name = ""
     @State private var description = ""
     @State private var imageName = "default" // Set your default image name here
+    @State private var selectedImage: UIImage?
+    @State private var isShowImagePicker = false
 
     var body: some View {
         NavigationView {
             Form {
                 TextField("Name", text: $name)
                 TextField("Description", text: $description)
-                TextField("Image Name", text: $imageName)
+                Button("Choose Image") {
+                    isShowImagePicker = true
+                }
+                .sheet(isPresented: $isShowImagePicker) {
+                    ImagePicker(selectedImage: $selectedImage)
+                }
             }
             .navigationBarTitle("Add Cocktail")
             .navigationBarItems(trailing: Button("Save") {
-                viewModel.addCocktail(name: name, description: description, imageName: imageName)
+                viewModel.addCocktail(name: name, description: description, selectedImage: selectedImage)
                 presentationMode.wrappedValue.dismiss()
             })
         }
@@ -36,10 +43,18 @@ struct CocktailDetail: View {
 
     var body: some View {
         VStack {
-            Image(cocktail.imageName)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(maxHeight: 200)
+            if let uiImage = UIImage(data: cocktail.imageName!), let image = Image(uiImage: uiImage) {
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxHeight: 200)
+            } else {
+                // Placeholder image in case the conversion fails or image is nil
+                Image("default_image_name")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxHeight: 200)
+            }
             Text(cocktail.name)
                 .font(.title)
             Text(cocktail.description)

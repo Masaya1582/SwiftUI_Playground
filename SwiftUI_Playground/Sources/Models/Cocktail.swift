@@ -11,5 +11,5 @@ struct Cocktail: Identifiable, Codable {
     var id = UUID()
     var name: String
     var description: String
-    var imageName: String
+    var imageName: Data? // Change this to Data type
 }

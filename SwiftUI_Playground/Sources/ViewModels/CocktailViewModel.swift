@@ -30,8 +30,12 @@ class CocktailViewModel: ObservableObject {
     }
 
     // Add a new cocktail
-    func addCocktail(name: String, description: String, imageName: String) {
-        let newCocktail = Cocktail(name: name, description: description, imageName: imageName)
+    func addCocktail(name: String, description: String, selectedImage: UIImage?) {
+        var imageData: Data? = nil
+        if let selectedImage = selectedImage {
+            imageData = selectedImage.jpegData(compressionQuality: 0.8)
+        }
+        let newCocktail = Cocktail(name: name, description: description, imageName: imageData)
         cocktails.append(newCocktail)
         saveCocktails()
     }
