@@ -8,22 +8,50 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var number1 = ""
+    @State private var number2 = ""
+    @State private var result = ""
+    @State private var errorMessage = ""
 
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+        VStack(spacing: 48) {
+            TextField("Enter number 1", text: $number1)
+                .keyboardType(.numberPad)
+
+            TextField("Enter number 2", text: $number2)
+                .keyboardType(.numberPad)
+
+            Button("Divide", action: divideNumbers)
+                .modifier(ButtonModifier(foregroundColor: .white, backgroundColor: .orange))
+
+            Text(result)
+                .font(.largeTitle)
+                .foregroundColor(.green)
+                .padding()
+
+            Text(errorMessage)
+                .font(.largeTitle)
+                .foregroundColor(.red)
+                .padding()
+        }
+        .padding()
+    }
+
+    func divideNumbers() {
+        guard let num1 = Int(number1), let num2 = Int(number2) else {
+            errorMessage = "Invalid input"
+            return
+        }
+
+        do {
+            let calculator = Calculator()
+            let result = try calculator.divide(num1, by: num2)
+            self.result = "Result: \(result)"
+            errorMessage = ""
+        } catch CalculationError.divideByZero {
+            errorMessage = "Cannot divide by zero"
+        } catch {
+            errorMessage = "An error occurred"
         }
     }
 }
