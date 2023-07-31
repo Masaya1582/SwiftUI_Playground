@@ -6,11 +6,13 @@ PODS:
     - RxSwift (= 6.5.0)
   - RxSwift (6.5.0)
   - SwiftGen (6.6.2)
+  - SwiftyJSON (4.3.0)
 
 DEPENDENCIES:
   - RxCocoa
   - RxSwift
   - SwiftGen (~> 6.0)
+  - SwiftyJSON (~> 4.0)
 
 SPEC REPOS:
   trunk:
@@ -18,13 +20,15 @@ SPEC REPOS:
     - RxRelay
     - RxSwift
     - SwiftGen
+    - SwiftyJSON
 
 SPEC CHECKSUMS:
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
   RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
   SwiftGen: 1366a7f71aeef49954ca5a63ba4bef6b0f24138c
+  SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
 
-PODFILE CHECKSUM: 8f00980ad340305e2b7af2ce7b8faba7201fd296
+PODFILE CHECKSUM: d745886c821d34ef43a2a3647b434c50dfe508d7
 
 COCOAPODS: 1.12.1
