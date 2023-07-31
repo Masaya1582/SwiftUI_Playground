@@ -8,22 +8,43 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @StateObject private var weatherViewModel = WeatherViewModel()
+    @State private var city = ""
 
     var body: some View {
         VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+            if let weatherData = weatherViewModel.weatherData {
+                WeatherDetailView(weatherData: weatherData)
+            }
+            TextField("Enter city name", text: $city)
+                .padding()
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+
+            Button("Get Weather", action: fetchWeatherData)
+                .padding()
+
+        }
+        .padding()
+    }
+
+    private func fetchWeatherData() {
+        weatherViewModel.fetchWeatherData(for: city)
+    }
+}
+
+struct WeatherDetailView: View {
+    let weatherData: WeatherModel
+    
+    var body: some View {
+        VStack(spacing: 24) {
+            Text(weatherData.city)
+                .font(.title)
+
+            Text("\(weatherData.temperature)°C")
+                .font(.headline)
+
+            Text(weatherData.condition)
+                .font(.subheadline)
         }
     }
 }
