@@ -8,22 +8,22 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var agreedToTerms = false
+    @State private var agreedText = ""
 
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+        Form {
+            Section {
+                Toggle("Agree to terms and conditions", isOn: $agreedToTerms)
+            }
+
+            Section {
+                Button("Continue") {
+                    agreedText = "Thank you"
+                }
+                .disabled(agreedToTerms == false)
+            }
+            Text(agreedText)
         }
     }
 }
