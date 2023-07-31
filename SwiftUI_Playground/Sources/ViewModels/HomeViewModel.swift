@@ -8,8 +8,5 @@
 import SwiftUI
 
 class HomeViewModel: ObservableObject {
-    @Published var name = ""
-    @Published var age = 24
-    @Published var height = 174.5
-    @Published var isHuman = false
+    @Published var colors: [Color] = [.red, .green, .blue]
 }
