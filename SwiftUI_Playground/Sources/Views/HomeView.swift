@@ -6,25 +6,25 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
-
+    @State var avPlayer: AVPlayer?
     var body: some View {
         VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+            Button {
+                playOnlineFile()
+            } label: {
+                Text("Play Online File")
+            }
         }
+    }
+
+    private func playOnlineFile() {
+        guard let url = URL(string: "https://masasophi.com/wp-content/uploads/2023/07/swift.wav") else { fatalError("File wan't found")}
+        let playerItem = AVPlayerItem(url: url)
+        avPlayer = AVPlayer(playerItem: playerItem)
+        avPlayer?.play()
     }
 }
 
