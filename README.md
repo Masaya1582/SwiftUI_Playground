@@ -27,7 +27,7 @@ git add .
 ```
 
 ```swift
-git commit -m "Add login screen UI using Xib file"
+git commit -m "Add login screen UI"
 ```
 
 ***
@@ -45,7 +45,7 @@ git push origin feature/add-login-screen
 8. **Syncing with Upstream:** To keep your fork up to date with the original repository, you can add the original repository as an upstream remote and fetch its changes:
 
 ```swift
-git remote add upstream https://github.com/original-user/XibPlayground.git
+git remote add upstream https://github.com/original-user/SwiftUI_Playground.git
 ```
 
 ```swift
