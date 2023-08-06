@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UIKit
+import AWSS3
 
 struct ImageUploadView: View {
     @State private var showImagePicker: Bool = false
@@ -36,8 +37,35 @@ struct ImageUploadView: View {
     }
 
     func uploadImageToS3(image: UIImage) {
-        // Implement code to upload the selected image to S3 using the AWS SDK
-        // You can use the same 'uploadImageToS3' function as mentioned in the previous response
+        // Replace 'swiftui-cookie-monster-app-images' with the name of your S3 bucket
+        let bucketName = "swiftui-cookie-monster-app-images"
+
+        // Convert the UIImage to Data
+        guard let imageData = image.jpegData(compressionQuality: 0.8) else {
+            return
+        }
+
+        // Set up the S3 upload request
+        let transferUtility = AWSS3TransferUtility.default()
+        let expression = AWSS3TransferUtilityUploadExpression()
+        expression.progressBlock = { task, progress in
+            // Handle progress updates if needed
+            print("Upload progress: \(progress.fractionCompleted)")
+        }
+
+        transferUtility.uploadData(imageData,
+                                   bucket: bucketName,
+                                   key: UUID().uuidString, // Use a unique key for each image
+                                   contentType: "image/jpeg",
+                                   expression: expression) { task, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    print("Error uploading image: \(error.localizedDescription)")
+                } else {
+                    print("Image uploaded successfully.")
+                }
+            }
+        }
     }
 }
 

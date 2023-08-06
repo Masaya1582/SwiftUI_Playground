@@ -24,6 +24,7 @@
 		407E02082A7E587B002BFEFE /* ImageUploadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407E02072A7E587B002BFEFE /* ImageUploadView.swift */; };
 		407E020A2A7E588E002BFEFE /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407E02092A7E588E002BFEFE /* ImagePickerView.swift */; };
 		407E020C2A7E58B1002BFEFE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407E020B2A7E58B1002BFEFE /* SceneDelegate.swift */; };
+		407E020F2A7F2B05002BFEFE /* AWSS3 in Frameworks */ = {isa = PBXBuildFile; productRef = 407E020E2A7F2B05002BFEFE /* AWSS3 */; };
 		CABC9E129CED010448D92EF8 /* Pods_SwiftUI_Playground.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3977D086BE021AF13A042E9A /* Pods_SwiftUI_Playground.framework */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				407E020F2A7F2B05002BFEFE /* AWSS3 in Frameworks */,
 				CABC9E129CED010448D92EF8 /* Pods_SwiftUI_Playground.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -213,6 +215,9 @@
 			dependencies = (
 			);
 			name = SwiftUI_Playground;
+			packageProductDependencies = (
+				407E020E2A7F2B05002BFEFE /* AWSS3 */,
+			);
 			productName = SwiftUI_Playground;
 			productReference = 4011E8652A49759C003F06BF /* SwiftUI_Playground.app */;
 			productType = "com.apple.product-type.application";
@@ -241,6 +246,9 @@
 				Base,
 			);
 			mainGroup = 4011E85C2A49759C003F06BF;
+			packageReferences = (
+				407E020D2A7F2B05002BFEFE /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */,
+			);
 			productRefGroup = 4011E8662A49759C003F06BF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -556,6 +564,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		407E020D2A7F2B05002BFEFE /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/aws-amplify/aws-sdk-ios-spm";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		407E020E2A7F2B05002BFEFE /* AWSS3 */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 407E020D2A7F2B05002BFEFE /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSS3;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 4011E85D2A49759C003F06BF /* Project object */;
 }

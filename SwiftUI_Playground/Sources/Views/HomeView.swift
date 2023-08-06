@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AWSS3
 
 struct HomeView: View {
     var body: some View {
