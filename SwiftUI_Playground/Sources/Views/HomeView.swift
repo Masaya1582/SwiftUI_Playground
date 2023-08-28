@@ -12,7 +12,7 @@ struct HomeView: View {
 
     var body: some View {
         VStack {
-            Text("Dioです")
+            Text("Dio")
                 .font(.custom(FontFamily.Caprasimo.regular, size: 42))
             Asset.Assets.imgDio.swiftUIImage
                 .resizable()
