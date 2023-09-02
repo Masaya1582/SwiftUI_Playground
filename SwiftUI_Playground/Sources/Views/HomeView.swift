@@ -8,22 +8,26 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @StateObject var viewModel = UsersViewModel()
 
     var body: some View {
         VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+            Button("URLSession") {
+                viewModel.fetchUsersWithURLSession()
+            }
+            .modifier(ButtonModifier(foregroundColor: .white, backgroundColor: .orange))
+            Button("Alamofire") {
+                viewModel.fetchUsersWithAlamofire()
+            }
+            .modifier(ButtonModifier(foregroundColor: .white, backgroundColor: .green))
+            List(viewModel.users) { user in
+                VStack(alignment: .leading) {
+                    Text(user.name)
+                        .font(.headline)
+                    Text(user.email)
+                        .font(.subheadline)
+                }
+            }
         }
     }
 }
