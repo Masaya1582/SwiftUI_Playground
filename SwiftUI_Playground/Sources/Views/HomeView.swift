@@ -8,23 +8,46 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var expenses: [Expense] = []
+    @State private var expenseName = ""
+    @State private var expenseAmount = ""
 
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+        NavigationView {
+            VStack {
+                List {
+                    ForEach(expenses) { expense in
+                        Text("\(expense.name): $\(expense.amount, specifier: "%.2f")")
+                    }
+                    .onDelete(perform: deleteExpense)
+                }
+
+                HStack {
+                    TextField("Expense name", text: $expenseName)
+                    TextField("Amount", text: $expenseAmount)
+                        .keyboardType(.decimalPad)
+                    Button(action: addExpense) {
+                        Text("Add Expense")
+                    }
+                }
+                .padding()
+            }
+            .navigationBarTitle("Expense Tracker")
         }
+    }
+
+    private func addExpense() {
+        guard let amount = Double(expenseAmount), !expenseName.isEmpty else {
+            return
+        }
+        let newExpense = Expense(name: expenseName, amount: amount)
+        expenses.append(newExpense)
+        expenseName = ""
+        expenseAmount = ""
+    }
+
+    private func deleteExpense(at offsets: IndexSet) {
+        expenses.remove(atOffsets: offsets)
     }
 }
 
