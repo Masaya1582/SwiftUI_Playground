@@ -8,24 +8,40 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var image: UIImage? = nil
+    @State private var isLoading = false
+    private let imageURL = "https://masasophi.com/wp-content/uploads/2023/05/swiftui_image.001.png"
 
     var body: some View {
         VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+            if isLoading {
+                ProgressView("Loading Image...")
+            } else if let image = image {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFit()
+            } else {
+                Text("Image Not Available")
+            }
         }
+        .onAppear(perform: loadImage)
     }
+
+    private func loadImage() {
+        guard let url = URL(string: imageURL) else {
+            return
+        }
+        isLoading = true
+        URLSession.shared.dataTask(with: url) { data, _, error in
+            DispatchQueue.main.async {
+                isLoading = false
+                if let data = data, let loadedImage = UIImage(data: data) {
+                    image = loadedImage
+                }
+            }
+        }.resume()
+    }
+
 }
 
 struct HomeView_Previews: PreviewProvider {
