@@ -8,22 +8,32 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var users: [User] = []
+    @State private var errorItem: ErrorItem?
 
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+        NavigationView {
+            List(users, id: \.id) { user in
+                Text(user.name)
+            }
+            .navigationBarTitle("Users")
+            .onAppear {
+                fetchUserData()
+            }
+            .alert(item: $errorItem) { errorItem in
+                Alert(title: Text("Error"), message: Text(errorItem.message), dismissButton: .default(Text("OK")))
+            }
+        }
+    }
+
+    private func fetchUserData() {
+        NetworkService.shared.fetchUsers { result in
+            switch result {
+            case .success(let fetchUsers):
+                users = fetchUsers
+            case .failure(let error):
+                errorItem = ErrorItem(message: error.localizedDescription)
+            }
         }
     }
 }
