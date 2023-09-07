@@ -8,22 +8,31 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @StateObject var viewModel = GitHubViewModel()
+    @State private var username: String = ""
 
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+        NavigationView {
+            VStack {
+                TextField("Enter GitHub username", text: $username)
+                    .padding()
+
+                Button("Fetch Repositories") {
+                    viewModel.fetchRepositories(for: username)
+                }
+                .modifier(ButtonModifier(foregroundColor: .white, backgroundColor: .yellow))
+
+                List(viewModel.repositories, id: \.name) { repo in
+                    VStack(alignment: .leading) {
+                        Text(repo.name)
+                            .font(.headline)
+                        Text(repo.description ?? "")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                    }
+                }
+            }
+            .navigationBarTitle("GitHub Repositories")
         }
     }
 }
