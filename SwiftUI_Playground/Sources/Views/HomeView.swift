@@ -8,22 +8,49 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var isRunning = false
+    @State private var elapsedTime = 0.0
+    private var timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
 
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+        ZStack {
+            LinearGradient(gradient: Gradient(colors: [.red, .orange]), startPoint: .top, endPoint: .bottom)
+                .edgesIgnoringSafeArea(.all)
+
+            VStack {
+                Text("Stopwatch")
+                    .font(.largeTitle)
+                    .foregroundColor(.white)
+
+                Text(String(format: "%.1f", elapsedTime))
+                    .font(.system(size: 80))
+                    .foregroundColor(.white)
+
+                HStack {
+                    Button {
+                        isRunning.toggle()
+                    } label: {
+                        Image(systemName: isRunning ? "pause.circle.fill" : "play.circle.fill")
+                            .font(.largeTitle)
+                            .foregroundColor(.white)
+                    }
+
+                    Button {
+                        isRunning = false
+                        elapsedTime = 0.0
+                    } label: {
+                        Image(systemName: "arrow.counterclockwise.circle.fill")
+                            .font(.largeTitle)
+                            .foregroundColor(.white)
+                    }
+                }
+                .padding(.top, 20)
+            }
+        }
+        .onReceive(timer) { _ in
+            if isRunning {
+                elapsedTime += 0.1
+            }
         }
     }
 }
