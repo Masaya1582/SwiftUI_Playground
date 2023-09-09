@@ -8,22 +8,20 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    private let items = ["Item 1", "Item 2", "Item 3", "Item 4"]
 
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+        NavigationView {
+            List {
+                ForEach(items, id: \.self) { item in
+                    NavigationLink(destination: Text(item)) { // Replace Text(item) with your detail view
+                        FancyListRow(item: item)
+                            .padding(.vertical, 8)
+                    }
+                }
+            }
+            .listStyle(PlainListStyle()) // Customize the list style
+            .navigationBarTitle("Fancy List")
         }
     }
 }

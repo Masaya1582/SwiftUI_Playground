@@ -21,3 +21,22 @@ struct ButtonModifier: ViewModifier {
             .padding()
     }
 }
+
+struct FancyListRow: View {
+    var item: String // Customize this based on your data model
+
+    var body: some View {
+        VStack {
+            Text(item)
+                .font(.title)
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.blue)
+                .cornerRadius(10)
+                .foregroundColor(.white)
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 4)
+    }
+}
+
