@@ -6,24 +6,43 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var selectedImages: [UIImage] = []
+    @State private var isPickerPresented = false
 
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+        NavigationView {
+            VStack {
+                Button(action: {
+                    isPickerPresented.toggle()
+                }) {
+                    Text("Open Photo Album")
+                        .font(.title)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+                .sheet(isPresented: $isPickerPresented) {
+                    PhotoPickerView(selectedImages: $selectedImages)
+                }
+
+                if !selectedImages.isEmpty {
+                    ScrollView {
+                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+                            ForEach(selectedImages, id: \.self) { image in
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .scaledToFit()
+                            }
+                        }
+                        .padding()
+                    }
+                }
+            }
+            .navigationBarTitle("Photo Album App", displayMode: .inline)
         }
     }
 }
