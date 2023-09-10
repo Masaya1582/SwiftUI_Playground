@@ -8,22 +8,37 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    private let friends: [Friend] = [
+        Friend(name: "John Doe", imageName: "person.circle"),
+        Friend(name: "Jane Smith", imageName: "person.circle.fill"),
+        Friend(name: "Tom Johnson", imageName: "person.circle"),
+        Friend(name: "John Doe", imageName: "person.circle"),
+        Friend(name: "Jane Smith", imageName: "person.circle.fill"),
+        Friend(name: "Tom Johnson", imageName: "person.circle"),
+        Friend(name: "John Doe", imageName: "person.circle"),
+        Friend(name: "Jane Smith", imageName: "person.circle.fill"),
+        Friend(name: "Tom Johnson", imageName: "person.circle"),
+        Friend(name: "John Doe", imageName: "person.circle"),
+        Friend(name: "Jane Smith", imageName: "person.circle.fill"),
+        Friend(name: "Tom Johnson", imageName: "person.circle")
+    ]
 
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+        NavigationView {
+            List(friends) { friend in
+                NavigationLink(destination: Text("Profile of \(friend.name)")) {
+                    HStack {
+                        Image(systemName: friend.imageName)
+                            .resizable()
+                            .frame(width: 50, height: 50)
+                            .padding(.trailing, 10)
+
+                        Text(friend.name)
+                            .font(.headline)
+                    }
+                }
+            }
+            .navigationTitle("Friend List")
         }
     }
 }
