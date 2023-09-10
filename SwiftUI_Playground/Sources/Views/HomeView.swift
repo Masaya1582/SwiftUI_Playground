@@ -8,22 +8,32 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    private let cards = Card.allCards
+    @State private var selectedCard: Card?
 
     var body: some View {
         VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+            Text("Horizontal Scroll View with Animation")
+                .font(.custom(FontFamily.Caprasimo.regular, size: 16))
+                .padding()
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 20) {
+                    ForEach(cards) { card in
+                        CardView(card: card)
+                            .scaleEffect(selectedCard == card ? 1.2 : 1.0)
+                            .onTapGesture {
+                                withAnimation {
+                                    selectedCard = card
+                                }
+                            }
+                    }
+                }
+                .padding(20)
+            }
+            .frame(height: 200)
+
+            Spacer()
         }
     }
 }
