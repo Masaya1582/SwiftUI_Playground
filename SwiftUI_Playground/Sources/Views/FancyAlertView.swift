@@ -9,25 +9,25 @@ import SwiftUI
 
 struct FancyAlertView: View {
     @Binding var isShowing: Bool
-
+    
     var body: some View {
         ZStack {
             Color.black.opacity(0.3).edgesIgnoringSafeArea(.all)
-
+            
             VStack(spacing: 20) {
                 Text("Fancy Alert")
                     .font(.title)
                     .foregroundColor(.white)
-
+                
                 Image(systemName: "star.fill")
                     .font(.largeTitle)
                     .foregroundColor(.yellow)
-
+                
                 Text("This is a fancy alert with SwiftUI.")
                     .font(.headline)
                     .foregroundColor(.white)
                     .multilineTextAlignment(.center)
-
+                
                 Button(action: {
                     isShowing = false
                 }) {
@@ -43,7 +43,5 @@ struct FancyAlertView: View {
             .background(Color.black)
             .cornerRadius(20)
         }
-        .opacity(isShowing ? 1 : 0)
-        .animation(.easeInOut(duration: 0.3))
     }
 }

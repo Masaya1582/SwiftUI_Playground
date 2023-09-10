@@ -11,21 +11,23 @@ struct HomeView: View {
     @State private var showAlert = false
 
     var body: some View {
-        VStack {
-            Button {
-                self.showAlert.toggle()
-            } label: {
-                Text("Show Fancy Alert")
-                    .font(.headline)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            }
-            .sheet(isPresented: $showAlert) {
+        ZStack {
+            if showAlert {
                 FancyAlertView(isShowing: $showAlert)
+            } else {
+                Button {
+                    self.showAlert.toggle()
+                } label: {
+                    Text("Show Fancy Alert")
+                        .font(.headline)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
             }
         }
+        .animation(.easeInOut(duration: 0.4))
     }
 }
 
