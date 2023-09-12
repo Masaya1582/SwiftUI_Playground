@@ -8,22 +8,57 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    private let emojis = [
+        Emoji(symbol: "😀"),
+        Emoji(symbol: "😍"),
+        Emoji(symbol: "🥳"),
+        Emoji(symbol: "😎"),
+        Emoji(symbol: "🎉"),
+        Emoji(symbol: "🚀"),
+        Emoji(symbol: "🌈"),
+        Emoji(symbol: "🦄"),
+        Emoji(symbol: "🍔"),
+        Emoji(symbol: "🍕"),
+        Emoji(symbol: "🍰"),
+        Emoji(symbol: "🍦")
+    ]
+    @State private var selectedEmoji: Emoji?
 
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+        NavigationView {
+            List(emojis) { emoji in
+                EmojiRowView(emoji: emoji)
+                    .onTapGesture {
+                        selectedEmoji = emoji
+                    }
+            }
+            .navigationBarTitle("Emoji Palette")
+            .sheet(item: $selectedEmoji) { emoji in
+                Text(emoji.symbol)
+                    .font(.system(size: 100))
+                    .padding()
+                    .onTapGesture {
+                        copyToClipboard(text: emoji.symbol)
+                    }
+            }
+        }
+    }
+
+    private func copyToClipboard(text: String) {
+        let pasteboard = UIPasteboard.general
+        pasteboard.string = text
+    }
+}
+
+struct EmojiRowView: View {
+    let emoji: Emoji
+
+    var body: some View {
+        HStack {
+            Spacer()
+            Text(emoji.symbol)
+                .font(.system(size: 40))
+            Spacer()
         }
     }
 }
