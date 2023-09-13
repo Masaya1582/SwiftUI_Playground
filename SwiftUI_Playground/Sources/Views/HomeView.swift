@@ -23,6 +23,35 @@ struct HomeView: View {
                     Circle()
                         .stroke(Color.black, lineWidth: 2)
                 )
+                .contextMenu {
+                    Button(action: {
+                        print("fight")
+                    }) {
+                        Text("FIGHT")
+                        Image(systemName: "figure.wave")
+                    }
+
+                    Button(action: {
+                        print("bag")
+                    }) {
+                        Text("BAG")
+                        Image(systemName: "bag")
+                    }
+
+                    Button(action: {
+                        print("pokemon")
+                    }) {
+                        Text("POKEMON")
+                        Image(systemName: "hare")
+                    }
+
+                    Button(action: {
+                        print("run")
+                    }) {
+                        Text("RUN")
+                        Image(systemName: "figure.walk")
+                    }
+                }
             Spacer().frame(height: 100)
         }
     }
