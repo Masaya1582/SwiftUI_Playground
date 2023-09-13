@@ -27,6 +27,7 @@ struct HomeView: View {
             .frame(width: 320, height: 60)
             .background(.orange)
             .foregroundColor(.white)
+            .clipShape(RoundedRectangle(cornerRadius: 27))
             .padding()
         }
         .alert("Login", isPresented: $presentAlert, actions: {
