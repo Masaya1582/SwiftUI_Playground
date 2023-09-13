@@ -9,11 +9,11 @@
 import SwiftUI
 
 struct PokemonListView: View {
-    @EnvironmentObject var store: PokemonStore
+    @EnvironmentObject var pokemonStore: PokemonStore
 
     var body: some View {
         NavigationView {
-            List(store.pokemons) { pokemon in
+            List(pokemonStore.pokemons) { pokemon in
                 VStack(alignment: .leading, spacing: 10) {
                     Text(pokemon.name)
                         .font(.headline)

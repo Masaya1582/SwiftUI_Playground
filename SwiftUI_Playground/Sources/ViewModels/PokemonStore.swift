@@ -8,8 +8,8 @@
 import SwiftUI
 
 class PokemonStore: ObservableObject {
+    // UserDefaultsに保存する
     @Published var pokemons: [Pokemon] {
-        // Save to UserDefaults
         didSet {
             let encoder = JSONEncoder()
             if let encoded = try? encoder.encode(pokemons) {
@@ -18,8 +18,8 @@ class PokemonStore: ObservableObject {
         }
     }
 
+    // UserDefaultsから情報を取得する
     init() {
-        // Load from UserDefaults
         if let savedData = UserDefaults.standard.data(forKey: "pokemons") {
             let decoder = JSONDecoder()
             if let loadedData = try? decoder.decode([Pokemon].self, from: savedData) {

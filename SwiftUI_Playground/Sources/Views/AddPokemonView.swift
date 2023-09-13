@@ -9,11 +9,11 @@
 import SwiftUI
 
 struct AddPokemonView: View {
-    @EnvironmentObject var store: PokemonStore
+    @EnvironmentObject var pokemonStore: PokemonStore
     @State private var name = ""
     @State private var type = ""
     @State private var level = 1
-    @Environment(\.presentationMode) var presentationMode //
+    @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
         Form {
@@ -35,13 +35,13 @@ struct AddPokemonView: View {
         .navigationBarTitle("Add Pokemon")
     }
 
+    // ポケモン情報を追加する
     private func addPokemon() {
-        // Don't add empty Pokemon
         if name.isEmpty || type.isEmpty {
             return
         }
-        let pokemon = Pokemon(id: store.pokemons.count + 1, name: name, type: type, level: level)
-        store.pokemons.append(pokemon)
+        let pokemon = Pokemon(id: pokemonStore.pokemons.count + 1, name: name, type: type, level: level)
+        pokemonStore.pokemons.append(pokemon)
         name = ""
         type = ""
         level = 1
