@@ -18,6 +18,7 @@ struct ButtonModifier: ViewModifier {
             .padding()
             .foregroundColor(foregroundColor)
             .background(backgroundColor)
+            .clipShape(RoundedRectangle(cornerRadius: 27))
             .padding()
     }
 }
