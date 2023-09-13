@@ -8,22 +8,48 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var selectedPriority: TaskPriority = .high
+    @State private var selectedStatus: TaskStatus = .todo
+
+    private let tasks: [Task] = [
+        Task(title: "Task 1", priority: .high, status: .todo),
+        Task(title: "Task 2", priority: .medium, status: .inProgress),
+        Task(title: "Task 3", priority: .low, status: .completed),
+        Task(title: "Task 4", priority: .medium, status: .todo),
+        Task(title: "Task 5", priority: .high, status: .inProgress),
+        Task(title: "Task 6", priority: .low, status: .completed)
+    ]
+
+    private var filteredTasks: [Task] {
+        return tasks.filter { task in
+            return task.priority == selectedPriority && task.status == selectedStatus
+        }
+    }
 
     var body: some View {
-        VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+        NavigationView {
+            VStack {
+                Picker("Priority", selection: $selectedPriority) {
+                    ForEach(TaskPriority.allCases, id: \.self) { priority in
+                        Text(priority.rawValue)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .padding()
+
+                Picker("Status", selection: $selectedStatus) {
+                    ForEach(TaskStatus.allCases, id: \.self) { status in
+                        Text(status.rawValue)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .padding()
+
+                List(filteredTasks) { task in
+                    Text(task.title)
+                }
+            }
+            .navigationBarTitle("Task List")
         }
     }
 }
