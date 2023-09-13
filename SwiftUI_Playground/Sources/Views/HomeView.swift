@@ -55,6 +55,5 @@ struct HomeView_Previews: PreviewProvider {
             HomeView()
                 .preferredColorScheme(.dark)
         }
-
     }
 }
