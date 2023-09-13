@@ -8,23 +8,22 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var isExpanded = false
 
     var body: some View {
         VStack {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                )
-            Spacer().frame(height: 100)
+            DisclosureGroup("Expandable Group", isExpanded: $isExpanded) {
+                Text("This is some content inside the group.")
+            }
+            .padding()
+
+            Spacer()
+
+            Text("Group is \(isExpanded ? "expanded" : "collapsed").")
+                .font(.headline)
+                .padding()
         }
+        .padding()
     }
 }
 
