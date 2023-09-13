@@ -8,42 +8,55 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
-    @State private var shouldInvertColor = false
+    @State private var tasks: [Task] = []
+    @State private var newTaskTitle = ""
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            if shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
+        NavigationView {
+            List {
+                Section(header: Text("Add a New Task")) {
+                    HStack {
+                        TextField("Task Title", text: $newTaskTitle)
+                        Button(action: {
+                            addTask()
+                        }) {
+                            Text("Add")
+                        }
+                    }
+                }
+
+                Section(header: Text("Tasks")) {
+                    ForEach(tasks) { task in
+                        TaskRowView(task: task, toggleTaskCompletion: {
+                            toggleTaskCompletion(task)
+                        })
+                    }
+                    .onDelete(perform: deleteTask)
+                }
             }
-            Button {
-                shouldInvertColor.toggle()
-            } label: {
-                Text(shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(ButtonModifier(foregroundColor: .white, backgroundColor: .orange))
+            .listStyle(GroupedListStyle())
+            .navigationTitle("To-Do List")
+            .toolbar {
+                EditButton()
             }
         }
+    }
+
+    private func addTask() {
+        guard !newTaskTitle.isEmpty else { return }
+        let newTask = Task(title: newTaskTitle)
+        tasks.append(newTask)
+        newTaskTitle = ""
+    }
+
+    private func toggleTaskCompletion(_ task: Task) {
+        if let index = tasks.firstIndex(where: { $0.id == task.id }) {
+            tasks[index].completed.toggle()
+        }
+    }
+
+    private func deleteTask(at offsets: IndexSet) {
+        tasks.remove(atOffsets: offsets)
     }
 }
 
