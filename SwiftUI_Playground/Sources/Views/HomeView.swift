@@ -16,6 +16,7 @@ struct HomeView: View {
                 .font(.custom(FontFamily.Caprasimo.regular, size: 42))
             Asset.Assets.imgDio.swiftUIImage
                 .resizable()
+                .colorInvert()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 200, height: 200)
                 .clipShape(Circle())
