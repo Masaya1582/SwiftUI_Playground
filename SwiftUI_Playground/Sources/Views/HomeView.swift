@@ -13,12 +13,24 @@ struct HomeView: View {
     @State private var password: String = ""
 
     var body: some View {
-        Button("Show Alert") {
-            presentAlert = true
+        VStack(spacing: 20) {
+            Text("Username: \(username)")
+                .font(.system(size: 28))
+            Text("Password: \(password)")
+                .font(.system(size: 28))
+            Button {
+                presentAlert = true
+            } label: {
+                Text("Show Alert")
+                    .font(.system(size: 28))
+            }
+            .frame(width: 320, height: 60)
+            .background(.orange)
+            .foregroundColor(.white)
+            .padding()
         }
         .alert("Login", isPresented: $presentAlert, actions: {
             TextField("Username", text: $username)
-
             SecureField("Password", text: $password)
             Button("Login", action: {})
             Button("Cancel", role: .cancel, action: {})
