@@ -12,37 +12,59 @@ struct HomeView: View {
     @State private var shouldInvertColor = false
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            if shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
+        ZStack {
+            LinearGradient(gradient: Gradient(colors: [Color.blue, Color.white]), startPoint: .top, endPoint: .bottom)
+                .edgesIgnoringSafeArea(.all)
+
+            VStack {
+                Text("Today's Weather")
+                    .font(.largeTitle)
+                    .foregroundColor(.white)
+                    .padding()
+
+                Image(systemName: "sun.max.fill")
                     .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
+                    .frame(width: 100, height: 100)
+                    .foregroundColor(.yellow)
+
+                Text("Sunny")
+                    .font(.title)
+                    .foregroundColor(.white)
+                    .padding()
+
+                Text("26°C")
+                    .font(.system(size: 60))
+                    .foregroundColor(.white)
+                    .padding()
+
+                HStack {
+                    WeatherDetail(icon: "drop.fill", title: "Humidity", value: "65%")
+                    WeatherDetail(icon: "wind", title: "Wind", value: "5 mph")
+                }
+                .padding()
+
+                Spacer()
             }
-            Button {
-                shouldInvertColor.toggle()
-            } label: {
-                Text(shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(ButtonModifier(foregroundColor: .white, backgroundColor: .orange))
-            }
+        }
+    }
+}
+
+struct WeatherDetail: View {
+    var icon: String
+    var title: String
+    var value: String
+
+    var body: some View {
+        VStack {
+            Image(systemName: icon)
+                .foregroundColor(.white)
+                .font(.system(size: 40))
+            Text(title)
+                .foregroundColor(.white)
+                .font(.title)
+            Text(value)
+                .foregroundColor(.white)
+                .font(.headline)
         }
     }
 }
