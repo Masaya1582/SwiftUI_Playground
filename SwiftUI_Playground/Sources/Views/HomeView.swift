@@ -8,41 +8,55 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
-    @State private var shouldInvertColor = false
+    @State private var cards: [Card] = [
+        Card(color: .red),
+        Card(color: .green),
+        Card(color: .blue),
+        Card(color: .orange),
+        Card(color: .purple),
+        Card(color: .pink),
+        Card(color: .red),
+        Card(color: .green),
+        Card(color: .blue),
+        Card(color: .orange),
+        Card(color: .purple),
+        Card(color: .pink),
+        Card(color: .red),
+        Card(color: .green),
+        Card(color: .blue),
+        Card(color: .orange),
+        Card(color: .purple),
+        Card(color: .pink),
+        Card(color: .red),
+        Card(color: .green),
+        Card(color: .blue),
+        Card(color: .orange),
+        Card(color: .purple),
+        Card(color: .pink),
+        Card(color: .purple),
+        Card(color: .pink),
+        Card(color: .yellow)
+    ]
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
-            if shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
+        NavigationView {
+            VStack {
+                ScrollView {
+                    ScrollViewReader { proxy in
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 20) {
+                            ForEach(cards) { card in
+                                Rectangle()
+                                    .fill(card.color)
+                                    .frame(width: 100, height: 100)
+                                    .cornerRadius(10)
+                                    .id(card.id)
+                            }
+                        }
+                        .padding()
+                    }
+                }
             }
-            Button {
-                shouldInvertColor.toggle()
-            } label: {
-                Text(shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(ButtonModifier(foregroundColor: .white, backgroundColor: .orange))
-            }
+            .navigationTitle("Scroll to Card")
         }
     }
 }
