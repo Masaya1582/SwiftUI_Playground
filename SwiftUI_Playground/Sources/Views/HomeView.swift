@@ -13,8 +13,10 @@ struct HomeView: View {
 
     var body: some View {
         VStack(spacing: 28) {
-            Text("Dio")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 42))
+            Text("Dio said: \(viewModel.name)")
+                .font(.custom(FontFamily.Caprasimo.regular, size: 28))
+            TextField("Your Name", text: $viewModel.name)
+                .modifier(CustomTextField())
             if shouldInvertColor {
                 Asset.Assets.imgDio.swiftUIImage
                     .resizable()
@@ -41,8 +43,9 @@ struct HomeView: View {
                 shouldInvertColor.toggle()
             } label: {
                 Text(shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(ButtonModifier(foregroundColor: .white, backgroundColor: .orange))
+                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
             }
+            Spacer().frame(height: 80)
         }
     }
 }
