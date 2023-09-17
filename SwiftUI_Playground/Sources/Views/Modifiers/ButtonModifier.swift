@@ -22,3 +22,22 @@ struct ButtonModifier: ViewModifier {
             .padding()
     }
 }
+
+struct TextFieldModifier: ViewModifier {
+    let foregroundColor: Color
+    let backgroundColor: Color
+
+    func body(content: Content) -> some View {
+        content
+            .font(.custom(FontFamily.Caprasimo.regular, size: 20))
+            .padding()
+            .foregroundColor(foregroundColor)
+            .background(backgroundColor)
+            .overlay(
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(Color.black, lineWidth: 1) // 1px black border
+            )
+            .padding()
+    }
+}
+
