@@ -9,7 +9,6 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject var viewModel = HomeViewModel()
-    @State private var shouldInvertColor = false
 
     var body: some View {
         VStack(spacing: 28) {
@@ -17,7 +16,7 @@ struct HomeView: View {
                 .font(.custom(FontFamily.Caprasimo.regular, size: 28))
             TextField("Your Name", text: $viewModel.name)
                 .modifier(CustomTextField())
-            if shouldInvertColor {
+            if viewModel.shouldInvertColor {
                 Asset.Assets.imgDio.swiftUIImage
                     .resizable()
                     .aspectRatio(contentMode: .fill)
@@ -40,9 +39,9 @@ struct HomeView: View {
                     )
             }
             Button {
-                shouldInvertColor.toggle()
+                viewModel.shouldInvertColor.toggle()
             } label: {
-                Text(shouldInvertColor ? "Revert Color" : "Invert Color")
+                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
                     .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
             }
             Spacer().frame(height: 80)
