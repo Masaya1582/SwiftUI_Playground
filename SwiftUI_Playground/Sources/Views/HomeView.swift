@@ -8,44 +8,33 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var ipAddress = "0.0.0.0"
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 28))
-            TextField("Your Name", text: $viewModel.name)
-                .modifier(CustomTextField())
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            }
+        VStack {
+            Text("Random IP Address")
+                .font(.custom(FontFamily.Caprasimo.regular, size: 24))
+                .padding()
+
+            Text(ipAddress)
+                .font(.custom(FontFamily.Caprasimo.regular, size: 24))
+                .padding()
+
             Button {
-                viewModel.shouldInvertColor.toggle()
+                ipAddress = generateRandomIPAddress()
             } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
+                Text("Generate IP Address")
                     .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
             }
-            Spacer().frame(height: 80)
         }
+    }
+
+    private func generateRandomIPAddress() -> String {
+        let octet1 = Int.random(in: 0...255)
+        let octet2 = Int.random(in: 0...255)
+        let octet3 = Int.random(in: 0...255)
+        let octet4 = Int.random(in: 0...255)
+        return "\(octet1).\(octet2).\(octet3).\(octet4)"
     }
 }
 
