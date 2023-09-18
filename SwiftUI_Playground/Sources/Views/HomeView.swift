@@ -8,46 +8,41 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var deviceName: String = ""
+    @State private var isWifiEnabled: Bool = false
+    @State private var date = Date()
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 28))
-            TextField("Your Name", text: $viewModel.name)
-                .modifier(CustomTextField())
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
+        NavigationStack {
+            Form {
+                Section {
+                    TextField("Name", text: $deviceName)
+                    LabeledContent("iOS Version", value: "16.2")
+                } header: {
+                    Text("About")
+                }
+
+                Section {
+                    Toggle("Wi-Fi", isOn: $isWifiEnabled)
+                        .tint(.pink)
+                } header: {
+                    Text("Internet")
+                }
+
+                Section {
+                    DatePicker("Date picker", selection: $date)
+                }
+
+                Section {
+                    Button("Reset All Content and Settings") {
+                        // Reset logic
+                    }
+                }
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-            }
-            Spacer().frame(height: 80)
+            .tint(.pink)
+            .navigationBarTitle("Settings")
         }
-    }
-}
+    }}
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
