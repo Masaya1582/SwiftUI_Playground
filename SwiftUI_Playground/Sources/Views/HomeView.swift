@@ -8,39 +8,56 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State private var decimalInput = ""
-    @State private var binaryOutput = ""
+    @State private var input = ""
+    @State private var output = ""
+    @State private var isBinaryToDecimal = false
 
     var body: some View {
         VStack(spacing: 20) {
-            Text("Decimal to Binary Converter")
+            Text(isBinaryToDecimal ? "Decimal to Binary" : "Binary to Decimal")
                 .font(.custom(FontFamily.Caprasimo.regular, size: 20))
                 .padding()
 
-            TextField("Enter a Decimal Number", text: $decimalInput)
-                .modifier(CustomTextField())
-                .keyboardType(.numberPad)
+            Toggle("Convert Mode", isOn: $isBinaryToDecimal)
+                .font(.custom(FontFamily.Caprasimo.regular, size: 20))
+                .padding()
 
-            Button("Convert", action: convertToBinary)
+            TextField(isBinaryToDecimal ? "Enter Decimal Number" : "Enter Binary Number", text: $input)
+                .modifier(CustomTextField())
+                .keyboardType(isBinaryToDecimal ? .decimalPad : .numberPad)
+
+            Button("Convert", action: convert)
                 .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
 
-            Text("Binary Result:")
+            Text(isBinaryToDecimal ? "Binary Result:" : "Decimal Result:")
                 .font(.custom(FontFamily.Caprasimo.regular, size: 20))
 
-            Text(binaryOutput)
-                .font(.title)
+            Text(output)
+                .font(.custom(FontFamily.Caprasimo.regular, size: 40))
                 .padding()
 
             Spacer()
         }
+        .onChange(of: isBinaryToDecimal) { _ in
+            input = ""
+            output = ""
+        }
         .padding()
     }
 
-    private func convertToBinary() {
-        if let decimalValue = Int(decimalInput) {
-            binaryOutput = String(decimalValue, radix: 2)
+    private func convert() {
+        if isBinaryToDecimal {
+            if let decimalValue = Int(input) {
+                output = String(decimalValue, radix: 2)
+            } else {
+                output = "Invalid Input"
+            }
         } else {
-            binaryOutput = "Invalid Input"
+            if let binaryValue = Int(input, radix: 2) {
+                output = String(binaryValue)
+            } else {
+                output = "Invalid Input"
+            }
         }
     }
 }
