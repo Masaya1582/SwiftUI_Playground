@@ -11,7 +11,10 @@ import SwiftUI
 
 struct HomeView: View {
     enum LoadState {
-        case unknown, loading, loaded(Movie), failed
+        case unknown
+        case loading
+        case loaded(Movie)
+        case failed
     }
 
     @State private var selectedItem: PhotosPickerItem?
@@ -20,7 +23,7 @@ struct HomeView: View {
     var body: some View {
         VStack {
             PhotosPicker("Select movie", selection: $selectedItem, matching: .videos)
-                .font(.custom(FontFamily.Caprasimo.regular, size: 32))
+                .modifier(ButtonModifier(foregroundColor: .white, backgroundColor: .orange))
             switch loadState {
             case .unknown:
                 EmptyView()
