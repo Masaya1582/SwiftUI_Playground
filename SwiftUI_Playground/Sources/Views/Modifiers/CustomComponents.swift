@@ -37,3 +37,16 @@ struct CustomTextField: ViewModifier {
             .padding()
     }
 }
+
+struct CustomImage: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .aspectRatio(contentMode: .fill)
+            .frame(width: 200, height: 200)
+            .clipShape(Circle())
+            .overlay(
+                Circle()
+                    .stroke(Color.black, lineWidth: 2)
+            )
+    }
+}
