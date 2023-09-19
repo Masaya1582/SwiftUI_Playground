@@ -40,10 +40,12 @@ struct HomeView: View {
 
     private func addTask() {
         withAnimation {
-            let newTask = Task(context: viewContext)
-            newTask.name = taskName
-            taskName = ""
-            try? viewContext.save()
+            if !taskName.isEmpty {
+                let newTask = Task(context: viewContext)
+                newTask.name = taskName
+                taskName = ""
+                try? viewContext.save()
+            }
         }
     }
 

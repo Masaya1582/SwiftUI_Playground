@@ -31,7 +31,11 @@ struct PersistenceController {
     init(inMemory: Bool = false) {
         container = NSPersistentContainer(name: "CoreDataSample")
         if inMemory {
-            container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
+            if let firstStoreDescription = container.persistentStoreDescriptions.first {
+                firstStoreDescription.url = URL(fileURLWithPath: "/dev/null")
+            } else {
+                fatalError("Unable to access persistent store description")
+            }
         }
         container.loadPersistentStores { (storeDescription, error) in
             if let error = error as NSError? {
