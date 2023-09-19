@@ -8,37 +8,49 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @Environment(\.managedObjectContext) private var viewContext
+    @FetchRequest(entity: Task.entity(), sortDescriptors: []) var tasks: FetchedResults<Task>
+    @State private var taskName = ""
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 28))
-            TextField("Your Name", text: $viewModel.name)
-                .modifier(CustomTextField())
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        NavigationView {
+            List {
+                Section(header: Text("Add Task")) {
+                    HStack {
+                        TextField("Enter task name", text: $taskName)
+                            .modifier(CustomTextField())
+                        Button(action: addTask) {
+                            Text("Add")
+                        }
+                    }
+                }
+
+                Section(header: Text("Tasks")) {
+                    ForEach(tasks, id: \.self) { task in
+                        Text(task.name ?? "")
+                    }
+                    .onDelete(perform: deleteTasks)
+                }
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-            }
-            Spacer().frame(height: 80)
+            .listStyle(GroupedListStyle())
+            .navigationTitle("Task List")
+            .navigationBarItems(trailing: EditButton())
+        }
+    }
+
+    private func addTask() {
+        withAnimation {
+            let newTask = Task(context: viewContext)
+            newTask.name = taskName
+            taskName = ""
+            try? viewContext.save()
+        }
+    }
+
+    private func deleteTasks(offsets: IndexSet) {
+        withAnimation {
+            offsets.map { tasks[$0] }.forEach(viewContext.delete)
+            try? viewContext.save()
         }
     }
 }
@@ -48,8 +60,10 @@ struct HomeView_Previews: PreviewProvider {
         Group {
             HomeView()
                 .preferredColorScheme(.light)
+                .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
             HomeView()
                 .preferredColorScheme(.dark)
+                .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
         }
     }
 }
