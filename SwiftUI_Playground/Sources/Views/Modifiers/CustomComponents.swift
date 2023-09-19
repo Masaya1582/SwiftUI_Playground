@@ -39,10 +39,13 @@ struct CustomTextField: ViewModifier {
 }
 
 struct CustomImage: ViewModifier {
+    let width: CGFloat
+    let height: CGFloat
+
     func body(content: Content) -> some View {
         content
             .aspectRatio(contentMode: .fill)
-            .frame(width: 200, height: 200)
+            .frame(width: width, height: height)
             .clipShape(Circle())
             .overlay(
                 Circle()

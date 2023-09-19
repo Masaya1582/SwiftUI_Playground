@@ -30,13 +30,7 @@ struct HomeView: View {
             } else {
                 Asset.Assets.imgDio.swiftUIImage
                     .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
+                    .modifier(CustomImage(width: 200, height: 200))
             }
             Button {
                 viewModel.shouldInvertColor.toggle()
