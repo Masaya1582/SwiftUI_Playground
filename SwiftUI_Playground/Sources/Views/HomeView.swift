@@ -18,6 +18,7 @@ struct HomeView: View {
                 Section(header: Text("Add Task")) {
                     HStack {
                         TextField("Enter task name", text: $taskName)
+                            .modifier(CustomTextField())
                         Button(action: addTask) {
                             Text("Add")
                         }
