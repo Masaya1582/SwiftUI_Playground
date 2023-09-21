@@ -8,38 +8,28 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 28))
-            TextField("Your Name", text: $viewModel.name)
-                .modifier(CustomTextField())
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        Grid(horizontalSpacing: 20, verticalSpacing: 20) {
+            GridRow {
+                Image(systemName: "xmark")
+                Image(systemName: "xmark")
+                Image(systemName: "xmark")
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+
+            GridRow {
+                Image(systemName: "circle")
+                Image(systemName: "xmark")
+                Image(systemName: "circle")
             }
-            Spacer().frame(height: 80)
+
+            GridRow {
+                Image(systemName: "xmark")
+                Image(systemName: "circle")
+                Image(systemName: "circle")
+            }
         }
+        .font(.largeTitle)
     }
 }
 
