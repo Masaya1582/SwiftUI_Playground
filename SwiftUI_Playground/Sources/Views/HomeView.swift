@@ -8,38 +8,45 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                VintageSettingRow(iconName: "gear", title: "General")
+                VintageSettingRow(iconName: "wifi", title: "Wi-Fi")
+                VintageSettingRow(iconName: "wave.3.forward.circle.fill", title: "Bluetooth")
+                VintageSettingRow(iconName: "antenna.radiowaves.left.and.right", title: "Cellular")
+                VintageSettingRow(iconName: "phone.circle", title: "Phone")
+                VintageSettingRow(iconName: "music.note", title: "Music")
+                VintageSettingRow(iconName: "mail", title: "Mail")
+                VintageSettingRow(iconName: "calendar", title: "Calendar")
+                VintageSettingRow(iconName: "photo", title: "Photos")
+                VintageSettingRow(iconName: "camera", title: "Camera")
+            }
+        }
+        .padding()
+        .foregroundColor(.black)
+    }
+}
+
+struct VintageSettingRow: View {
+    var iconName: String
+    var title: String
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 28))
-            TextField("Your Name", text: $viewModel.name)
-                .modifier(CustomTextField())
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
-            }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-            }
-            Spacer().frame(height: 80)
+        HStack {
+            Image(systemName: iconName)
+                .font(.system(size: 28))
+            Text(title)
+                .font(.title)
+                .fontWeight(.semibold)
+
+            Spacer()
+
+            Image(systemName: "chevron.right")
+                .font(.system(size: 20))
         }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 10)
     }
 }
 
