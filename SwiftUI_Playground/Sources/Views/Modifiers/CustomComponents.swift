@@ -53,3 +53,23 @@ struct CustomImage: ViewModifier {
             )
     }
 }
+
+struct VintageSettingView: View {
+    var iconName: String
+    var title: String
+
+    var body: some View {
+        HStack {
+            Image(systemName: iconName)
+                .font(.system(size: 28))
+            Text(title)
+                .font(.title)
+                .fontWeight(.semibold)
+            Spacer()
+            Image(systemName: "chevron.right")
+                .font(.system(size: 20))
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 10)
+    }
+}

@@ -14,7 +14,7 @@ struct HomeView: View {
         VStack(spacing: 28) {
             Text("Dio said: \(viewModel.name)")
                 .font(.custom(FontFamily.Caprasimo.regular, size: 28))
-            TextField("Your Name", text: $viewModel.name)
+            TextField("Message", text: $viewModel.name)
                 .modifier(CustomTextField())
             if viewModel.shouldInvertColor {
                 Asset.Assets.imgDio.swiftUIImage
