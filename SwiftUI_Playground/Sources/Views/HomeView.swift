@@ -8,37 +8,40 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var photos = [
+        Photo(imageName: "img_biden"),
+        Photo(imageName: "img_barack"),
+        Photo(imageName: "img_donald"),
+    ]
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 28))
-            TextField("Message", text: $viewModel.name)
-                .modifier(CustomTextField())
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        NavigationView {
+            ScrollView {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 100, maximum: 200))]) {
+                    ForEach(photos) { photo in
+                        Image(photo.imageName)
+                            .resizable()
+                            .scaledToFit()
+                            .onTapGesture {
+                                withAnimation {
+                                    toggleZoom(for: photo)
+                                }
+                            }
+                            .frame(width: photo.isZoomed ? UIScreen.main.bounds.width - 40 : nil,
+                                   height: photo.isZoomed ? nil : 150)
+                            .border(Color.primary.opacity(0.5))
+                            .cornerRadius(photo.isZoomed ? 0 : 15)
+                    }
+                }
+                .padding(20)
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-            }
-            Spacer().frame(height: 80)
+            .navigationTitle("Photo Gallery")
+        }
+    }
+
+    private func toggleZoom(for photo: Photo) {
+        if let index = photos.firstIndex(where: { $0.id == photo.id }) {
+            photos[index].isZoomed.toggle()
         }
     }
 }
