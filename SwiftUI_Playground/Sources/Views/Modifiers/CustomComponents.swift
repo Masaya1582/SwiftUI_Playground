@@ -73,3 +73,39 @@ struct VintageSettingView: View {
         .padding(.vertical, 10)
     }
 }
+
+struct FlipCardView: View {
+    @State private var isFlipped = false
+    let englishWord: String
+    let spanishWord: String
+
+    var body: some View {
+        VStack {
+            if isFlipped {
+                Text(spanishWord)
+                    .font(.custom(FontFamily.Caprasimo.regular, size: 24))
+            } else {
+                Text(englishWord)
+                    .font(.custom(FontFamily.Caprasimo.regular, size: 24))
+            }
+            Button {
+                withAnimation {
+                    isFlipped.toggle()
+                }
+            } label: {
+                Text(isFlipped ? "Show English" : "Show Spanish")
+            }
+            .font(.custom(FontFamily.Caprasimo.regular, size: 24))
+            .frame(width: UIScreen.main.bounds.width / 1.3, height: UIScreen.main.bounds.height / 28, alignment: .center)
+            .padding()
+            .foregroundColor(.white)
+            .background(.orange)
+            .clipShape(RoundedRectangle(cornerRadius: 27))
+            .padding()
+        }
+        .rotation3DEffect(
+            .degrees(isFlipped ? 180 : 0),
+            axis: (x: 0.0, y: 1.0, z: 0.0)
+        )
+    }
+}
