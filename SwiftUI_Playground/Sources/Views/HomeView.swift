@@ -8,37 +8,20 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var text = "Hello World"
+    @State private var isCopied = false
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 28))
-            TextField("Message", text: $viewModel.name)
-                .modifier(CustomTextField())
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
-            }
+        VStack {
+            Text(text)
+                .font(.custom(FontFamily.Caprasimo.regular, size: 24))
             Button {
-                viewModel.shouldInvertColor.toggle()
+                UIPasteboard.general.string = text
+                isCopied = true
             } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+                Text(isCopied ? "Copied" : "Copy Text")
             }
-            Spacer().frame(height: 80)
+            .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
         }
     }
 }
