@@ -9,6 +9,7 @@ import SwiftUI
 
 class JokeViewModel: ObservableObject {
     @Published var joke: Joke?
+    @Published var isCopied = false
 
     func fetchRandomJoke() {
         if let url = URL(string: "https://v2.jokeapi.dev/joke/Programming?type=single") {

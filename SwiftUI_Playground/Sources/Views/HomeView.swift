@@ -16,6 +16,9 @@ struct HomeView: View {
                 .modifier(CustomLabel(foregroundColor: .black, size: 24))
                 .padding()
             Button {
+                if viewModel.isCopied {
+                    viewModel.isCopied = false
+                }
                 viewModel.fetchRandomJoke()
             } label: {
                 Text("Get a joke")
@@ -30,6 +33,14 @@ struct HomeView: View {
                 Text(joke.joke)
                     .modifier(CustomLabel(foregroundColor: .black, size: 20))
                     .padding()
+
+                Button {
+                    viewModel.isCopied = true
+                    UIPasteboard.general.string = joke.joke
+                } label: {
+                    Text(viewModel.isCopied ? "Copied" : "Copy a joke")
+                }
+                .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
             }
             Spacer()
         }
