@@ -8,38 +8,58 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var rating: Int = 5
+    @State private var feedbackText: String = ""
+    @State private var isSubmitted: Bool = false
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Message", text: $viewModel.name)
-                .modifier(CustomTextField())
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        VStack {
+            Text("Feedback Form")
+                .modifier(CustomLabel(foregroundColor: .black, size: 24))
+                .padding(.bottom, 20)
+
+            Text("How much do you like our app?")
+                .modifier(CustomLabel(foregroundColor: .black, size: 20))
+
+            HStack {
+                ForEach(1...5, id: \.self) { index in
+                    Button {
+                        self.rating = index
+                    } label: {
+                        Image(systemName: index <= rating ? "star.fill" : "star")
+                            .resizable()
+                            .frame(width: 40, height: 40)
+                            .foregroundColor(.yellow)
+                    }
+                }
             }
+
+            Text("Tell us why you like it or how we can improve:")
+                .modifier(CustomLabel(foregroundColor: .black, size: 16))
+                .padding(.top, 20)
+
+            TextEditor(text: $feedbackText)
+                .frame(minHeight: 100)
+                .cornerRadius(10)
+                .border(Color.gray, width: 1)
+                .padding(.horizontal)
+                .padding(.bottom, 20)
+
             Button {
-                viewModel.shouldInvertColor.toggle()
+                self.isSubmitted = true
             } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+                Text("Submit Feedback")
             }
-            Spacer().frame(height: 80)
+            .modifier(CustomButton(foregroundColor: .white, backgroundColor: .green))
+            .disabled(feedbackText.isEmpty)
+
+            if isSubmitted {
+                Text("Thank you for your feedback!")
+                    .modifier(CustomLabel(foregroundColor: .black, size: 14))
+                    .padding(.top, 20)
+            }
         }
+        .padding()
     }
 }
 
