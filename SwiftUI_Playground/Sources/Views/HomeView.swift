@@ -13,7 +13,7 @@ struct HomeView: View {
     var body: some View {
         VStack(spacing: 28) {
             Text("Dio said: \(viewModel.name)")
-                .font(.custom(FontFamily.Caprasimo.regular, size: 28))
+                .modifier(CustomLabel(foregroundColor: .black, size: 28))
             TextField("Message", text: $viewModel.name)
                 .modifier(CustomTextField())
             if viewModel.shouldInvertColor {

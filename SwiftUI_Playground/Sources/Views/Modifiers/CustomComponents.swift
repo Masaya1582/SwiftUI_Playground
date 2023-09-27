@@ -7,6 +7,17 @@
 
 import SwiftUI
 
+struct CustomLabel: ViewModifier {
+    let foregroundColor: Color
+    let size: CGFloat
+
+    func body(content: Content) -> some View {
+        content
+            .font(.custom(FontFamily.Caprasimo.regular, size: size))
+            .foregroundColor(foregroundColor)
+    }
+}
+
 struct CustomButton: ViewModifier {
     let foregroundColor: Color
     let backgroundColor: Color
