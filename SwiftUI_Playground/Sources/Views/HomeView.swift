@@ -11,34 +11,20 @@ struct HomeView: View {
     @StateObject var viewModel = HomeViewModel()
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Message", text: $viewModel.name)
-                .modifier(CustomTextField())
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        NavigationView {
+            List {
+                Section(header: Text("Account Settings").modifier(CustomLabel(foregroundColor: .blue, size: 24))) {
+                    VintageSettingView(iconName: "person.fill", title: "Profile")
+                    VintageSettingView(iconName: "envelope.fill", title: "Email")
+                    VintageSettingView(iconName: "lock.fill", title: "Password")
+                }
+                Section(header: Text("App Settings").modifier(CustomLabel(foregroundColor: .green, size: 24))) {
+                    VintageSettingView(iconName: "gear", title: "General")
+                    VintageSettingView(iconName: "bell.fill", title: "Notifications")
+                    VintageSettingView(iconName: "arrow.up.arrow.down.circle.fill", title: "Data Usage")
+                }
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-            }
-            Spacer().frame(height: 80)
+            .navigationBarTitle("Settings")
         }
     }
 }
