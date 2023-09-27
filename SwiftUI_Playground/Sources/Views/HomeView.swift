@@ -8,37 +8,77 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var cardNumber: String = ""
+    @State private var cardHolderName: String = ""
+    @State private var expirationDate: String = ""
+    @State private var cvv: String = ""
+    @State private var isCardNumberValid: Bool = false
+    @State private var isCardHolderNameValid: Bool = false
+    @State private var isExpirationDateValid: Bool = false
+    @State private var isCVVValid: Bool = false
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Message", text: $viewModel.name)
-                .modifier(CustomTextField())
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        VStack {
+            Text("Payment Information")
+                .modifier(CustomLabel(foregroundColor: .black, size: 24))
+                .padding()
+
+            TextField("Card Number", text: $cardNumber)
+                .padding()
+                .keyboardType(.numberPad)
+                .onReceive(cardNumber.publisher.collect()) {
+                    let text = String($0)
+                    isCardNumberValid = text.count == 16
+                }
+                .background(isCardNumberValid ? Color.green.opacity(0.3) : Color.gray.opacity(0.3))
+                .cornerRadius(10)
+                .padding()
+
+            TextField("Cardholder Name", text: $cardHolderName)
+                .padding()
+                .autocapitalization(.words)
+                .onReceive(cardHolderName.publisher.collect()) {
+                    isCardHolderNameValid = !$0.isEmpty
+                }
+                .background(isCardHolderNameValid ? Color.green.opacity(0.3) : Color.gray.opacity(0.3))
+                .cornerRadius(10)
+                .padding()
+
+            HStack {
+                TextField("Expiration Date (MM/YY)", text: $expirationDate)
+                    .padding()
+                    .keyboardType(.numberPad)
+                    .onReceive(expirationDate.publisher.collect()) {
+                        let text = String($0)
+                        isExpirationDateValid = text.count == 5 && text.contains("/")
+                    }
+                    .background(isExpirationDateValid ? Color.green.opacity(0.3) : Color.gray.opacity(0.3))
+                    .cornerRadius(10)
+                    .padding()
+
+                TextField("CVV", text: $cvv)
+                    .padding()
+                    .keyboardType(.numberPad)
+                    .onReceive(cvv.publisher.collect()) {
+                        let text = String($0)
+                        isCVVValid = text.count == 3
+                    }
+                    .background(isCVVValid ? Color.green.opacity(0.3) : Color.gray.opacity(0.3))
+                    .cornerRadius(10)
+                    .padding()
             }
+
             Button {
-                viewModel.shouldInvertColor.toggle()
+                if isCardNumberValid && isCardHolderNameValid && isExpirationDateValid && isCVVValid {
+                    // Payment is valid, proceed with processing
+                    // You can navigate to a success screen or perform further actions here
+                } else {
+                    // Payment is not valid, show an error message
+                }
             } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+                Text("Submit Payment")
             }
-            Spacer().frame(height: 80)
+            .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
         }
     }
 }
