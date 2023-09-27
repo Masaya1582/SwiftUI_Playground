@@ -8,37 +8,41 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var progress = 0.8
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Message", text: $viewModel.name)
-                .modifier(CustomTextField())
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        HStack {
+            VStack(spacing: 20) {
+                ProgressView()
+
+                ProgressView(value: 0.2)
+
+                ProgressView("Hello", value: 70, total: 100)
+
+                ProgressView(value: progress) {
+                    Text("Label")
+                } currentValueLabel: {
+                    Text("Value: \(progress)")
+                }
+
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+            .progressViewStyle(.circular)
+
+            VStack(spacing: 20) {
+                ProgressView()
+
+                ProgressView(value: 0.2)
+
+                ProgressView("Label", value: 70, total: 100)
+
+                ProgressView(value: progress) {
+                    Text("Label")
+                } currentValueLabel: {
+                    Text("Current Value Label: \(progress)")
+                }
+
             }
-            Spacer().frame(height: 80)
+            .progressViewStyle(.linear)
         }
     }
 }
