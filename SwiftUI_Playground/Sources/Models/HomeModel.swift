@@ -8,16 +8,19 @@
 import Foundation
 import SwiftUI
 
-class HomeModel {
-    var name: String
-    var age: Int
-    var height: Double
-    var isMan: Bool
+struct Task: Identifiable {
+    let id = UUID()
+    var title: String
+}
 
-    init(name: String, age: Int, height: Double, isMen: Bool) {
-        self.name = name
-        self.age = age
-        self.height = height
-        self.isMan = isMen
+class TaskManager: ObservableObject {
+    @Published var tasks: [Task] = []
+
+    func addTask(title: String) {
+        tasks.append(Task(title: title))
+    }
+
+    func removeTask(at index: Int) {
+        tasks.remove(at: index)
     }
 }
