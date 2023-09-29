@@ -109,3 +109,27 @@ struct CustomCircleView: View {
         }
     }
 }
+
+struct WidgetListItem: View {
+    var title: String
+    var description: String
+
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text(title)
+                    .font(.headline)
+                Text(description)
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+            }
+            Spacer()
+        }
+        .padding(10)
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.white)
+                .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 2)
+        )
+    }
+}
