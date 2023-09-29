@@ -101,7 +101,6 @@ struct FancyCircleView: View {
                 .font(.system(size: 50))
                 .foregroundColor(.white)
                 .rotationEffect(.degrees(isAnimating ? 360 : 0)) // Rotate the icon when animating
-                .offset(y: isAnimating ? -40 : 0) // Move the icon when animating
         }
         .onTapGesture {
             withAnimation(Animation.easeInOut(duration: 1.0)) {
