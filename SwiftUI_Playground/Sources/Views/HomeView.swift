@@ -38,7 +38,7 @@ struct HomeView: View {
                 Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
                     .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
             }
-            Spacer().frame(height: 80)
+            CustomCircleView()
         }
     }
 }
