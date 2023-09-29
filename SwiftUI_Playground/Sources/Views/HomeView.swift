@@ -9,12 +9,14 @@ import SwiftUI
 
 struct HomeView: View {
     @State private var count = 16
+    @State private var circleColor: [Color] = [.orange, .green, .red, .blue, .brown, .purple, .pink, .indigo, .mint]
 
     var body: some View {
         RadialLayout {
             ForEach(0..<count, id: \.self) { _ in
                 Circle()
                     .frame(width: 32, height: 32)
+                    .foregroundColor(circleColor.randomElement() ?? .orange)
             }
         }
         .safeAreaInset(edge: .bottom) {
