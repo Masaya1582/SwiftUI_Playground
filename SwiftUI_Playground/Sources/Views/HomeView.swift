@@ -11,35 +11,29 @@ struct HomeView: View {
     @StateObject var viewModel = HomeViewModel()
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Message", text: $viewModel.name)
-                .modifier(CustomTextField(disableAutoCorrection: true))
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        List {
+            Section(header: Text("Today")) {
+                WidgetListItem(title: "Task 1", description: "Complete task 1")
+                WidgetListItem(title: "Task 2", description: "Complete task 2")
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+
+            Section(header: Text("Tomorrow")) {
+                WidgetListItem(title: "Task 3", description: "Complete task 3")
+                WidgetListItem(title: "Task 4", description: "Complete task 4")
             }
-            CustomCircleView()
+
+            Section(header: Text("Tomorrow")) {
+                WidgetListItem(title: "Task 3", description: "Complete task 3")
+                WidgetListItem(title: "Task 4", description: "Complete task 4")
+            }
+
+            Section(header: Text("Tomorrow")) {
+                WidgetListItem(title: "Task 3", description: "Complete task 3")
+                WidgetListItem(title: "Task 4", description: "Complete task 4")
+            }
         }
+        .listStyle(GroupedListStyle())
+        .background(Color.white) // Set the background color of the List
     }
 }
 
