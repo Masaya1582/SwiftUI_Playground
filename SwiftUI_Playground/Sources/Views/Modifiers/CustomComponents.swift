@@ -86,3 +86,27 @@ struct VintageSettingView: View {
         .padding(.vertical, 10)
     }
 }
+
+struct FancyCircleView: View {
+    @State private var isAnimating = false
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .frame(width: 100, height: 100)
+                .foregroundColor(.blue)
+                .scaleEffect(isAnimating ? 1.5 : 1.0) // Scale the circle when animating
+
+            Image(systemName: "arrow.right.circle.fill")
+                .font(.system(size: 50))
+                .foregroundColor(.white)
+                .rotationEffect(.degrees(isAnimating ? 360 : 0)) // Rotate the icon when animating
+                .offset(y: isAnimating ? -40 : 0) // Move the icon when animating
+        }
+        .onTapGesture {
+            withAnimation(Animation.easeInOut(duration: 1.0)) {
+                isAnimating.toggle()
+            }
+        }
+    }
+}
