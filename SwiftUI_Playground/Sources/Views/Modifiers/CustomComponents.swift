@@ -36,6 +36,7 @@ struct CustomButton: ViewModifier {
 
 struct CustomTextField: ViewModifier {
     @Environment(\.colorScheme) var colorScheme
+    let disableAutoCorrection: Bool
     
     func body(content: Content) -> some View {
         content
@@ -45,6 +46,7 @@ struct CustomTextField: ViewModifier {
                 RoundedRectangle(cornerRadius: 20)
                     .stroke(colorScheme == .dark ? Color.white : Color.black, lineWidth: 1)
             )
+            .disableAutocorrection(disableAutoCorrection)
             .padding()
     }
 }

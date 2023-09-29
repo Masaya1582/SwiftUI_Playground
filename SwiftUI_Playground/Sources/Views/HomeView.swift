@@ -15,7 +15,7 @@ struct HomeView: View {
             Text("Dio said: \(viewModel.name)")
                 .modifier(CustomLabel(foregroundColor: .black, size: 28))
             TextField("Message", text: $viewModel.name)
-                .modifier(CustomTextField())
+                .modifier(CustomTextField(disableAutoCorrection: true))
             if viewModel.shouldInvertColor {
                 Asset.Assets.imgDio.swiftUIImage
                     .resizable()
