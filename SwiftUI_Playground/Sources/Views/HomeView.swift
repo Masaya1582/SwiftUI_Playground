@@ -8,37 +8,23 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var rotationAngle: Double = 0.0
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Message", text: $viewModel.name)
-                .modifier(CustomTextField(disableAutoCorrection: true))
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
-            }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-            }
-            CustomCircleView()
+        VStack {
+            Text("Rotate Circle")
+                .modifier(CustomLabel(foregroundColor: .black, size: 24))
+            Spacer()
+            Image(systemName: "arrow.right.circle.fill")
+                .resizable()
+                .frame(width: 100, height: 100)
+                .rotationEffect(.degrees(rotationAngle))
+                .animation(.spring())
+            Spacer()
+            Slider(value: $rotationAngle, in: 0...360, step: 1.0)
+                .padding()
+            Text("Rotation Angle: \(Int(rotationAngle))°")
+                .modifier(CustomLabel(foregroundColor: .black, size: 18))
         }
     }
 }
