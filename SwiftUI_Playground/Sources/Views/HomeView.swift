@@ -8,37 +8,20 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var count = 16
+    @State private var circleColor: [Color] = [.orange, .green, .red, .blue, .brown, .purple, .pink, .indigo, .mint]
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Message", text: $viewModel.name)
-                .modifier(CustomTextField())
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        RadialLayout {
+            ForEach(0..<count, id: \.self) { _ in
+                Circle()
+                    .frame(width: 32, height: 32)
+                    .foregroundColor(circleColor.randomElement() ?? .orange)
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-            }
-            Spacer().frame(height: 80)
+        }
+        .safeAreaInset(edge: .bottom) {
+            Stepper("Count: \(count)", value: $count.animation(), in: 0...36)
+                .padding()
         }
     }
 }
