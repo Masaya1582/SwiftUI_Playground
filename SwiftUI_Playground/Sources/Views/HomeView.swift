@@ -8,19 +8,19 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State private var count = 16
-    @State private var circleColor: [Color] = [.orange, .green, .red, .blue, .brown, .purple, .pink, .indigo, .mint]
+    @State private var circleCount = 16
+    private let circleColor: [Color] = [.orange, .green, .red, .blue, .brown, .purple, .pink, .indigo, .mint]
 
     var body: some View {
         RadialLayout {
-            ForEach(0..<count, id: \.self) { _ in
+            ForEach(0..<circleCount, id: \.self) { _ in
                 Circle()
                     .frame(width: 32, height: 32)
                     .foregroundColor(circleColor.randomElement() ?? .orange)
             }
         }
         .safeAreaInset(edge: .bottom) {
-            Stepper("Count: \(count)", value: $count.animation(), in: 0...36)
+            Stepper("Circle Count: \(circleCount)", value: $circleCount.animation(), in: 0...36)
                 .padding()
         }
     }
