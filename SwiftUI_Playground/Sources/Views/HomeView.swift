@@ -8,38 +8,52 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    private let movies = [
+        Movie(title: "Inception", poster: "inception"),
+        Movie(title: "Interstellar", poster: "interstellar"),
+        Movie(title: "The Dark Knight", poster: "darkknight"),
+        Movie(title: "Blade Runner 2049", poster: "bladerunner2049"),
+        Movie(title: "The Matrix", poster: "matrix")
+    ]
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Message", text: $viewModel.name)
-                .modifier(CustomTextField(disableAutoCorrection: true))
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        NavigationView {
+            List(movies) { movie in
+                NavigationLink(destination: Text(movie.title)) {
+                    MovieRow(movie: movie)
+                }
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-            }
-            CustomCircleView()
+            .navigationBarTitle("Favorite Movies")
         }
+    }
+
+}
+
+struct MovieRow: View {
+    let movie: Movie
+
+    var body: some View {
+        HStack {
+            Image(movie.poster)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 100, height: 150)
+                .cornerRadius(10)
+
+            Text(movie.title)
+                .font(.title)
+                .padding(.leading, 10)
+                .foregroundColor(.primary)
+
+            Spacer()
+        }
+        .padding(10)
+        .background(
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color.white)
+                .shadow(radius: 5)
+        )
+        .padding(.vertical, 5)
     }
 }
 
