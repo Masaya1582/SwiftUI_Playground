@@ -35,8 +35,13 @@ internal enum Asset {
     internal static let imgGerald = ImageAsset(name: "img_gerald")
     internal static let imgJimmy = ImageAsset(name: "img_jimmy")
     internal static let imgRonald = ImageAsset(name: "img_ronald")
+    internal static let bladerunner2049 = ImageAsset(name: "bladerunner2049")
+    internal static let darkknight = ImageAsset(name: "darkknight")
     internal static let imgDio = ImageAsset(name: "img_dio")
     internal static let imgLaboratory = ImageAsset(name: "img_laboratory")
+    internal static let inception = ImageAsset(name: "inception")
+    internal static let interstellar = ImageAsset(name: "interstellar")
+    internal static let matrix = ImageAsset(name: "matrix")
   }
   internal enum Colors {
     internal static let backgroundColor = ColorAsset(name: "background_color")
