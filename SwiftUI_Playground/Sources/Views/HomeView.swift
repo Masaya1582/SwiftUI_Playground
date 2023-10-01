@@ -8,38 +8,69 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @StateObject private var bookStore = BookStore()
+
+    @State private var newBookTitle = ""
+    @State private var newBookAuthor = ""
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Message", text: $viewModel.name)
-                .modifier(CustomTextField(disableAutoCorrection: true))
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        NavigationView {
+            VStack {
+                HStack {
+                    TextField("Title", text: $newBookTitle)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    TextField("Author", text: $newBookAuthor)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                }
+                .padding()
+
+                Button(action: addBook) {
+                    Text("Add Book")
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+                .padding()
+
+                List {
+                    ForEach(bookStore.books) { book in
+                        BookRowView(book: book)
+                    }
+                    .onDelete(perform: removeBooks)
+                }
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-            }
-            CustomCircleView()
+            .navigationTitle("My Book Collection")
+            .navigationBarItems(leading: EditButton())
         }
+    }
+
+    private func addBook() {
+        guard !newBookTitle.isEmpty && !newBookAuthor.isEmpty else { return }
+        let newBook = Book(title: newBookTitle, author: newBookAuthor)
+        bookStore.books.append(newBook)
+        newBookTitle = ""
+        newBookAuthor = ""
+    }
+
+    private func removeBooks(at offsets: IndexSet) {
+        bookStore.books.remove(atOffsets: offsets)
+    }
+}
+
+struct BookRowView: View {
+    var book: Book
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text(book.title)
+                .font(.headline)
+            Text("Author: \(book.author)")
+                .font(.subheadline)
+                .foregroundColor(.gray)
+        }
+        .padding(8)
     }
 }
 
