@@ -8,38 +8,54 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    private let items: [VintageItem] = [
+        VintageItem(imageName: "img_donald", title: "Trump"),
+        VintageItem(imageName: "img_donald", title: "Trump"),
+        VintageItem(imageName: "img_donald", title: "Trump"),
+        VintageItem(imageName: "img_donald", title: "Trump"),
+        VintageItem(imageName: "img_donald", title: "Trump"),
+        VintageItem(imageName: "img_donald", title: "Trump")
+    ]
+
+    private let columns = [
+        GridItem(.flexible(minimum: 100, maximum: 200)),
+        GridItem(.flexible(minimum: 100, maximum: 200))
+    ]
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Message", text: $viewModel.name)
-                .modifier(CustomTextField(disableAutoCorrection: true))
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        ScrollView {
+            LazyVGrid(columns: columns, spacing: 20) {
+                ForEach(items) { item in
+                    VintageItemView(item: item)
+                }
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-            }
-            CustomCircleView()
+            .padding()
         }
+    }
+}
+
+struct VintageItemView: View {
+    let item: VintageItem
+
+    var body: some View {
+        VStack {
+            Image(item.imageName)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 150, height: 150)
+                .cornerRadius(10)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.black, lineWidth: 2)
+                )
+            Text(item.title)
+                .font(.headline)
+                .padding(.top, 8)
+        }
+        .padding(12)
+        .background(Color.white)
+        .cornerRadius(10)
+        .shadow(radius: 5)
     }
 }
 
