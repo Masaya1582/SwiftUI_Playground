@@ -8,37 +8,65 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var inputDistance = ""
+    @State private var selectedInputUnit = 0
+    @State private var selectedOutputUnit = 1
+
+    private let distanceUnits = ["Meters", "Kilometers", "Miles", "Feet"]
+    private var convertedDistance: Double {
+        let inputValue = Double(inputDistance) ?? 0.0
+        let inputUnit = Measurement(value: inputValue, unit: getUnit(for: selectedInputUnit))
+        let outputUnit = inputUnit.converted(to: getUnit(for: selectedOutputUnit))
+        return outputUnit.value
+    }
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Message", text: $viewModel.name)
-                .modifier(CustomTextField(disableAutoCorrection: true))
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        VStack {
+            Text("Distance Converter")
+                .modifier(CustomLabel(foregroundColor: .black, size: 24))
+                .padding(.bottom, 20)
+
+            TextField("Enter distance", text: $inputDistance)
+                .modifier(CustomTextField(disableAutoCorrection: false))
+                .keyboardType(.decimalPad)
+                .padding()
+
+            Picker("Input Unit", selection: $selectedInputUnit) {
+                ForEach(0..<distanceUnits.count) {
+                    Text(self.distanceUnits[$0])
+                }
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+            .pickerStyle(SegmentedPickerStyle())
+            .padding()
+
+            Picker("Output Unit", selection: $selectedOutputUnit) {
+                ForEach(0..<distanceUnits.count) {
+                    Text(self.distanceUnits[$0])
+                }
             }
-            CustomCircleView()
+            .pickerStyle(SegmentedPickerStyle())
+            .padding()
+
+            Text("\(inputDistance.isEmpty ? "0" : String(format: "%.2f", convertedDistance)) \(distanceUnits[selectedOutputUnit])")
+                .modifier(CustomLabel(foregroundColor: .black, size: 32))
+                .padding()
+            Spacer()
+        }
+        .padding()
+    }
+
+    private func getUnit(for index: Int) -> UnitLength {
+        switch index {
+        case 0:
+            return .meters
+        case 1:
+            return .kilometers
+        case 2:
+            return .miles
+        case 3:
+            return .feet
+        default:
+            return .meters
         }
     }
 }
