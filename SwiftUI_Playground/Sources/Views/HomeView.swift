@@ -8,37 +8,22 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    private  let menuItems: [FoodItem] = [
+        FoodItem(name: "Chicken Nuggets", description: "Crispy chicken nuggets with ketchup", price: 5.99, imageName: "nuggets"),
+        FoodItem(name: "Cheeseburger", description: "Juicy cheeseburger with fries", price: 6.99, imageName: "burger"),
+        FoodItem(name: "Spaghetti", description: "Delicious spaghetti with tomato sauce", price: 7.99, imageName: "spaghetti"),
+        FoodItem(name: "Pancakes", description: "Fluffy pancakes with syrup and butter", price: 4.99, imageName: "pancakes"),
+        FoodItem(name: "Pizza", description: "Cheesy pizza with your favorite toppings", price: 8.99, imageName: "pizza")
+    ]
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Message", text: $viewModel.name)
-                .modifier(CustomTextField(disableAutoCorrection: true))
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        NavigationView {
+            List(menuItems) { item in
+                NavigationLink(destination: FoodDetail(item: item)) {
+                    FoodRow(item: item)
+                }
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-            }
-            CustomCircleView()
+            .navigationTitle("Simple Food Menu")
         }
     }
 }

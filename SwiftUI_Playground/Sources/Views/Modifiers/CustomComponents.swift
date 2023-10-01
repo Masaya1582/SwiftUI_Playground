@@ -109,3 +109,57 @@ struct CustomCircleView: View {
         }
     }
 }
+
+struct FoodRow: View {
+    let item: FoodItem
+
+    var body: some View {
+        HStack {
+            Image(item.imageName)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 80, height: 80)
+                .cornerRadius(10)
+                .padding(.trailing, 10)
+
+            VStack(alignment: .leading, spacing: 5) {
+                Text(item.name)
+                    .font(.headline)
+                Text(item.description)
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+            }
+
+            Spacer()
+
+            Text("$\(String(format: "%.2f", item.price))")
+                .font(.headline)
+        }
+        .padding(10)
+    }
+}
+
+struct FoodDetail: View {
+    let item: FoodItem
+
+    var body: some View {
+        VStack {
+            Image(item.imageName)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .cornerRadius(10)
+
+            Text(item.name)
+                .font(.largeTitle)
+                .padding()
+
+            Text(item.description)
+                .font(.headline)
+                .foregroundColor(.gray)
+                .padding()
+
+            Spacer()
+        }
+        .navigationTitle("Food Details")
+    }
+}
