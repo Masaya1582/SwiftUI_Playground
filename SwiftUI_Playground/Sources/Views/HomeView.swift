@@ -8,37 +8,110 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @StateObject private var taskStore = TaskStore()
+
+    @State private var newTaskTitle = ""
+    @State private var selectedPriority = Priority.medium
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Message", text: $viewModel.name)
-                .modifier(CustomTextField(disableAutoCorrection: true))
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        NavigationView {
+            VStack {
+                HStack {
+                    TextField("New Task", text: $newTaskTitle)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+
+                    Picker("Priority", selection: $selectedPriority) {
+                        ForEach(Priority.allCases, id: \.self) { priority in
+                            Text(priority.rawValue)
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                }
+                .padding()
+
+                Button(action: addTask) {
+                    Text("Add Task")
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+                .padding()
+
+                List {
+                    ForEach(taskStore.tasks) { task in
+                        TaskRowView(task: task)
+                            .contextMenu {
+                                Button(action: {
+                                    toggleTaskCompletion(task: task)
+                                }) {
+                                    Text(task.completed ? "Mark as Incomplete" : "Mark as Complete")
+                                    Image(systemName: task.completed ? "checkmark.square" : "square")
+                                }
+                                Button(action: {
+                                    removeTask(task: task)
+                                }) {
+                                    Text("Delete")
+                                    Image(systemName: "trash")
+                                }
+                            }
+                    }
+                    .onDelete(perform: removeTasks)
+                }
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-            }
-            CustomCircleView()
+            .navigationTitle("To-Do List")
+            .navigationBarItems(leading: EditButton())
+        }
+    }
+
+    private func addTask() {
+        guard !newTaskTitle.isEmpty else { return }
+        let newTask = TaskItem(title: newTaskTitle, priority: selectedPriority)
+        taskStore.tasks.append(newTask)
+        newTaskTitle = ""
+    }
+
+    private func removeTask(task: TaskItem) {
+        if let index = taskStore.tasks.firstIndex(where: { $0.id == task.id }) {
+            taskStore.tasks.remove(at: index)
+        }
+    }
+
+    private func removeTasks(at offsets: IndexSet) {
+        taskStore.tasks.remove(atOffsets: offsets)
+    }
+
+    private func toggleTaskCompletion(task: TaskItem) {
+        if let index = taskStore.tasks.firstIndex(where: { $0.id == task.id }) {
+            taskStore.tasks[index].completed.toggle()
+        }
+    }
+}
+
+struct TaskRowView: View {
+    var task: TaskItem
+
+    var body: some View {
+        HStack {
+            Text(task.title)
+                .foregroundColor(task.completed ? .gray : .black)
+
+            Spacer()
+
+            Text(task.priority.rawValue)
+                .foregroundColor(getPriorityColor())
+        }
+    }
+
+    private func getPriorityColor() -> Color {
+        switch task.priority {
+        case .high:
+            return .red
+        case .medium:
+            return .orange
+        case .low:
+            return .green
         }
     }
 }
