@@ -35,7 +35,7 @@ struct HomeView: View {
             Button {
                 viewModel.shouldInvertColor.toggle()
             } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Colors" : "Invert Color")
+                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
                     .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
             }
             CustomCircleView()
