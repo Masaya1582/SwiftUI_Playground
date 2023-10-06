@@ -18,7 +18,6 @@ struct HomeView: View {
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
 
-
     var body: some View {
         NavigationView {
             VStack {
