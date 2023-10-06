@@ -7,40 +7,70 @@
 
 import SwiftUI
 
+enum LoginError: Error {
+    case emptyFields
+    case invalidCredentials
+}
+
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var username: String = ""
+    @State private var password: String = ""
+    @State private var showAlert: Bool = false
+    @State private var alertMessage: String = ""
+
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Messages", text: $viewModel.name)
-                .modifier(CustomTextField(disableAutoCorrection: true))
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        NavigationView {
+            VStack {
+                Text("Login")
+                    .modifier(CustomLabel(foregroundColor: .black, size: 24))
+
+                TextField("Username", text: $username)
+                    .modifier(CustomTextField(disableAutoCorrection: false))
+
+                SecureField("Password", text: $password)
+                    .modifier(CustomTextField(disableAutoCorrection: false))
+
+                Button {
+                    login()
+                } label: {
+                    Text("Log In")
+                        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+                }
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-            }
-            CustomCircleView()
+        }
+        .alert(isPresented: $showAlert) {
+            Alert(
+                title: Text("Error"),
+                message: Text(alertMessage),
+                dismissButton: .default(Text("OK"))
+            )
         }
     }
+
+    private func login() {
+        do {
+            // usernameかpasswordが空ではないことをチェック
+            guard !username.isEmpty, !password.isEmpty else {
+                throw LoginError.emptyFields
+            }
+
+            // usernameとpasswordが合っているかどうかチェック
+            guard username == "Masaya" && password == "Masaya1234" else {
+                throw LoginError.invalidCredentials
+            }
+
+            // 条件を満たせば、成功アラートを出す
+            showAlert = true
+            alertMessage = "Login successful!"
+        } catch {
+            // エラーが起きた場合は、それをCatch (キャッチ)する
+            // エラーメッセージを表示
+            showAlert = true
+            alertMessage = error.localizedDescription
+        }
+    }
+
 }
 
 struct HomeView_Previews: PreviewProvider {
