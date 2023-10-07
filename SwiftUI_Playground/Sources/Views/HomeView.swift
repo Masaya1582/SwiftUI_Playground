@@ -8,38 +8,76 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var isTimerRunning = false
+    @State private var elapsedTime: TimeInterval = 0
+    @State private var selectedTask = Task.allTasks[0]
+    @State private var timer: Timer?
+    private var timerText: String {
+        let seconds = Int(elapsedTime) % 60
+        let minutes = Int(elapsedTime) / 60
+        let hours = minutes / 60
+        return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
+    }
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Messages", text: $viewModel.name)
-                .modifier(CustomTextField(disableAutoCorrection: true))
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        VStack {
+            Text("Task Timer")
+                .font(.largeTitle)
+                .padding()
+
+            Text(selectedTask.name)
+                .font(.title)
+
+            Text(timerText)
+                .font(.system(size: 60))
+                .padding()
+
+            HStack {
+                Button(action: startTimer) {
+                    Text(isTimerRunning ? "Pause" : "Start")
+                        .font(.title)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+
+                Button(action: resetTimer) {
+                    Text("Reset")
+                        .font(.title)
+                        .padding()
+                        .background(Color.red)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+            .padding()
+
+            Picker("Select Task", selection: $selectedTask) {
+                ForEach(Task.allTasks, id: \.self) { task in
+                    Text(task.name).tag(task)
+                }
             }
-            CustomCircleView()
+            .pickerStyle(SegmentedPickerStyle())
+            .padding()
         }
+    }
+
+    private func startTimer() {
+        if isTimerRunning {
+            timer?.invalidate()
+        } else {
+            timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+                elapsedTime += 1
+            }
+        }
+        isTimerRunning.toggle()
+    }
+
+    private func resetTimer() {
+        timer?.invalidate()
+        isTimerRunning = false
+        elapsedTime = 0
     }
 }
 
