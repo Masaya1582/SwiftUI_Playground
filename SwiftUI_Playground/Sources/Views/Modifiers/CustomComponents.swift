@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// カスタムLabel
 struct CustomLabel: ViewModifier {
     let foregroundColor: Color
     let size: CGFloat
@@ -18,6 +19,7 @@ struct CustomLabel: ViewModifier {
     }
 }
 
+// カスタムButton
 struct CustomButton: ViewModifier {
     let foregroundColor: Color
     let backgroundColor: Color
@@ -34,6 +36,7 @@ struct CustomButton: ViewModifier {
     }
 }
 
+// カスタムTextField
 struct CustomTextField: ViewModifier {
     @Environment(\.colorScheme) var colorScheme
     let disableAutoCorrection: Bool
@@ -51,6 +54,7 @@ struct CustomTextField: ViewModifier {
     }
 }
 
+// カスタムImageView
 struct CustomImage: ViewModifier {
     let width: CGFloat
     let height: CGFloat
@@ -67,6 +71,7 @@ struct CustomImage: ViewModifier {
     }
 }
 
+// ビンテージスタイルのSettingView
 struct VintageSettingView: View {
     var iconName: String
     var title: String
@@ -87,6 +92,7 @@ struct VintageSettingView: View {
     }
 }
 
+// カスタムCircleView
 struct CustomCircleView: View {
     @State private var isAnimating = false
 
