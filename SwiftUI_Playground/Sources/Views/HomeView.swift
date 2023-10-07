@@ -8,37 +8,47 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var eventDate = Date()
+    @State private var timeRemaining = TimeInterval()
+    private var timeRemainingFormatted: String {
+        let hours = Int(timeRemaining) / 3600
+        let minutes = Int(timeRemaining) % 3600 / 60
+        let seconds = Int(timeRemaining) % 60
+        return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
+    }
+    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Messages", text: $viewModel.name)
-                .modifier(CustomTextField(disableAutoCorrection: true))
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
-            }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-            }
-            CustomCircleView()
+        VStack {
+            Text("Event Countdown")
+                .modifier(CustomLabel(foregroundColor: .black, size: 24))
+                .padding()
+
+            DatePicker("Select Event Date", selection: $eventDate, in: Date()...)
+                .datePickerStyle(GraphicalDatePickerStyle())
+                .padding()
+
+            Text("Time Remaining")
+                .modifier(CustomLabel(foregroundColor: .black, size: 24))
+
+            Text("\(timeRemainingFormatted)")
+                .modifier(CustomLabel(foregroundColor: .purple, size: 60))
+            Spacer()
+        }
+        .onAppear {
+            calculateTimeRemaining()
+        }
+        .onReceive(timer) { _ in
+            calculateTimeRemaining()
+        }
+    }
+
+    private func calculateTimeRemaining() {
+        let currentDate = Date()
+        timeRemaining = eventDate.timeIntervalSince(currentDate)
+
+        if timeRemaining < 0 {
+            timeRemaining = 0
         }
     }
 }
