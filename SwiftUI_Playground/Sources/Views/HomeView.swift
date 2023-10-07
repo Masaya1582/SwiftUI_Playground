@@ -8,38 +8,55 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var posts: [Post] = []
+    @State private var isLoading = false
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Messages", text: $viewModel.name)
-                .modifier(CustomTextField(disableAutoCorrection: true))
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        NavigationView {
+            List(posts) { post in
+                VStack(alignment: .leading) {
+                    Text(post.title)
+                        .font(.headline)
+                    Text(post.body)
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                }
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+            .navigationBarTitle("Posts")
+            .onAppear {
+                if posts.isEmpty {
+                    fetchPosts()
+                }
             }
-            CustomCircleView()
+            .overlay(
+                isLoading ? ProgressView("Loading...") : nil
+            )
         }
+    }
+
+    private func fetchPosts() {
+        isLoading = true
+        guard let url = URL(string: "https://jsonplaceholder.typicode.com/posts") else {
+            isLoading = false
+            return
+        }
+
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            defer { isLoading = false }
+            if let data = data {
+                do {
+                    let decodedData = try JSONDecoder().decode([Post].self, from: data)
+                    DispatchQueue.main.async {
+                        self.posts = decodedData
+                    }
+                } catch {
+                    print("Error decoding data: \(error)")
+                }
+            } else if let error = error {
+                print("Error fetching data: \(error)")
+            }
+        }
+        task.resume()
     }
 }
 
