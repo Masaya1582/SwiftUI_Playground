@@ -7,38 +7,71 @@
 
 import SwiftUI
 
+enum Theme: String, CaseIterable {
+    case light = "Light Theme"
+    case dark = "Dark Theme"
+    case colorful = "Colorful Theme"
+
+    var backgroundColor: Color {
+        switch self {
+        case .light:
+            return Color.white
+        case .dark:
+            return Color.black
+        case .colorful:
+            return Color.blue
+        }
+    }
+
+    var textColor: Color {
+        switch self {
+        case .light:
+            return Color.black
+        case .dark:
+            return Color.white
+        case .colorful:
+            return Color.white
+        }
+    }
+}
+
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var selectedTheme = Theme.light
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Messages", text: $viewModel.name)
-                .modifier(CustomTextField(disableAutoCorrection: true))
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        ZStack {
+            selectedTheme.backgroundColor
+                .edgesIgnoringSafeArea(.all)
+            VStack {
+                Text("Theme Picker App")
+                    .font(.largeTitle)
+                    .padding()
+
+                Text("Select a Theme:")
+                    .font(.title)
+                    .padding()
+
+                Picker("Select Theme", selection: $selectedTheme) {
+                    ForEach(Theme.allCases, id: \.self) { theme in
+                        Text(theme.rawValue)
+                            .font(.title)
+                            .tag(theme)
+                    }
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding()
+
+                Text("Selected Theme:")
+                    .font(.title)
+                    .padding()
+
+                Text(selectedTheme.rawValue)
+                    .font(.title)
+                    .foregroundColor(selectedTheme.textColor)
+                    .padding()
+                    .background(selectedTheme.backgroundColor)
+                    .cornerRadius(10)
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-            }
-            CustomCircleView()
         }
     }
 }
