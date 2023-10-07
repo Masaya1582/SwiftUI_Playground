@@ -8,38 +8,64 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var drawing: Path = Path()
+    @State private var strokeColor: Color = .black
+    @State private var strokeWidth: CGFloat = 4.0
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Messages", text: $viewModel.name)
-                .modifier(CustomTextField(disableAutoCorrection: true))
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        VStack {
+            CanvasView(drawing: $drawing, strokeColor: $strokeColor, strokeWidth: $strokeWidth)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.white)
+                .gesture(
+                    DragGesture(minimumDistance: 0)
+                        .onChanged { value in
+                            let currentPoint = value.location
+                            drawing.addLine(to: currentPoint)
+                        }
+                        .onEnded { _ in
+                            drawing.move(to: .zero)
+                        }
+                )
+
+            HStack {
+                ColorPicker("Brush Color", selection: $strokeColor)
+                    .padding()
+
+                Slider(value: $strokeWidth, in: 1...20, step: 1)
+                    .padding()
+
+                Button(action: {
+                    drawing = Path()
+                }) {
+                    Text("Clear")
+                        .padding()
+                        .background(Color.red)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+                .padding()
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-            }
-            CustomCircleView()
         }
+    }
+}
+
+struct CanvasView: View {
+    @Binding var drawing: Path
+    @Binding var strokeColor: Color
+    @Binding var strokeWidth: CGFloat
+
+    var body: some View {
+        DrawingCanvas(drawing: drawing)
+            .stroke(strokeColor, lineWidth: strokeWidth)
+    }
+}
+
+struct DrawingCanvas: Shape {
+    var drawing: Path
+
+    func path(in rect: CGRect) -> Path {
+        return drawing
     }
 }
 
