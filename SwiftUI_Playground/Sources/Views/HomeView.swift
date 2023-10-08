@@ -7,38 +7,61 @@
 
 import SwiftUI
 
+enum DivisionError: Error {
+    case divisionByZero
+}
+
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var dividend: String = ""
+    @State private var divisor: String = ""
+    @State private var result: String = ""
+    @State private var errorMessage: String?
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Messages", text: $viewModel.name)
-                .modifier(CustomTextField(disableAutoCorrection: true))
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
+        VStack {
+            Text("Division Calculator")
+                .modifier(CustomLabel(foregroundColor: .black, size: 24))
+                .padding()
+
+            TextField("Enter dividend", text: $dividend)
+                .modifier(CustomTextField(disableAutoCorrection: false))
+
+            TextField("Enter divisor", text: $divisor)
+                .modifier(CustomTextField(disableAutoCorrection: false))
+
+            Button("Divide") {
+                performDivision()
+            }
+            .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+
+            if let message = errorMessage {
+                Text(message)
+                    .foregroundColor(.red)
+                    .padding()
             } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+                Text("Result: \(result)")
+                    .modifier(CustomLabel(foregroundColor: .black, size: 24))
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+            Spacer()
+        }
+    }
+
+    private func performDivision() {
+        do {
+            guard let dividendValue = Double(dividend), let divisorValue = Double(divisor) else {
+                errorMessage = "Invalid input"
+                return
             }
-            CustomCircleView()
+
+            if divisorValue == 0 {
+                throw DivisionError.divisionByZero
+            }
+
+            let quotient = dividendValue / divisorValue
+            result = String(quotient)
+            errorMessage = nil
+        } catch {
+            errorMessage = "Error: Division by zero"
         }
     }
 }
