@@ -7,39 +7,67 @@
 
 import SwiftUI
 
+// Define an enum to represent the different states of the network request.
+enum RequestState<T> {
+    case idle
+    case loading
+    case success(T)
+    case failure(Error)
+}
+
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var todos: RequestState<[Todo]> = .idle
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Messages", text: $viewModel.name)
-                .modifier(CustomTextField(disableAutoCorrection: true))
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        NavigationView {
+            VStack {
+                switch todos {
+                case .idle:
+                    Text("Tap the button to fetch todos.")
+                        .modifier(CustomLabel(foregroundColor: .black, size: 24))
+                case .loading:
+                    ProgressView("Loading...")
+                        .modifier(CustomLabel(foregroundColor: .black, size: 24))
+                case .success(let todos):
+                    List(todos) { todo in
+                        Text(todo.title)
+                    }
+                case .failure(let error):
+                    Text("Error: \(error.localizedDescription)")
+                        .modifier(CustomLabel(foregroundColor: .black, size: 24))
+                }
+                Button("Fetch Todos") {
+                    fetchTodos()
+                }
+                .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-            }
-            CustomCircleView()
+            .navigationBarTitle("Todo List")
         }
+    }
+
+    private func fetchTodos() {
+        guard let url = URL(string: "https://jsonplaceholder.typicode.com/todos") else {
+            return
+        }
+        todos = .loading
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    self.todos = .failure(error)
+                    return
+                }
+
+                if let data = data {
+                    do {
+                        let decodedData = try JSONDecoder().decode([Todo].self, from: data)
+                        self.todos = .success(decodedData)
+                    } catch {
+                        self.todos = .failure(error)
+                    }
+                }
+            }
+        }
+        task.resume()
     }
 }
 
