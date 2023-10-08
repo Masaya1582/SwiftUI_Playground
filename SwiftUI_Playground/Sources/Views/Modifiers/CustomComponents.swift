@@ -115,3 +115,21 @@ struct CustomCircleView: View {
         }
     }
 }
+
+struct PulsatingCircleView: View {
+    @State private var isPulsating = false
+
+    var body: some View {
+        Circle()
+            .frame(width: isPulsating ? 150 : 100, height: isPulsating ? 150 : 100)
+            .foregroundColor(.purple)
+            .opacity(isPulsating ? 0.3 : 0.8)
+            .animation(
+                Animation.easeInOut(duration: 1.0)
+                    .repeatForever(autoreverses: true)
+            )
+            .onAppear() {
+                isPulsating.toggle()
+            }
+    }
+}
