@@ -8,37 +8,34 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
-
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Messages", text: $viewModel.name)
-                .modifier(CustomTextField(disableAutoCorrection: true))
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        ZStack {
+            Color.blue
+                .ignoresSafeArea()
+
+            ForEach(0..<10) { index in
+                Circle()
+                    .foregroundColor(.purple)
+                    .opacity(0.6)
+                    .frame(width: CGFloat.random(in: 50...200), height: CGFloat.random(in: 50...200))
+                    .position(x: CGFloat.random(in: 0...UIScreen.main.bounds.width), y: CGFloat.random(in: 0...UIScreen.main.bounds.height))
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+
+            ForEach(0..<10) { index in
+                Rectangle()
+                    .foregroundColor(.green)
+                    .opacity(0.6)
+                    .frame(width: CGFloat.random(in: 50...200), height: CGFloat.random(in: 50...200))
+                    .position(x: CGFloat.random(in: 0...UIScreen.main.bounds.width), y: CGFloat.random(in: 0...UIScreen.main.bounds.height))
             }
-            CustomCircleView()
+
+            ForEach(0..<10) { index in
+                RoundedRectangle(cornerRadius: 25.0)
+                    .foregroundColor(.orange)
+                    .opacity(0.6)
+                    .frame(width: CGFloat.random(in: 50...200), height: CGFloat.random(in: 50...200))
+                    .position(x: CGFloat.random(in: 0...UIScreen.main.bounds.width), y: CGFloat.random(in: 0...UIScreen.main.bounds.height))
+            }
         }
     }
 }
