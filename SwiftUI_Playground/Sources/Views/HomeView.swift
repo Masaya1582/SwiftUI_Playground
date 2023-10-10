@@ -8,37 +8,30 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    private let link: URL
+
+    init() {
+        if let url = URL(string: "https://www.hackingwithswift.com") {
+            self.link = url
+        } else {
+            fatalError("Invalid URL")
+        }
+    }
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Messages", text: $viewModel.name)
-                .modifier(CustomTextField(disableAutoCorrection: true))
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        VStack(spacing: 20) {
+            ShareLink(item: link)
+            ShareLink("Learn Swift here", item: link)
+            ShareLink(item: link) {
+                Label("Learn Swift here", systemImage: "swift")
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-            }
-            CustomCircleView()
+            ShareLink(
+                item: link,
+                preview: SharePreview(
+                    "Switzerland's flag: it's a big plus.",
+                    image: Image(systemName: "plus")
+                )
+            )
         }
     }
 }
