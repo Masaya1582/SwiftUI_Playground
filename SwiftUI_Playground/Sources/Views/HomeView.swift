@@ -7,38 +7,39 @@
 
 import SwiftUI
 
+enum Food: String, CaseIterable {
+    case burger = "Burger"
+    case nuggets = "Nuggets"
+    case pancakes = "Pancakes"
+    case pizza = "Pizza"
+    case spaghetti = "Spaghetti"
+}
+
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var selectedFood = Food.burger
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Messages", text: $viewModel.name)
-                .modifier(CustomTextField(disableAutoCorrection: true))
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        VStack {
+            Text("Food Picker")
+                .modifier(CustomLabel(foregroundColor: .black, size: 24))
+                .padding()
+
+            Text("Selected Food: \(selectedFood.rawValue)")
+                .modifier(CustomLabel(foregroundColor: .black, size: 24))
+                .padding()
+
+            Picker("Select Food", selection: $selectedFood) {
+                ForEach(Food.allCases, id: \.self) { condition in
+                    Text(condition.rawValue)
+                }
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-            }
-            CustomCircleView()
+            .pickerStyle(SegmentedPickerStyle())
+            .padding()
+
+            Image(selectedFood.rawValue)
+                .modifier(CustomImage(width: 200, height: 200))
+
+            Spacer()
         }
     }
 }
