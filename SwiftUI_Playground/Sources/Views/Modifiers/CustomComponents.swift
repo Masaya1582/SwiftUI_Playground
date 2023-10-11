@@ -115,3 +115,31 @@ struct CustomCircleView: View {
         }
     }
 }
+
+struct RotatingTextWheel: View {
+    @State private var rotationAngle: Double = 0
+
+    let text: String
+    let numberOfSegments: Int
+
+    var body: some View {
+        VStack {
+            Spacer()
+            Text(text)
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .rotationEffect(.degrees(rotationAngle))
+                .animation(Animation.linear(duration: 5).repeatForever(autoreverses: false))
+            Spacer()
+        }
+        .onAppear {
+            let segmentAngle = 360.0 / Double(numberOfSegments)
+            let initialRotation = Double.random(in: 0..<segmentAngle)
+            let finalRotation = initialRotation + 360 * 5 // Rotate 5 full circles
+
+            withAnimation {
+                rotationAngle = finalRotation
+            }
+        }
+    }
+}
