@@ -8,37 +8,30 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
 
     var body: some View {
         VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Messages", text: $viewModel.name)
-                .modifier(CustomTextField(disableAutoCorrection: true))
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
-            }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-            }
-            CustomCircleView()
+            Text("This is a pen")
+                .foregroundStyle(.black)
+                .padding()
+                .shadow(radius: 5)
+                .border(.red, width: 4)
+                .background(.white)
+
+            Text("This is a book")
+                .padding()
+                .shadow(color: .red, radius: 5)
+                .border(.red, width: 4)
+
+            Text("This is a desk")
+                .padding()
+                .shadow(color: .red, radius: 5, x: 20, y: 20)
+                .border(.red, width: 4)
+
+            Text("This is my life")
+                .padding()
+                .border(.red, width: 4)
+                .shadow(color: .red, radius: 5, x: 20, y: 20)
         }
     }
 }
