@@ -8,47 +8,39 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @ObservedObject var viewModel: APIRequestViewModel
 
     var body: some View {
-        VStack(spacing: 28) {
-            Text("Dio said: \(viewModel.name)")
-                .modifier(CustomLabel(foregroundColor: .black, size: 28))
-            TextField("Messages", text: $viewModel.name)
-                .modifier(CustomTextField(disableAutoCorrection: true))
-            if viewModel.shouldInvertColor {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorInvert()
-                    .overlay(
-                        Circle()
-                            .stroke(Color.black, lineWidth: 2)
-                    )
-            } else {
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
+        VStack {
+            switch viewModel.requestStatus {
+            case .idle:
+                Text("Tap the button to fetch data")
+                    .modifier(CustomLabel(foregroundColor: .black, size: 24))
+            case .loading:
+                ProgressView("Loading...")
+                    .modifier(CustomLabel(foregroundColor: .black, size: 24))
+            case .success:
+                Text("Data fetched successfully!")
+                    .modifier(CustomLabel(foregroundColor: .black, size: 24))
+            case .failure(let error):
+                Text("Error: \(error.localizedDescription)")
+                    .modifier(CustomLabel(foregroundColor: .black, size: 24))
             }
-            Button {
-                viewModel.shouldInvertColor.toggle()
-            } label: {
-                Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+            Button("Fetch Data") {
+                viewModel.fetchData()
             }
-            CustomCircleView()
+            .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
         }
+        .padding()
     }
 }
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            HomeView()
+            HomeView(viewModel: APIRequestViewModel())
                 .preferredColorScheme(.light)
-            HomeView()
+            HomeView(viewModel: APIRequestViewModel())
                 .preferredColorScheme(.dark)
         }
     }
