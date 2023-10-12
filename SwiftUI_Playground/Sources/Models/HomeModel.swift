@@ -8,6 +8,13 @@
 import Foundation
 import SwiftUI
 
+enum RequestStatus {
+    case idle
+    case loading
+    case success
+    case failure(Error)
+}
+
 class HomeModel {
     var name: String
     var age: Int
