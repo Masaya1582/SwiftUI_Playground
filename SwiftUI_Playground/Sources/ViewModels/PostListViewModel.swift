@@ -1,0 +1,29 @@
+// 
+//  PostListViewModel.swift
+//  SwiftUI_Playground
+//
+//  Created by MasayaNakakuki on 2023/06/26.
+//
+
+import SwiftUI
+import Combine
+
+class PostListViewModel: ObservableObject {
+    @Published var posts: [Post] = []
+
+    init() {
+        fetchPosts()
+    }
+
+    func fetchPosts() {
+        if let url = URL(string: "https://jsonplaceholder.typicode.com/posts") {
+            URLSession.shared.dataTaskPublisher(for: url)
+                .map(\.data)
+                .decode(type: [Post].self, decoder: JSONDecoder())
+                .replaceError(with: [])
+                .receive(on: DispatchQueue.main)
+                .assign(to: &$posts)
+        }
+    }
+
+}
