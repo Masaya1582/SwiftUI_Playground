@@ -115,3 +115,49 @@ struct CustomCircleView: View {
         }
     }
 }
+
+struct FancySlider: View {
+    @Binding var value: Double
+    var range: ClosedRange<Double>
+    var trackColor: Color
+    var thumbColor: Color
+    var width: CGFloat
+
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                Capsule()
+                    .frame(height: width)
+                    .foregroundColor(trackColor)
+                    .frame(width: geometry.size.width)
+
+                Capsule()
+                    .frame(width: geometry.size.width * CGFloat((value - range.lowerBound) / (range.upperBound - range.lowerBound)))
+                    .foregroundColor(thumbColor)
+                    .gesture(DragGesture()
+                        .onChanged({ value in
+                            let newWidth = max(0, min(geometry.size.width, value.location.x))
+                            let rangeSize = range.upperBound - range.lowerBound
+                            self.value = Double(newWidth / geometry.size.width) * rangeSize + range.lowerBound
+                        })
+                    )
+            }
+        }
+    }
+}
+
+struct FancySliderDemo: View {
+    @State private var sliderValue: Double = 0.5
+
+    var body: some View {
+        VStack {
+            Text("Value: \(sliderValue, specifier: "%.2f")")
+                .font(.headline)
+                .padding()
+
+            FancySlider(value: $sliderValue, range: 0.0...1.0, trackColor: Color.gray, thumbColor: Color.blue, width: 10.0)
+                .frame(height: 40)
+                .padding(20)
+        }
+    }
+}
