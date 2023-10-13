@@ -1,0 +1,76 @@
+//
+//  FloatingView.swift
+//  SwiftUI_Playground
+//
+//  Created by MasayaNakakuki on 2023/06/26.
+
+import SwiftUI
+
+struct FloatingView: View {
+    @State var dismissAction: (() -> Void)
+
+    var body: some View {
+        VStack {
+            closeButton
+            sampleView
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .padding(12)
+        .background(
+            Color.black
+                .opacity(0.5)
+                .ignoresSafeArea()
+        )
+        .onTapGesture {
+            dismissAction()
+        }
+    }
+
+    var closeButton: some View {
+        HStack {
+            Spacer()
+            Button(action: dismissAction) {
+                Asset.Assets.imgHeadback.swiftUIImage
+                    .resizable()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            .frame(width: 48, height: 48)
+            .padding(2)
+        }
+    }
+
+    var sampleView: some View {
+        VStack(spacing: 42) {
+            Text("Floating View")
+                .modifier(CustomLabel(foregroundColor: .black, size: 32))
+            Asset.Assets.imgApple.swiftUIImage
+                .resizable()
+                .scaledToFit()
+                .padding(.horizontal, 80)
+            mainCloseButton
+        }
+        .padding(20)
+        .background(.white)
+        .frame(maxWidth: .infinity)
+        .cornerRadius(12)
+    }
+
+    var mainCloseButton: some View {
+        Button(action: {
+            dismissAction()
+        }, label: {
+            Text("Close")
+                .modifier(CustomLabel(foregroundColor: .white, size: 32))
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        })
+        .background(.orange)
+        .cornerRadius(80)
+        .frame(height: 60)
+    }
+}
+
+struct FloatingView_Previews: PreviewProvider {
+    static var previews: some View {
+        FloatingView(dismissAction: {})
+    }
+}
