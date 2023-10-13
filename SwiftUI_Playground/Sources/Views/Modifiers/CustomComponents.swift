@@ -115,3 +115,20 @@ struct CustomCircleView: View {
         }
     }
 }
+
+struct RadioButtonView: View {
+    @Binding var isSelected: Bool
+
+    var body: some View {
+        Button(action: {
+            isSelected.toggle()
+        }) {
+            HStack {
+                Image(systemName: isSelected ? "largecircle.fill.circle" : "circle")
+                    .resizable()
+                    .frame(width: 20, height: 20)
+                Text("Option")
+            }
+        }
+    }
+}
