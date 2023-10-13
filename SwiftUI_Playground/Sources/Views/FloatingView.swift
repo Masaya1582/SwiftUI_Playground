@@ -15,7 +15,8 @@ struct FloatingView: View {
             sampleView
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .padding(12)
+        .padding(.top, 32)
+        .padding(28)
         .background(
             Color.black
                 .opacity(0.5)
@@ -63,7 +64,7 @@ struct FloatingView: View {
                 .modifier(CustomLabel(foregroundColor: .white, size: 32))
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         })
-        .background(.orange)
+        .background(.green)
         .cornerRadius(80)
         .frame(height: 60)
     }

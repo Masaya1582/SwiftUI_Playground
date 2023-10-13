@@ -13,6 +13,7 @@ class HomeViewModel: ObservableObject {
     @Published var age = 24
     @Published var height = 174.5
     @Published var shouldInvertColor = false
+    @Published var isFloatingViewVisible = false
     @Published var posts: [Post] = []
 
     init() {
