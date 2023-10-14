@@ -8,37 +8,28 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    private  let texts = [
+        L10n.sampleText1,
+        L10n.sampleText2,
+        L10n.sampleText3,
+        L10n.sampleText4,
+        L10n.sampleText5,
+        L10n.sampleText6,
+        L10n.sampleText7,
+        L10n.sampleText8,
+        L10n.sampleText9,
+        L10n.sampleText10
+    ]
 
     var body: some View {
-        ZStack {
-            if viewModel.isFloatingViewVisible {
-                FloatingView(dismissAction: {
-                    withAnimation {
-                        viewModel.isFloatingViewVisible = false
-                    }
-                })
-                .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-                .zIndex(1)
-            }
-            VStack(spacing: 28) {
-                Text("Dio said: \(viewModel.name)")
-                    .modifier(CustomLabel(foregroundColor: .black, size: 28))
-                TextField("Messages", text: $viewModel.name)
-                    .modifier(CustomTextField(disableAutoCorrection: true))
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
-                Button {
-                    withAnimation {
-                        viewModel.isFloatingViewVisible = true
-                    }
-                } label: {
-                    Text("Show Popup View")
-                        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+        NavigationView {
+            List {
+                ForEach(texts, id: \.self) { text in
+                    Text(text)
+                        .modifier(CustomLabel(foregroundColor: .black, size: 24))
                 }
-                CustomCircleView()
             }
+            .navigationBarTitle("Texts List")
         }
     }
 }
