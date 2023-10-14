@@ -8,50 +8,48 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var username: String = ""
+    @State private var password: String = ""
+    @State private var isLoginSuccessful: Bool = false
 
     var body: some View {
         ZStack {
-            if viewModel.isFloatingViewVisible {
-                FloatingView(dismissAction: {
-                    withAnimation {
-                        viewModel.isFloatingViewVisible = false
-                    }
-                })
-                .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-                .zIndex(1)
-            }
+            Color.pink
+                .edgesIgnoringSafeArea(.all)
+
             VStack(spacing: 28) {
-                Text("Dio said: \(viewModel.name)")
-                    .modifier(CustomLabel(foregroundColor: .black, size: 28))
-                TextField("Messages", text: $viewModel.name)
-                    .modifier(CustomTextField(disableAutoCorrection: true))
-                if viewModel.shouldInvertColor {
-                    Asset.Assets.imgDio.swiftUIImage
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 200, height: 200)
-                        .clipShape(Circle())
-                        .colorInvert()
-                        .overlay(
-                            Circle()
-                                .stroke(Color.black, lineWidth: 2)
-                        )
-                } else {
-                    Asset.Assets.imgDio.swiftUIImage
-                        .resizable()
-                        .modifier(CustomImage(width: 200, height: 200))
-                }
-                Button {
-                    withAnimation {
-                        viewModel.shouldInvertColor.toggle()
-                        viewModel.isFloatingViewVisible = true
+                Image(systemName: "person.circle.fill")
+                    .font(.system(size: 100))
+                    .foregroundColor(.white)
+                    .padding(.bottom, 40)
+
+                TextField("ID", text: $username)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding()
+                    .background(Color.white.opacity(0.8))
+                    .cornerRadius(10)
+                    .padding(.horizontal, 20)
+
+                SecureField("Password", text: $password)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding()
+                    .background(Color.white.opacity(0.8))
+                    .cornerRadius(10)
+                    .padding(.horizontal, 20)
+
+                Button(action: {
+                    if username == "user" && password == "password" {
+                        isLoginSuccessful = true
                     }
-                } label: {
-                    Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
+                }) {
+                    Text("Login")
                         .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
                 }
-                CustomCircleView()
+                .alert(isPresented: $isLoginSuccessful) {
+                    Alert(title: Text("Login Successful"), message: Text("Welcome, \(username)!"), dismissButton: .default(Text("OK")))
+                }
+
+                Spacer()
             }
         }
     }
