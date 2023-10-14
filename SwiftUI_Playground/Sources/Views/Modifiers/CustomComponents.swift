@@ -126,3 +126,14 @@ struct CardViewModifier: ViewModifier {
             .shadow(radius: 5)
     }
 }
+
+struct CardView: View {
+    @Binding var card: Card
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: 10)
+            .frame(height: 100)
+            .foregroundColor(card.color)
+            .offset(y: card.offset)
+    }
+}

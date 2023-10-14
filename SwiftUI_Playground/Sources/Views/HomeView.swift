@@ -8,52 +8,35 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var cards: [Card] = [
+        Card(color: Color.red, offset: 0),
+        Card(color: Color.blue, offset: 0),
+        Card(color: Color.green, offset: 0),
+        Card(color: Color.yellow, offset: 0),
+        Card(color: Color.red, offset: 0),
+        Card(color: Color.blue, offset: 0),
+        Card(color: Color.green, offset: 0),
+        Card(color: Color.yellow, offset: 0),
+        Card(color: Color.red, offset: 0),
+        Card(color: Color.blue, offset: 0),
+        Card(color: Color.green, offset: 0),
+        Card(color: Color.yellow, offset: 0)
+    ]
 
     var body: some View {
-        ZStack {
-            if viewModel.isFloatingViewVisible {
-                FloatingView(dismissAction: {
-                    withAnimation {
-                        viewModel.isFloatingViewVisible = false
-                    }
-                })
-                .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-                .zIndex(1)
-            }
-            VStack(spacing: 28) {
-                Text("Dio said: \(viewModel.name)")
-                    .modifier(CustomLabel(foregroundColor: .black, size: 28))
-                TextField("Messages", text: $viewModel.name)
-                    .modifier(CustomTextField(disableAutoCorrection: true))
-                if viewModel.shouldInvertColor {
-                    Asset.Assets.imgDio.swiftUIImage
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 200, height: 200)
-                        .clipShape(Circle())
-                        .colorInvert()
-                        .overlay(
-                            Circle()
-                                .stroke(Color.black, lineWidth: 2)
-                        )
-                } else {
-                    Asset.Assets.imgDio.swiftUIImage
-                        .resizable()
-                        .modifier(CustomImage(width: 200, height: 200))
+        ScrollView {
+            VStack(spacing: 10) {
+                ForEach(cards.indices, id: \.self) { index in
+                    CardView(card: $cards[index])
+                        .onTapGesture {
+                            withAnimation {
+                                cards[index].offset += 100
+                            }
+                        }
                 }
-                Button {
-                    withAnimation {
-                        viewModel.shouldInvertColor.toggle()
-                        viewModel.isFloatingViewVisible = true
-                    }
-                } label: {
-                    Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
-                        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-                }
-                CustomCircleView()
             }
         }
+        .padding()
     }
 }
 
