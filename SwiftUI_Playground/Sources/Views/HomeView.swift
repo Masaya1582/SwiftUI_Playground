@@ -26,29 +26,15 @@ struct HomeView: View {
                     .modifier(CustomLabel(foregroundColor: .black, size: 28))
                 TextField("Messages", text: $viewModel.name)
                     .modifier(CustomTextField(disableAutoCorrection: true))
-                if viewModel.shouldInvertColor {
-                    Asset.Assets.imgDio.swiftUIImage
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 200, height: 200)
-                        .clipShape(Circle())
-                        .colorInvert()
-                        .overlay(
-                            Circle()
-                                .stroke(Color.black, lineWidth: 2)
-                        )
-                } else {
-                    Asset.Assets.imgDio.swiftUIImage
-                        .resizable()
-                        .modifier(CustomImage(width: 200, height: 200))
-                }
+                Asset.Assets.imgDio.swiftUIImage
+                    .resizable()
+                    .modifier(CustomImage(width: 200, height: 200))
                 Button {
                     withAnimation {
-                        viewModel.shouldInvertColor.toggle()
                         viewModel.isFloatingViewVisible = true
                     }
                 } label: {
-                    Text(viewModel.shouldInvertColor ? "Revert Color" : "Invert Color")
+                    Text("Show Popup View")
                         .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
                 }
                 CustomCircleView()
