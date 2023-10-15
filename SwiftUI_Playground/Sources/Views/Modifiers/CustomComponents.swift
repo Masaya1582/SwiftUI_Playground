@@ -126,3 +126,51 @@ struct CardViewModifier: ViewModifier {
             .shadow(radius: 5)
     }
 }
+
+struct ConfettiView: View {
+    @State private var confettiOffset: CGSize = .zero
+    @State private var confettiRotation: Double = 0.0
+    @State private var isAnimating = false
+
+    let confettiColors: [Color] = [.blue, .red, .green, .yellow, .purple, .orange]
+
+    var body: some View {
+        ZStack {
+            ForEach(0..<100) { _ in
+                ConfettiShape()
+                    .fill(confettiColors.randomElement()!)
+                    .frame(width: 10, height: 10)
+                    .offset(confettiOffset)
+                    .rotationEffect(.degrees(confettiRotation))
+                    .animation(
+                        Animation.linear(duration: 2.0)
+                            .repeatForever(autoreverses: false)
+                            .delay(0.5)
+                    )
+            }
+        }
+        .onAppear {
+            withAnimation {
+                confettiOffset = CGSize(width: 100, height: 100)
+                confettiRotation = 45.0
+            }
+            withAnimation(Animation.linear(duration: 2.0).repeatForever(autoreverses: false)) {
+                isAnimating.toggle()
+            }
+        }
+    }
+}
+
+struct ConfettiShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+
+        path.move(to: CGPoint(x: 0, y: 0))
+        path.addLine(to: CGPoint(x: 5, y: 10))
+        path.addLine(to: CGPoint(x: 0, y: 20))
+        path.addLine(to: CGPoint(x: -5, y: 10))
+        path.closeSubpath()
+
+        return path
+    }
+}
