@@ -8,36 +8,23 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @EnvironmentObject var viewModel: PostViewModel
 
     var body: some View {
-        ZStack {
-            if viewModel.isFloatingViewVisible {
-                FloatingView(dismissAction: {
-                    withAnimation {
-                        viewModel.isFloatingViewVisible = false
-                    }
-                })
-                .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-                .zIndex(1)
-            }
-            VStack(spacing: 28) {
-                Text("Dio said: \(viewModel.name)")
-                    .modifier(CustomLabel(foregroundColor: .black, size: 28))
-                TextField("Messages", text: $viewModel.name)
-                    .modifier(CustomTextField(disableAutoCorrection: true))
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
-                Button {
-                    withAnimation {
-                        viewModel.isFloatingViewVisible = true
-                    }
-                } label: {
-                    Text("Show Popup View")
-                        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+        NavigationView {
+            List(viewModel.posts, id: \.id) { post in
+                VStack(alignment: .leading) {
+                    Text(post.title)
+                        .font(.headline)
+                    Text(post.body)
+                        .font(.subheadline)
                 }
-                CustomCircleView()
+            }
+            .navigationBarTitle("Posts")
+        }
+        .onAppear {
+            Task {
+                await viewModel.fetchPosts()
             }
         }
     }
@@ -48,8 +35,10 @@ struct HomeView_Previews: PreviewProvider {
         Group {
             HomeView()
                 .preferredColorScheme(.light)
+                .environmentObject(PostViewModel())
             HomeView()
                 .preferredColorScheme(.dark)
+                .environmentObject(PostViewModel())
         }
     }
 }
