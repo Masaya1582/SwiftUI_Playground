@@ -25,7 +25,7 @@ struct HomeView: View {
                 Text("Dio said: \(viewModel.name)")
                     .modifier(CustomLabel(foregroundColor: .black, size: 28))
                 TextField("Messages", text: $viewModel.name)
-                    .modifier(CustomTextField(disableAutoCorrection: true))
+                    .modifier(CustomTextField())
                 Asset.Assets.imgDio.swiftUIImage
                     .resizable()
                     .modifier(CustomImage(width: 200, height: 200))

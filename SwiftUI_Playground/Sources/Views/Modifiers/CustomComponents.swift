@@ -39,8 +39,7 @@ struct CustomButton: ViewModifier {
 // カスタムTextField
 struct CustomTextField: ViewModifier {
     @Environment(\.colorScheme) var colorScheme
-    let disableAutoCorrection: Bool
-    
+
     func body(content: Content) -> some View {
         content
             .font(.custom(FontFamily.Caprasimo.regular, size: 20))
@@ -49,7 +48,6 @@ struct CustomTextField: ViewModifier {
                 RoundedRectangle(cornerRadius: 20)
                     .stroke(colorScheme == .dark ? Color.white : Color.black, lineWidth: 1)
             )
-            .disableAutocorrection(disableAutoCorrection)
             .padding()
     }
 }
