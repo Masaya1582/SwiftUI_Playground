@@ -8,36 +8,41 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
-
     var body: some View {
         ZStack {
-            if viewModel.isFloatingViewVisible {
-                FloatingView(dismissAction: {
-                    withAnimation {
-                        viewModel.isFloatingViewVisible = false
-                    }
-                })
-                .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-                .zIndex(1)
-            }
-            VStack(spacing: 28) {
-                Text("Dio said: \(viewModel.name)")
-                    .modifier(CustomLabel(foregroundColor: .black, size: 28))
-                TextField("Messages", text: $viewModel.name)
-                    .modifier(CustomTextField(disableAutoCorrection: true))
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
-                Button {
-                    withAnimation {
-                        viewModel.isFloatingViewVisible = true
-                    }
-                } label: {
-                    Text("Show Popup View")
-                        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+            // Background color
+            Color.pink
+                .ignoresSafeArea()
+
+            // Confetti
+            ConfettiView()
+
+            VStack {
+                Image(systemName: "heart.fill")
+                    .font(.system(size: 100))
+                    .foregroundColor(.white)
+
+                Text("Welcome to the Cutest App!")
+                    .font(.title)
+                    .foregroundColor(.white)
+                    .padding(.top, 20)
+
+                Text("Get ready for adorable experiences.")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding(.top, 10)
+
+                Button(action: {
+                    // Handle button action (e.g., navigate to the main app)
+                }) {
+                    Text("Start Exploring")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.orange)
+                        .cornerRadius(10)
                 }
-                CustomCircleView()
+                .padding(.top, 30)
             }
         }
     }
