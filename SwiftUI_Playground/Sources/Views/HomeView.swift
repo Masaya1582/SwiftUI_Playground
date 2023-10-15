@@ -8,38 +8,31 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var text = ""
+    @State private var isEditing = false
 
     var body: some View {
-        ZStack {
-            if viewModel.isFloatingViewVisible {
-                FloatingView(dismissAction: {
-                    withAnimation {
-                        viewModel.isFloatingViewVisible = false
-                    }
-                })
-                .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-                .zIndex(1)
+        ZStack(alignment: .leading) {
+            if text.isEmpty {
+                Text("Enter text...")
+                    .foregroundColor(isEditing ? .accentColor : .gray)
+                    .scaleEffect(isEditing ? 0.8 : 1)
+                    .offset(x: isEditing ? 0 : 10, y: isEditing ? -10 : 0)
             }
-            VStack(spacing: 28) {
-                Text("Dio said: \(viewModel.name)")
-                    .modifier(CustomLabel(foregroundColor: .black, size: 28))
-                TextField("Messages", text: $viewModel.name)
-                    .modifier(CustomTextField(disableAutoCorrection: true))
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
-                Button {
+
+            TextField("", text: $text)
+                .onTapGesture {
                     withAnimation {
-                        viewModel.isFloatingViewVisible = true
+                        isEditing = true
                     }
-                } label: {
-                    Text("Show Popup View")
-                        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
                 }
-                CustomCircleView()
-            }
         }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(isEditing ? Color.accentColor : Color.gray, lineWidth: 1)
+        )
+        .padding(.horizontal)
     }
 }
 
