@@ -26,6 +26,7 @@
 
 /* Begin PBXFileReference section */
 		1E62EE702AD8D0080031CB1B /* FloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingView.swift; sourceTree = "<group>"; };
+		1EF7E5942ADCD9210032015B /* SwiftUI-Playground-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "SwiftUI-Playground-Info.plist"; sourceTree = SOURCE_ROOT; };
 		3977D086BE021AF13A042E9A /* Pods_SwiftUI_Playground.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftUI_Playground.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4011E8652A49759C003F06BF /* SwiftUI_Playground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftUI_Playground.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4011E8682A49759C003F06BF /* SwiftUI_PlaygroundApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUI_PlaygroundApp.swift; sourceTree = "<group>"; };
@@ -78,6 +79,7 @@
 		4011E8672A49759C003F06BF /* SwiftUI_Playground */ = {
 			isa = PBXGroup;
 			children = (
+				1EF7E5942ADCD9210032015B /* SwiftUI-Playground-Info.plist */,
 				4011E8782A497608003F06BF /* Resources */,
 				4011E8772A497604003F06BF /* Sources */,
 				4011E8762A4975FE003F06BF /* Generated */,
@@ -464,6 +466,7 @@
 				DEVELOPMENT_TEAM = YLUL9XKLDZ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "SwiftUI-Playground-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = SwiftUILab;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -499,6 +502,7 @@
 				DEVELOPMENT_TEAM = L6Q3MJXV23;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "SwiftUI-Playground-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = SwiftUILab;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
