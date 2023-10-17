@@ -8,38 +8,40 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    private let items = ["Apple", "Banana", "Strawberry", "Mango", "PineApple", "Orange", "Grapes", "Watermelon", "Cherry", "Kiwi"]
 
     var body: some View {
-        ZStack {
-            if viewModel.isFloatingViewVisible {
-                FloatingView(dismissAction: {
-                    withAnimation {
-                        viewModel.isFloatingViewVisible = false
-                    }
-                })
-                .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-                .zIndex(1)
-            }
-            VStack(spacing: 28) {
-                Text("Dio said: \(viewModel.name)")
-                    .modifier(CustomLabel(foregroundColor: .black, size: 28))
-                TextField("Messages", text: $viewModel.name)
-                    .modifier(CustomTextField())
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
-                Button {
-                    withAnimation {
-                        viewModel.isFloatingViewVisible = true
-                    }
-                } label: {
-                    Text("Show Popup View")
-                        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+        ScrollView {
+            VStack(spacing: 20) {
+                ForEach(items, id: \.self) { item in
+                    FancyListItemView(item: item)
                 }
-                CustomCircleView()
             }
+            .padding()
         }
+    }
+}
+
+struct FancyListItemView: View {
+    let item: String
+
+    var body: some View {
+        HStack {
+            Text(item)
+                .font(.headline)
+                .foregroundColor(Color.black)
+            Spacer()
+            Image(systemName: "arrow.right.circle")
+                .foregroundColor(Color.blue)
+                .font(.system(size: 24))
+        }
+        .padding()
+        .frame(width: 320, height: 60)
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.white)
+                .shadow(color: Color.gray.opacity(0.4), radius: 5, x: 0, y: 2)
+        )
     }
 }
 
