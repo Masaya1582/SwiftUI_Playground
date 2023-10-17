@@ -20,6 +20,7 @@ class HomeViewModel: ObservableObject {
         fetchPosts()
     }
 
+    /// URLSessionとCombineを学ぶ
     private func fetchPosts() {
         if let url = URL(string: "https://jsonplaceholder.typicode.com/posts") {
             URLSession.shared.dataTaskPublisher(for: url)

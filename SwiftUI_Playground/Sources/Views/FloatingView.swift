@@ -27,6 +27,7 @@ struct FloatingView: View {
         }
     }
 
+    /// 右上のバツボタン
     var closeButton: some View {
         HStack {
             Spacer()
@@ -40,6 +41,7 @@ struct FloatingView: View {
         }
     }
 
+    /// 全体のView
     var sampleView: some View {
         VStack(spacing: 42) {
             Text("Floating View")
@@ -56,6 +58,7 @@ struct FloatingView: View {
         .cornerRadius(12)
     }
 
+    /// メインの閉じるボタン
     var mainCloseButton: some View {
         Button(action: {
             dismissAction()
