@@ -38,6 +38,7 @@ struct HomeView: View {
                         .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
                 }
                 CustomCircleView()
+                VintageSettingView(iconName: "gear.circle", title: "Setting")
             }
         }
     }
