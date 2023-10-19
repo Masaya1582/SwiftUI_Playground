@@ -6,39 +6,41 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct HomeView: View {
     @StateObject var viewModel = HomeViewModel()
+    private let loginManager = FirebaseAuthManager()
 
     var body: some View {
-        ZStack {
-            if viewModel.isFloatingViewVisible {
-                FloatingView(dismissAction: {
-                    withAnimation {
-                        viewModel.isFloatingViewVisible = false
-                    }
-                })
-                .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-                .zIndex(1)
+        VStack(spacing: 20) {
+            Text("Login")
+                .modifier(CustomLabel(foregroundColor: .black, size: 24))
+            TextField("Email", text: $viewModel.email)
+                .modifier(CustomTextField())
+            TextField("Password", text: $viewModel.password)
+                .modifier(CustomTextField())
+            Button {
+                loginUser()
+            } label: {
+                Text("Login")
             }
-            VStack(spacing: 28) {
-                Text("Dio said: \(viewModel.name)")
-                    .modifier(CustomLabel(foregroundColor: .black, size: 28))
-                TextField("Messages", text: $viewModel.name)
-                    .modifier(CustomTextField())
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
-                Button {
-                    withAnimation {
-                        viewModel.isFloatingViewVisible = true
-                    }
-                } label: {
-                    Text("Show Popup View")
-                        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-                }
-                CustomCircleView()
+            .modifier(CustomButton(foregroundColor: .white, backgroundColor: viewModel.buttonColor))
+            .disabled(!viewModel.isLoginButtonEnabled)
+        }
+        .alert(isPresented: $viewModel.showAlert) {
+            Alert(title: Text("Login Status"), message: Text(viewModel.message), dismissButton: .default(Text("OK")))
+        }
+    }
+
+    private func loginUser() {
+        loginManager.loginUser(email: viewModel.email, password: viewModel.password) { success in
+            if success {
+                viewModel.message = "Login was successful."
+            } else {
+                viewModel.message = "Login failed. Email or Password are wrong"
             }
+            viewModel.showAlert = true
         }
     }
 }
