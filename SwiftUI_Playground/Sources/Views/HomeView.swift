@@ -25,7 +25,8 @@ struct HomeView: View {
             } label: {
                 Text("Signup")
             }
-            .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+            .modifier(CustomButton(foregroundColor: .white, backgroundColor: viewModel.buttonColor))
+            .disabled(!viewModel.isSignupButtonEnabled)
         }
         .alert(isPresented: $viewModel.showAlert) {
             Alert(title: Text("Signup Status"), message: Text(viewModel.message), dismissButton: .default(Text("OK")))
@@ -33,15 +34,13 @@ struct HomeView: View {
     }
 
     private func createUser() {
-        if !viewModel.email.isEmpty && !viewModel.password.isEmpty {
-            signUpManager.createUser(email: viewModel.email, password: viewModel.password) { success in
-                if success {
-                    viewModel.message = "User was successfully created."
-                } else {
-                    viewModel.message = "There was an error."
-                }
-                viewModel.showAlert = true
+        signUpManager.createUser(email: viewModel.email, password: viewModel.password) { success in
+            if success {
+                viewModel.message = "User was successfully created."
+            } else {
+                viewModel.message = "There was an error."
             }
+            viewModel.showAlert = true
         }
     }
 }

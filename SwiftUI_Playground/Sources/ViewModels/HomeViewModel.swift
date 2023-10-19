@@ -13,4 +13,12 @@ class HomeViewModel: ObservableObject {
     @Published var password = ""
     @Published var message = ""
     @Published var showAlert = false
+
+    var isSignupButtonEnabled: Bool {
+        return email.contains("@") && password.count >= 8
+    }
+
+    var buttonColor: Color {
+        return isSignupButtonEnabled ? .orange : .gray
+    }
 }
