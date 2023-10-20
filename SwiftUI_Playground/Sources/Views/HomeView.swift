@@ -51,7 +51,6 @@ struct HomeView: View {
                     }
                 }
                 .modifier(CustomButton(foregroundColor: .white, backgroundColor: .green))
-                CustomCircleView()
             }
         }
         .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
