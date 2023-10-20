@@ -12,36 +12,31 @@ import FirebaseFirestore
 
 struct HomeView: View {
     @StateObject var viewModel = HomeViewModel()
+    @State private var isImagePickerPresented = false
+    @State private var selectedImage: UIImage?
 
     var body: some View {
-        ZStack {
-            if viewModel.isFloatingViewVisible {
-                FloatingView(dismissAction: {
-                    withAnimation {
-                        viewModel.isFloatingViewVisible = false
-                    }
-                })
-                .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-                .zIndex(1)
-            }
-            VStack(spacing: 28) {
-                Text("Dio said: \(viewModel.name)")
-                    .modifier(CustomLabel(foregroundColor: .black, size: 28))
-                TextField("Messages", text: $viewModel.name)
-                    .modifier(CustomTextField())
-                Asset.Assets.imgDio.swiftUIImage
+        VStack {
+            if let image = selectedImage {
+                Image(uiImage: image)
                     .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
-                Button {
-                    withAnimation {
-                        viewModel.isFloatingViewVisible = true
-                    }
-                } label: {
-                    Text("Show Popup View")
-                        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-                }
-                CustomCircleView()
+                    .modifier(CustomImage(width: 240, height: 240))
+            } else {
+                Text("No image selected")
+                    .modifier(CustomLabel(foregroundColor: .black, size: 24))
             }
+            Button {
+                withAnimation {
+                    isImagePickerPresented = true
+                }
+            } label: {
+                Text("Open Camera")
+                    .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+            }
+        }
+        .sheet(isPresented: $isImagePickerPresented) {
+            AlbumPicker(selectedImage: $selectedImage, sourceType: .camera)
+            // AlbumPicker(selectedImage: $selectedImage, sourceType: .photoLibrary)
         }
     }
 }
