@@ -34,3 +34,6 @@ Carthage/Build/
 xcuserdata/
 *.moved-aside
 !.gitkeep
+
+# Firebase GoogleService-Info.plist
+GoogleService-Info.plist
