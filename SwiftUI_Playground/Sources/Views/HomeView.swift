@@ -16,17 +16,7 @@ struct HomeView: View {
 
     var body: some View {
         ZStack {
-            LinearGradient(gradient: Gradient(colors: [Color.red, Color.blue]), startPoint: .top, endPoint: .bottom)
-                .edgesIgnoringSafeArea(.all)
-            if viewModel.isFloatingViewVisible {
-                FloatingView(dismissAction: {
-                    withAnimation {
-                        viewModel.isFloatingViewVisible = false
-                    }
-                })
-                .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-                .zIndex(1)
-            }
+            backgroundField()
             VStack(spacing: 16) {
                 topField()
                 middleField()
@@ -88,6 +78,21 @@ struct HomeView: View {
             }
         }
         .modifier(CustomButton(foregroundColor: .white, backgroundColor: .green))
+    }
+
+    @ViewBuilder
+    private func backgroundField() -> some View {
+        LinearGradient(gradient: Gradient(colors: [Color.red, Color.blue]), startPoint: .top, endPoint: .bottom)
+            .edgesIgnoringSafeArea(.all)
+        if viewModel.isFloatingViewVisible {
+            FloatingView(dismissAction: {
+                withAnimation {
+                    viewModel.isFloatingViewVisible = false
+                }
+            })
+            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
+            .zIndex(1)
+        }
     }
 }
 
