@@ -9,7 +9,6 @@ target 'SwiftUI_Playground' do
     pod 'SwiftGen', '~> 6.0'
     pod 'RxSwift'
     pod 'RxCocoa'
-    pod 'SDWebImageSwiftUI'
     pod 'Firebase/Core'
     pod 'Firebase/Auth'
     pod 'Firebase/Firestore'
