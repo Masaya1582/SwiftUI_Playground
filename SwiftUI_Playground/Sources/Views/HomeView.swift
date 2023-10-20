@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 import FirebaseAuth
 import FirebaseStorage
 import FirebaseFirestore
