@@ -816,12 +816,12 @@ PODS:
   - nanopb/encode (2.30909.0)
   - PromisesObjC (2.3.1)
   - RecaptchaInterop (100.0.0)
-  - RxCocoa (6.5.0):
-    - RxRelay (= 6.5.0)
-    - RxSwift (= 6.5.0)
-  - RxRelay (6.5.0):
-    - RxSwift (= 6.5.0)
-  - RxSwift (6.5.0)
+  - RxCocoa (6.6.0):
+    - RxRelay (= 6.6.0)
+    - RxSwift (= 6.6.0)
+  - RxRelay (6.6.0):
+    - RxSwift (= 6.6.0)
+  - RxSwift (6.6.0)
   - SwiftGen (6.6.2)
 
 DEPENDENCIES:
@@ -885,9 +885,9 @@ SPEC CHECKSUMS:
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
-  RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
-  RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
-  RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
+  RxCocoa: 44a80de90e25b739b5aeaae3c8c371a32e3343cc
+  RxRelay: 45eaa5db8ee4fb50e5ebd57deec0159e97fa51e6
+  RxSwift: a4b44f7d24599f674deebd1818eab82e58410632
   SwiftGen: 1366a7f71aeef49954ca5a63ba4bef6b0f24138c
 
 PODFILE CHECKSUM: 27eb2f5f777f930c5bc98ae06b30ddd9d9009df1

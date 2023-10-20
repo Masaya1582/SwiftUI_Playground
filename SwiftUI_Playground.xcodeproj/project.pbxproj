@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E0CBD5E2AE25A39001917B9 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E0CBD5D2AE25A39001917B9 /* ImagePicker.swift */; };
 		1E62EE712AD8D0080031CB1B /* FloatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E62EE702AD8D0080031CB1B /* FloatingView.swift */; };
 		1E9C22232ADE799700F48C97 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1E9C22222ADE799700F48C97 /* GoogleService-Info.plist */; };
 		4011E8692A49759C003F06BF /* SwiftUI_PlaygroundApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E8682A49759C003F06BF /* SwiftUI_PlaygroundApp.swift */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1E0CBD5D2AE25A39001917B9 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		1E62EE702AD8D0080031CB1B /* FloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingView.swift; sourceTree = "<group>"; };
 		1E9C22222ADE799700F48C97 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		1EF7E5942ADCD9210032015B /* SwiftUI-Playground-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "SwiftUI-Playground-Info.plist"; sourceTree = SOURCE_ROOT; };
@@ -153,6 +155,7 @@
 			isa = PBXGroup;
 			children = (
 				4011E87D2A497644003F06BF /* HomeModel.swift */,
+				1E0CBD5D2AE25A39001917B9 /* ImagePicker.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -336,6 +339,7 @@
 				4011E8892A4976D0003F06BF /* LocalizableStrings.swift in Sources */,
 				4011E88F2A497727003F06BF /* HomeViewModel.swift in Sources */,
 				4011E87E2A497644003F06BF /* HomeModel.swift in Sources */,
+				1E0CBD5E2AE25A39001917B9 /* ImagePicker.swift in Sources */,
 				4011E8872A4976C9003F06BF /* Assets.swift in Sources */,
 				4011E8692A49759C003F06BF /* SwiftUI_PlaygroundApp.swift in Sources */,
 			);
