@@ -6,42 +6,32 @@
 //
 
 import SwiftUI
+import UIKit
 import FirebaseAuth
 import FirebaseStorage
 import FirebaseFirestore
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var isImagePickerPresented = false
+    @State private var selectedImage: UIImage?
 
     var body: some View {
-        ZStack {
-            if viewModel.isFloatingViewVisible {
-                FloatingView(dismissAction: {
-                    withAnimation {
-                        viewModel.isFloatingViewVisible = false
-                    }
-                })
-                .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-                .zIndex(1)
-            }
-            VStack(spacing: 28) {
-                Text("Dio said: \(viewModel.name)")
-                    .modifier(CustomLabel(foregroundColor: .black, size: 28))
-                TextField("Messages", text: $viewModel.name)
-                    .modifier(CustomTextField())
-                Asset.Assets.imgDio.swiftUIImage
+        VStack(spacing: 28) {
+            if let image = selectedImage {
+                Image(uiImage: image)
                     .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
-                Button {
-                    withAnimation {
-                        viewModel.isFloatingViewVisible = true
-                    }
-                } label: {
-                    Text("Show Popup View")
-                        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-                }
-                CustomCircleView()
+                    .modifier(CustomImage(width: 300, height: 300))
+            } else {
+                Text("No image selected")
+                    .modifier(CustomLabel(foregroundColor: .black, size: 24))
             }
+            Button("Select Image") {
+                isImagePickerPresented.toggle()
+            }
+            .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+        }
+        .fullScreenCover(isPresented: $isImagePickerPresented) {
+            ImagePicker(selectedImage: $selectedImage)
         }
     }
 }
