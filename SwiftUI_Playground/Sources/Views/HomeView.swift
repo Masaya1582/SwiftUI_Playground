@@ -25,10 +25,10 @@ struct HomeView: View {
                 .transition(.asymmetric(insertion: .opacity, removal: .opacity))
                 .zIndex(1)
             }
-            VStack(spacing: 28) {
-                Text("Dio said: \(viewModel.name)")
+            VStack(spacing: 16) {
+                Text("Today's Quote: \(viewModel.name)")
                     .modifier(CustomLabel(foregroundColor: .black, size: 28))
-                TextField("Messages", text: $viewModel.name)
+                TextField("Quote", text: $viewModel.name)
                     .modifier(CustomTextField())
                 if let image = viewModel.selectedImage {
                     Image(uiImage: image)
@@ -47,7 +47,7 @@ struct HomeView: View {
                 .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
                 Button("Select an Image") {
                     withAnimation {
-                        viewModel.isOpenImagePicker = true
+                        viewModel.showSourceTypeAlert = true
                     }
                 }
                 .modifier(CustomButton(foregroundColor: .white, backgroundColor: .green))
@@ -65,7 +65,7 @@ struct HomeView: View {
                     viewModel.sourceType = .camera
                     viewModel.isOpenImagePicker = true
                 },
-                secondaryButton: .default(Text("Photo Library")) {
+                secondaryButton: .default(Text("Library")) {
                     viewModel.sourceType = .photoLibrary
                     viewModel.isOpenImagePicker = true
                 }

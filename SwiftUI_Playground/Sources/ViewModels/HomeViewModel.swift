@@ -10,9 +10,6 @@ import Combine
 
 class HomeViewModel: ObservableObject {
     @Published var name = ""
-    @Published var age = 24
-    @Published var height = 174.5
-    @Published var shouldInvertColor = false
     @Published var isFloatingViewVisible = false
     @Published var isOpenImagePicker = false
     @Published var showSourceTypeAlert = false
