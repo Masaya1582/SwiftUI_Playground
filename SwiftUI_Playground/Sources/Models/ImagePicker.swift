@@ -1,5 +1,5 @@
 //
-//  AlbumPicker.swift
+//  ImagePicker.swift
 //  SwiftUI_Playground
 //
 //  Created by 中久木 雅哉(Nakakuki Masaya) on 2023/10/20.
@@ -9,17 +9,18 @@
 import UIKit
 import SwiftUI
 
-struct AlbumPicker: UIViewControllerRepresentable {
+struct ImagePicker: UIViewControllerRepresentable {
     @Binding var selectedImage: UIImage?
+    let sourceType: UIImagePickerController.SourceType
 
-    func makeUIViewController(context: UIViewControllerRepresentableContext<AlbumPicker>) -> UIImagePickerController {
+    func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePicker>) -> UIImagePickerController {
         let imagePicker = UIImagePickerController()
-        imagePicker.sourceType = .photoLibrary
+        imagePicker.sourceType = sourceType
         imagePicker.delegate = context.coordinator
         return imagePicker
     }
 
-    func updateUIViewController(_ uiViewController: UIImagePickerController, context: UIViewControllerRepresentableContext<AlbumPicker>) {
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: UIViewControllerRepresentableContext<ImagePicker>) {
         // Update the view controller if needed
     }
 
@@ -28,9 +29,9 @@ struct AlbumPicker: UIViewControllerRepresentable {
     }
 
     class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-        let parent: AlbumPicker
+        let parent: ImagePicker
 
-        init(_ parent: AlbumPicker) {
+        init(_ parent: ImagePicker) {
             self.parent = parent
         }
 

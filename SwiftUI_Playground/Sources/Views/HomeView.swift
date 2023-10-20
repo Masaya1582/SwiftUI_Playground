@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 import FirebaseAuth
 import FirebaseStorage
 import FirebaseFirestore
@@ -29,19 +30,46 @@ struct HomeView: View {
                     .modifier(CustomLabel(foregroundColor: .black, size: 28))
                 TextField("Messages", text: $viewModel.name)
                     .modifier(CustomTextField())
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
-                Button {
+                if let image = viewModel.selectedImage {
+                    Image(uiImage: image)
+                        .resizable()
+                        .modifier(CustomImage(width: 200, height: 200))
+                } else {
+                    Asset.Assets.imgDio.swiftUIImage
+                        .resizable()
+                        .modifier(CustomImage(width: 200, height: 200))
+                }
+                Button("Show Popup View") {
                     withAnimation {
                         viewModel.isFloatingViewVisible = true
                     }
-                } label: {
-                    Text("Show Popup View")
-                        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
                 }
+                .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+                Button("Select an Image") {
+                    withAnimation {
+                        viewModel.isOpenImagePicker = true
+                    }
+                }
+                .modifier(CustomButton(foregroundColor: .white, backgroundColor: .green))
                 CustomCircleView()
             }
+        }
+        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
+            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
+        }
+        .alert(isPresented: $viewModel.showSourceTypeAlert) {
+            Alert(
+                title: Text("Select SourceType"),
+                message: nil,
+                primaryButton: .default(Text("Camera")) {
+                    viewModel.sourceType = .camera
+                    viewModel.isOpenImagePicker = true
+                },
+                secondaryButton: .default(Text("Photo Library")) {
+                    viewModel.sourceType = .photoLibrary
+                    viewModel.isOpenImagePicker = true
+                }
+            )
         }
     }
 }

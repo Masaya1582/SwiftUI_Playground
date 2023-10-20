@@ -14,6 +14,10 @@ class HomeViewModel: ObservableObject {
     @Published var height = 174.5
     @Published var shouldInvertColor = false
     @Published var isFloatingViewVisible = false
+    @Published var isOpenImagePicker = false
+    @Published var showSourceTypeAlert = false
+    @Published var sourceType: UIImagePickerController.SourceType?
+    @Published var selectedImage: UIImage?
     @Published var posts: [Post] = []
 
     init() {
