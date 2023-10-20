@@ -12,37 +12,17 @@ import FirebaseStorage
 import FirebaseFirestore
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
 
     var body: some View {
-        ZStack {
-            if viewModel.isFloatingViewVisible {
-                FloatingView(dismissAction: {
-                    withAnimation {
-                        viewModel.isFloatingViewVisible = false
-                    }
-                })
-                .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-                .zIndex(1)
-            }
-            VStack(spacing: 28) {
-                Text("Dio said: \(viewModel.name)")
-                    .modifier(CustomLabel(foregroundColor: .black, size: 28))
-                TextField("Messages", text: $viewModel.name)
-                    .modifier(CustomTextField())
-                Asset.Assets.imgDio.swiftUIImage
-                    .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
-                Button {
-                    withAnimation {
-                        viewModel.isFloatingViewVisible = true
-                    }
-                } label: {
-                    Text("Show Popup View")
-                        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-                }
-                CustomCircleView()
-            }
+        VStack {
+            Text("Remote Image Example")
+                .font(.title)
+                .padding()
+
+            SDImageView(imageUrl: "https://masasophi.com/wp-content/uploads/2023/05/normal_swift.001.png")
+                .frame(width: 200, height: 200)
+                .cornerRadius(10)
+                .padding()
         }
     }
 }
