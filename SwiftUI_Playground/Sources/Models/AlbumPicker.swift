@@ -11,10 +11,11 @@ import SwiftUI
 
 struct AlbumPicker: UIViewControllerRepresentable {
     @Binding var selectedImage: UIImage?
+    let sourceType: UIImagePickerController.SourceType
 
     func makeUIViewController(context: UIViewControllerRepresentableContext<AlbumPicker>) -> UIImagePickerController {
         let imagePicker = UIImagePickerController()
-        imagePicker.sourceType = .photoLibrary
+        imagePicker.sourceType = sourceType
         imagePicker.delegate = context.coordinator
         return imagePicker
     }
