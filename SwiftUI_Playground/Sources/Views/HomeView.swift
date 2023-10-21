@@ -70,6 +70,7 @@ struct HomeView: View {
                 viewModel.isFloatingViewVisible = true
                 print("Hello World")
                 print("Hello Japan")
+                print("Hello France")
             }
         }
         .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
