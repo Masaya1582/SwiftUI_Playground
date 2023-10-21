@@ -26,11 +26,11 @@ internal typealias AssetImageTypeAlias = ImageAsset.Image
 internal enum Asset {
   internal enum Assets {
     internal static let accentColor = ColorAsset(name: "AccentColor")
-    internal static let burger = ImageAsset(name: "Burger")
-    internal static let nuggets = ImageAsset(name: "Nuggets")
-    internal static let pancakes = ImageAsset(name: "Pancakes")
-    internal static let pizza = ImageAsset(name: "Pizza")
-    internal static let spaghetti = ImageAsset(name: "Spaghetti")
+    internal static let burger = ImageAsset(name: "burger")
+    internal static let nuggets = ImageAsset(name: "nuggets")
+    internal static let pancakes = ImageAsset(name: "pancakes")
+    internal static let pizza = ImageAsset(name: "pizza")
+    internal static let spaghetti = ImageAsset(name: "spaghetti")
     internal static let imgBarack = ImageAsset(name: "img_barack")
     internal static let imgBiden = ImageAsset(name: "img_biden")
     internal static let imgBill = ImageAsset(name: "img_bill")
@@ -46,8 +46,21 @@ internal enum Asset {
     internal static let imgLaboratory = ImageAsset(name: "img_laboratory")
   }
   internal enum Colors {
-    internal static let backgroundColor = ColorAsset(name: "background_color")
-    internal static let mainColor = ColorAsset(name: "main_color")
+    internal static let alertRed = ColorAsset(name: "alert_red")
+    internal static let black = ColorAsset(name: "black")
+    internal static let blue = ColorAsset(name: "blue")
+    internal static let gray1 = ColorAsset(name: "gray1")
+    internal static let gray2 = ColorAsset(name: "gray2")
+    internal static let gray3 = ColorAsset(name: "gray3")
+    internal static let gray4 = ColorAsset(name: "gray4")
+    internal static let gray5 = ColorAsset(name: "gray5")
+    internal static let gray6 = ColorAsset(name: "gray6")
+    internal static let gray7 = ColorAsset(name: "gray7")
+    internal static let gray8 = ColorAsset(name: "gray8")
+    internal static let gray9 = ColorAsset(name: "gray9")
+    internal static let ivory = ColorAsset(name: "ivory")
+    internal static let pink = ColorAsset(name: "pink")
+    internal static let white = ColorAsset(name: "white")
   }
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
