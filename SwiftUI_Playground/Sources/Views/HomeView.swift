@@ -68,6 +68,9 @@ struct HomeView: View {
         Button("Show Popup View") {
             withAnimation {
                 viewModel.isFloatingViewVisible = true
+                print("Hello World")
+                print("Hello Japan")
+                print("Hello France")
             }
         }
         .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
