@@ -13,33 +13,20 @@ import FirebaseFirestore
 
 struct HomeView: View {
     @StateObject var viewModel = HomeViewModel()
+    @State private var isRotating = false
 
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 16) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .alert(isPresented: $viewModel.showSourceTypeAlert) {
-            Alert(
-                title: Text("Select SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
-                }
+        Image(systemName: "apple.logo")
+            .font(.system(size: 100))
+            .foregroundColor(.blue)
+            .rotationEffect(.degrees(isRotating ? 360 : 0))
+            .animation(
+                Animation.linear(duration: 2)
+                    .repeatForever(autoreverses: false)
             )
-        }
+            .onAppear() {
+                isRotating = true
+            }
     }
 
     @ViewBuilder
