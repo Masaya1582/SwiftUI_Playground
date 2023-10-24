@@ -82,7 +82,7 @@ struct HomeView: View {
 
     @ViewBuilder
     private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.red, Color.blue]), startPoint: .top, endPoint: .bottom)
+        LinearGradient(gradient: Gradient(colors: [Color.red, Color.orange]), startPoint: .top, endPoint: .bottom)
             .edgesIgnoringSafeArea(.all)
         if viewModel.isFloatingViewVisible {
             FloatingView(dismissAction: {
