@@ -6,93 +6,64 @@
 //
 
 import SwiftUI
-import UIKit
-import FirebaseAuth
-import FirebaseStorage
-import FirebaseFirestore
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @StateObject private var viewModel = ReminderViewModel()
+    @State private var newReminderTitle = ""
+    @State private var selectedDate = Date()
 
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 16) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .alert(isPresented: $viewModel.showSourceTypeAlert) {
-            Alert(
-                title: Text("Select SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        NavigationView {
+            VStack {
+                if viewModel.notificationStatus == .notDetermined {
+                    Button("Ask for Permission") {
+                        viewModel.requestNotificationPermission()
+                    }
+                } else if viewModel.notificationStatus == .denied {
+                    Text("Please enable notification permissions in Settings to use the reminder feature.")
+                        .padding()
+                } else {
+                    List {
+                        Section(header: Text("Reminders")) {
+                            ForEach(viewModel.reminders) { reminder in
+                                HStack {
+                                    Text(reminder.title)
+                                    Spacer()
+                                    Text(formattedDate(reminder.date))
+                                        .font(.subheadline)
+                                }
+                            }
+                            .onDelete(perform: deleteReminder)
+                        }
+                        Section {
+                            TextField("Enter reminder", text: $newReminderTitle)
+                            DatePicker("Select Date", selection: $selectedDate, displayedComponents: [.date, .hourAndMinute])
+                        }
+
+                        Section {
+                            Button("Add Reminder") {
+                                let newReminder = Reminder(title: newReminderTitle, date: selectedDate)
+                                viewModel.scheduleNotification(for: newReminder)
+                                newReminderTitle = ""
+                            }
+                        }
+                    }
+                    .listStyle(InsetGroupedListStyle())
                 }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
             }
+            .navigationTitle("Reminder App")
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.showSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .green))
     }
 
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.red, Color.orange]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
-        }
+    private func deleteReminder(at offsets: IndexSet) {
+        viewModel.reminders.remove(atOffsets: offsets)
+    }
+
+    private func formattedDate(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .short
+        return dateFormatter.string(from: date)
     }
 }
 
