@@ -8,37 +8,33 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var count = 0
+    @State private var isShowAho = false
 
     var body: some View {
-        ZStack {
-            if viewModel.isFloatingViewVisible {
-                FloatingView(dismissAction: {
-                    withAnimation {
-                        viewModel.isFloatingViewVisible = false
-                    }
-                })
-                .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-                .zIndex(1)
-            }
-            VStack(spacing: 28) {
-                Text("Dio said: \(viewModel.name)")
-                    .modifier(CustomLabel(foregroundColor: .black, size: 28))
-                TextField("Messages", text: $viewModel.name)
-                    .modifier(CustomTextField())
-                Asset.Assets.imgDio.swiftUIImage
+        VStack {
+            Spacer()
+            Text(String(count))
+                .modifier(CustomLabel(foregroundColor: .black, size: 32))
+            if isShowAho {
+                Asset.Assets.nabeatsu.swiftUIImage
                     .resizable()
-                    .modifier(CustomImage(width: 200, height: 200))
-                Button {
-                    withAnimation {
-                        viewModel.isFloatingViewVisible = true
-                    }
-                } label: {
-                    Text("Show Popup View")
-                        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-                }
-                CustomCircleView()
+                    .modifier(CustomImage(width: 280, height: 280))
             }
+            Spacer()
+            Button("Increment") {
+                incrementCount()
+            }
+            .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+        }
+    }
+
+    private func incrementCount() {
+        count += 1
+        if count.isMultiple(of: 3) || String(count).contains("3") {
+            isShowAho = true
+        } else {
+            isShowAho = false
         }
     }
 }
