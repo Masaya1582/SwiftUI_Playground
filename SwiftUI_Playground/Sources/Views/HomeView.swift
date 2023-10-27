@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct HomeView: View {
     @State private var count = 0
     @State private var isShowAho = false
+    @State private var audioPlayer: AVAudioPlayer?
 
     var body: some View {
         VStack {
@@ -27,14 +29,30 @@ struct HomeView: View {
             }
             .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
         }
+        .onAppear {
+            setupAudioPlayer()
+        }
     }
 
     private func incrementCount() {
         count += 1
         if count.isMultiple(of: 3) || String(count).contains("3") {
             isShowAho = true
+            audioPlayer?.play()
         } else {
             isShowAho = false
+        }
+    }
+
+    private func setupAudioPlayer() {
+        guard let audioPath = Bundle.main.path(forResource: "three_aho", ofType: "mp3") else {
+            return
+        }
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: audioPath))
+            audioPlayer?.prepareToPlay()
+        } catch {
+            print("Error")
         }
     }
 }
