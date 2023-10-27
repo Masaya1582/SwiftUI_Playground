@@ -7,11 +7,5 @@ target 'SwiftUI_Playground' do
 
   # Pods for SwiftUI_Playground
     pod 'SwiftGen', '~> 6.0'
-    pod 'RxSwift'
-    pod 'RxCocoa'
-    pod 'Firebase/Core'
-    pod 'Firebase/Auth'
-    pod 'Firebase/Firestore'
-    pod 'Firebase/Storage'
 
 end

@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		1E0CBD602AE25C44001917B9 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E0CBD5F2AE25C44001917B9 /* ImagePicker.swift */; };
 		1E62EE712AD8D0080031CB1B /* FloatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E62EE702AD8D0080031CB1B /* FloatingView.swift */; };
-		1E9C22232ADE799700F48C97 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1E9C22222ADE799700F48C97 /* GoogleService-Info.plist */; };
 		4011E8692A49759C003F06BF /* SwiftUI_PlaygroundApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E8682A49759C003F06BF /* SwiftUI_PlaygroundApp.swift */; };
 		4011E86B2A49759C003F06BF /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E86A2A49759C003F06BF /* HomeView.swift */; };
 		4011E86D2A49759D003F06BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4011E86C2A49759D003F06BF /* Assets.xcassets */; };
@@ -29,7 +28,6 @@
 /* Begin PBXFileReference section */
 		1E0CBD5F2AE25C44001917B9 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		1E62EE702AD8D0080031CB1B /* FloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingView.swift; sourceTree = "<group>"; };
-		1E9C22222ADE799700F48C97 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		1EF7E5942ADCD9210032015B /* SwiftUI-Playground-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "SwiftUI-Playground-Info.plist"; sourceTree = SOURCE_ROOT; };
 		3977D086BE021AF13A042E9A /* Pods_SwiftUI_Playground.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftUI_Playground.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4011E8652A49759C003F06BF /* SwiftUI_Playground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftUI_Playground.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -126,7 +124,6 @@
 			children = (
 				4011E86C2A49759D003F06BF /* Assets.xcassets */,
 				4011E8812A49769B003F06BF /* Colors.xcassets */,
-				1E9C22222ADE799700F48C97 /* GoogleService-Info.plist */,
 				4011E8832A4976AA003F06BF /* Localizable.strings */,
 				4011E8852A4976B2003F06BF /* Fonts */,
 			);
@@ -204,7 +201,6 @@
 				4011E8612A49759C003F06BF /* Sources */,
 				4011E8622A49759C003F06BF /* Frameworks */,
 				4011E8632A49759C003F06BF /* Resources */,
-				5895DF3215DF711AF3BF577F /* [CP] Embed Pods Frameworks */,
 				40779B5A2A4EDE0700505ABD /* SwiftLint */,
 			);
 			buildRules = (
@@ -259,7 +255,6 @@
 				4011E8842A4976AA003F06BF /* Localizable.strings in Resources */,
 				4011E8702A49759D003F06BF /* Preview Assets.xcassets in Resources */,
 				4011E86D2A49759D003F06BF /* Assets.xcassets in Resources */,
-				1E9C22232ADE799700F48C97 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,23 +279,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint >/dev/null; then\n  swiftlint autocorrect --format # 自動修正の有効化\n  swiftlint\nelse\n  echo \"SwiftLint does not exist, download from https://github.com/realm/SwiftLint\"\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		5895DF3215DF711AF3BF577F /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SwiftUI_Playground/Pods-SwiftUI_Playground-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SwiftUI_Playground/Pods-SwiftUI_Playground-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SwiftUI_Playground/Pods-SwiftUI_Playground-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DFBBD629AC954EA4ABE7499C /* [CP] Check Pods Manifest.lock */ = {

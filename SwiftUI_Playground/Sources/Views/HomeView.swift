@@ -7,9 +7,6 @@
 
 import SwiftUI
 import UIKit
-import FirebaseAuth
-import FirebaseStorage
-import FirebaseFirestore
 
 struct HomeView: View {
     @StateObject var viewModel = HomeViewModel()
