@@ -74,7 +74,7 @@ struct HomeView: View {
                 viewModel.showSourceTypeAlert = true
             }
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .green))
+        .buttonStyle(GrowingButton(foregroundColor: .white, backgroundColor: .green))
     }
 
     @ViewBuilder
