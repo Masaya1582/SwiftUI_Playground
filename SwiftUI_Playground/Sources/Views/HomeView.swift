@@ -9,87 +9,50 @@ import SwiftUI
 import UIKit
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var enteredNumber = ""
+    private let numberButtons: [[String]] = [
+        ["1", "2", "3"],
+        ["4", "5", "6"],
+        ["7", "8", "9"],
+        ["*", "0", "#"]
+    ]
 
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 16) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .alert(isPresented: $viewModel.showSourceTypeAlert) {
-            Alert(
-                title: Text("Select SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        VStack {
+            Text("Dial Pad")
+                .font(.largeTitle)
+                .padding()
+            Spacer()
+            Text(enteredNumber)
+                .font(.largeTitle)
+                .padding()
+            Spacer()
+            VStack(spacing: 10) {
+                ForEach(0..<4, id: \.self) { row in
+                    HStack(spacing: 10) {
+                        ForEach(0..<3, id: \.self) { col in
+                            Button(action: {
+                                let number = numberButtons[row][col]
+                                enteredNumber.append(number)
+                            }) {
+                                Text(numberButtons[row][col])
+                                    .font(.title)
+                                    .frame(width: 100, height: 100)
+                                    .background(Color.black)
+                                    .cornerRadius(30)
+                                    .foregroundColor(.white)
+                            }
+                        }
+                    }
                 }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
             }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.showSourceTypeAlert = true
+            Spacer()
+            Button("Clear") {
+                enteredNumber = ""
             }
+            .modifier(CustomButton(foregroundColor: .white, backgroundColor: .red))
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .green))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.brown, Color.purple]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
-        }
+        .padding()
     }
 }
 
