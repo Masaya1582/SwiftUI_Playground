@@ -9,86 +9,112 @@ import SwiftUI
 import UIKit
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var animatableProgress: CGFloat = 0
+    @State private var showText = false
+    @State private var displayedName = ""
+
+    private let names = ["Michael ScoField", "Lincoln Burrows"]
+    private let letterAnimationDuration = 0.2
+    private let nameTransitionDuration = 0.5
 
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 16) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .alert(isPresented: $viewModel.showSourceTypeAlert) {
-            Alert(
-                title: Text("Select SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        VStack {
+            ZStack {
+                ThreadsIcon()
+                    .foregroundColor(Color.gray.opacity(0.3))
+                    .frame(width: 200, height: 200)
+
+                ThreadsIcon()
+                    .trim(from: 0, to: animatableProgress)
+                    .stroke(style: StrokeStyle(lineWidth: 50, lineCap: .round, lineJoin: .round))
+                    .foregroundColor(.black)
+                    .animation(
+                        Animation.easeInOut(duration: 2)
+                            .repeatForever(autoreverses: true)
+                    )
+                    .frame(width: 200, height: 200)
+                    .mask(
+                        GeometryReader { geometry in
+                            Path { path in
+                                path.addPath(
+                                    ThreadsIcon()
+                                        .trim(from: 0, to: animatableProgress)
+                                        .path(in: CGRect(x: 0, y: 0, width: geometry.size.width, height: geometry.size.height))
+                                )
+                            }
+                            .fill(Color.white)
+                        }
+                    )
+
+                VStack {
+                    Spacer()
+                    if showText {
+                        VStack {
+                            Text("Created By")
+                                .font(.headline)
+                                .foregroundColor(.black)
+
+                            Text(displayedName)
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .foregroundColor(.black)
+                                .transition(.opacity)
+                                .padding(.bottom, 10)
+                        }
+                    }
                 }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
             }
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.showSourceTypeAlert = true
+        .onAppear {
+            withAnimation(Animation.linear(duration: 2).repeatForever(autoreverses: false)) {
+                animatableProgress = 1
             }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .green))
-    }
 
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.brown, Color.purple]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                showText = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    writeName(name: names[0])
                 }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+            }
+        }
+    }
+
+    private func writeName(name: String) {
+        var currentIndex = 0
+
+        Timer.scheduledTimer(withTimeInterval: letterAnimationDuration, repeats: true) { timer in
+            if currentIndex < name.count {
+                let endIndex = name.index(name.startIndex, offsetBy: currentIndex)
+                displayedName += String(name[endIndex])
+                currentIndex += 1
+            } else {
+                timer.invalidate()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    removeName(name: name)
+                }
+            }
+        }
+    }
+
+    private func removeName(name: String) {
+        if name == names[0] {
+            var currentIndex = name.count - 1
+
+            Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { timer in
+                if currentIndex >= 0 {
+                    let endIndex = name.index(name.startIndex, offsetBy: currentIndex)
+                    displayedName = String(name[..<endIndex])
+                    currentIndex -= 1
+                } else {
+                    timer.invalidate()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + letterAnimationDuration) {
+                        showText = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            writeName(name: names[1])
+                        }
+                    }
+                }
+            }
         }
     }
 }
