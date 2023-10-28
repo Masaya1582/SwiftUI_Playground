@@ -36,6 +36,24 @@ struct CustomButton: ViewModifier {
     }
 }
 
+/// 伸び縮みするButton
+struct GrowingButton: ButtonStyle {
+    let foregroundColor: Color
+    let backgroundColor: Color
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.custom(FontFamily.Caprasimo.regular, size: 24))
+            .frame(width: UIScreen.main.bounds.width / 1.6, height: UIScreen.main.bounds.height / 28, alignment: .center)
+            .padding()
+            .foregroundColor(foregroundColor)
+            .background(backgroundColor)
+            .clipShape(RoundedRectangle(cornerRadius: 27))
+            .scaleEffect(configuration.isPressed ? 1.2 : 1)
+            .animation(.easeOut(duration: 0.2), value: configuration.isPressed)
+    }
+}
+
 /// カスタムTextField
 struct CustomTextField: ViewModifier {
     @Environment(\.colorScheme) var colorScheme
