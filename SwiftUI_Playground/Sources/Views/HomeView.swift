@@ -31,7 +31,7 @@ struct AddressField: View {
     @Binding var text: String
 
     var body: some View {
-        HStack() {
+        HStack {
             Image(systemName: icon)
                 .foregroundColor(.blue)
                 .padding()
