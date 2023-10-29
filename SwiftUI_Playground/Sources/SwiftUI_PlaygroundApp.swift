@@ -9,10 +9,16 @@ import SwiftUI
 
 @main
 struct SwiftUI_PlaygroundApp: App {
+    let columns = ["Column 1", "Column 2", "Column 3"]
+    let data = [
+        ["A1", "A2", "A3"],
+        ["B1", "B2", "B3"],
+        ["C1", "C2", "C3"]
+    ]
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            HomeView(columns: columns, data: data)
         }
     }
 }
