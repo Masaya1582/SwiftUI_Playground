@@ -23,6 +23,10 @@ struct HomeView: View {
         .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
             ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
         }
+        .sheet(isPresented: $viewModel.isShowHalfModalView) {
+            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
+                .presentationDetents([.medium])
+        }
         .alert(isPresented: $viewModel.showSourceTypeAlert) {
             Alert(
                 title: Text("Select SourceType"),
@@ -43,6 +47,8 @@ struct HomeView: View {
     private func topField() -> some View {
         Text("Today's Quote: \(viewModel.name)")
             .modifier(CustomLabel(foregroundColor: .black, size: 28))
+        Text(viewModel.halfModalText)
+            .modifier(CustomLabel(foregroundColor: .black, size: 20))
         TextField("Quote", text: $viewModel.name)
             .modifier(CustomTextField())
     }
@@ -67,14 +73,21 @@ struct HomeView: View {
                 viewModel.isFloatingViewVisible = true
             }
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .green))
 
         Button("Select an Image") {
             withAnimation {
                 viewModel.showSourceTypeAlert = true
             }
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .green))
+        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .yellow))
+
+        Button("Show HalfModalView") {
+            withAnimation {
+                viewModel.isShowHalfModalView = true
+            }
+        }
+        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .red))
     }
 
     @ViewBuilder
