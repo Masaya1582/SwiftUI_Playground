@@ -142,3 +142,41 @@ struct CardViewModifier: ViewModifier {
             .shadow(radius: 5)
     }
 }
+
+struct BookListView: View {
+    let books: [Book]
+
+    var body: some View {
+        List(books) { book in
+            BookListItemView(book: book)
+        }
+    }
+}
+
+struct BookListItemView: View {
+    let book: Book
+
+    var body: some View {
+        HStack(alignment: .center) {
+            Image(book.imageName)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 80, height: 120)
+                .cornerRadius(8)
+
+            VStack(alignment: .leading) {
+                Text(book.title)
+                    .font(.title)
+                    .foregroundColor(.primary)
+
+                Text(book.subtitle)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            .padding(.leading, 10)
+
+            Spacer()
+        }
+        .padding(.vertical, 10)
+    }
+}
