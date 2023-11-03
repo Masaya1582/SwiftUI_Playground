@@ -9,99 +9,47 @@ import SwiftUI
 import UIKit
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var selectedEmoji: String = ""
+    private let emojis = [
+        "😀", "😍", "🎉", "🎈", "🌟", "🚀", "🍔", "🍦", "🎸", "🎮", "⚽", "📸",
+        "🐶", "🐱", "🐻", "🐼", "🦁", "🐮", "🐷", "🐸", "🦉", "🐙", "🦄", "🐴",
+        "🚗", "🚲", "✈️", "🚁", "🛴", "🚆",
+        "🍕", "🌮", "🍣", "🍩", "🍭", "🍺", "🍸", "🎂", "🍪", "🥂"
+    ]
 
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 16) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.showSourceTypeAlert) {
-            Alert(
-                title: Text("Select SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        VStack {
+            Text("Emoji Picker")
+                .modifier(CustomLabel(foregroundColor: .black, size: 28))
+                .padding()
+            ScrollView {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 60))], spacing: 20) {
+                    ForEach(emojis, id: \.self) { emoji in
+                        EmojiButton(emoji: emoji, selectedEmoji: $selectedEmoji)
+                    }
                 }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
+                .padding()
             }
+            Text("Selected Emoji: \(selectedEmoji)")
+                .modifier(CustomLabel(foregroundColor: .black, size: 28))
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .green))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.showSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .yellow))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .red))
     }
+}
 
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.brown, Color.purple]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+struct EmojiButton: View {
+    var emoji: String
+    @Binding var selectedEmoji: String
+
+    var body: some View {
+        Button(action: {
+            selectedEmoji = emoji
+        }) {
+            Text(emoji)
+                .font(.system(size: 30))
+                .frame(width: 60, height: 60)
+                .background(selectedEmoji == emoji ? Color.blue : Color.brown)
+                .cornerRadius(10)
+                .foregroundColor(.white)
         }
     }
 }
