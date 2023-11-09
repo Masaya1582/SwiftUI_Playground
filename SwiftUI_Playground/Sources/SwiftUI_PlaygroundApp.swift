@@ -9,10 +9,11 @@ import SwiftUI
 
 @main
 struct SwiftUI_PlaygroundApp: App {
+    @StateObject var viewModel = TodoViewModel()
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            HomeView(viewModel: viewModel)
         }
     }
 }
