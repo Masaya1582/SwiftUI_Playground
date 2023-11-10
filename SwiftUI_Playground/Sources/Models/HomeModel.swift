@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
 
 class HomeModel {
     var name: String

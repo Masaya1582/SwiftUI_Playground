@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 
-class HomeViewModel: ObservableObject {
+final class HomeViewModel: ObservableObject {
     @Published var name = ""
     @Published var halfModalText = ""
     @Published var isFloatingViewVisible = false
