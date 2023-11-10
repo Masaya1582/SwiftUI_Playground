@@ -7,7 +7,7 @@
 
 import Foundation
 
-class HomeModel {
+final class HomeModel {
     var name: String
     var age: Int
     var height: Double
