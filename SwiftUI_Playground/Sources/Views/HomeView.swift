@@ -6,103 +6,101 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var notes = [
+        Note(title: "Meeting Notes", content: "Discuss project timelines and goals."),
+        Note(title: "Ideas for App", content: "Implement dark mode, add a widget."),
+        Note(title: "Meeting Notes", content: "Discuss project timelines and goals."),
+        Note(title: "Ideas for App", content: "Implement dark mode, add a widget.")
+    ]
 
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 16) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.showSourceTypeAlert) {
-            Alert(
-                title: Text("Select SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        NavigationView {
+            List {
+                ForEach(notes) { note in
+                    NavigationLink(destination: NoteDetail(note: note, notes: $notes)) {
+                        NoteRow(note: note)
+                    }
                 }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
+                .onDelete(perform: deleteNote)
             }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .green))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.showSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .yellow))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .red))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.brown, Color.blue]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
+            .navigationBarTitle("Notes")
+            .navigationBarItems(trailing: NavigationLink(destination: AddNoteView(notes: $notes)) {
+                Image(systemName: "plus")
             })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
         }
+    }
+
+    private func deleteNote(at offsets: IndexSet) {
+        notes.remove(atOffsets: offsets)
+    }
+}
+
+struct NoteRow: View {
+    var note: Note
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(note.title)
+                .modifier(CustomLabel(foregroundColor: .black, size: 20))
+            Text(note.content)
+                .modifier(CustomLabel(foregroundColor: .gray, size: 12))
+                .lineLimit(2)
+        }
+        .padding(8)
+    }
+}
+
+struct NoteDetail: View {
+    var note: Note
+    @Binding var notes: [Note]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text(note.title)
+                .modifier(CustomLabel(foregroundColor: .black, size: 24))
+            Text(note.content)
+                .modifier(CustomLabel(foregroundColor: .black, size: 20))
+            Spacer()
+        }
+        .padding()
+        .navigationBarTitle("", displayMode: .inline)
+        .navigationBarItems(trailing: Button("Delete") {
+            if let index = notes.firstIndex(where: { $0.id == note.id }) {
+                notes.remove(at: index)
+            }
+        })
+    }
+}
+
+struct AddNoteView: View {
+    @State private var title = ""
+    @State private var content = ""
+    @Binding var notes: [Note]
+
+    var body: some View {
+        VStack(spacing: 16) {
+            TextField("Title", text: $title)
+                .modifier(CustomTextField())
+            ZStack(alignment: .topLeading) {
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.black, lineWidth: 1)
+                TextEditor(text: $content)
+                    .frame(minHeight: 100)
+                    .padding()
+                    .background(Color.clear)
+            }
+            Button("Save") {
+                let newNote = Note(title: title, content: content)
+                notes.append(newNote)
+                title = ""
+                content = ""
+            }
+            .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+        }
+        .padding()
+        .navigationBarTitle("Add Note")
     }
 }
 
