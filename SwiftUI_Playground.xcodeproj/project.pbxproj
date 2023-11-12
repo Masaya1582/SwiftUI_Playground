@@ -458,6 +458,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "SwiftUI-Playground-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = SwiftUILab;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Allow Camera to take a photo";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Allow Album to select a photo";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -496,6 +497,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "SwiftUI-Playground-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = SwiftUILab;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Allow Camera to take a photo";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Allow Album to select a photo";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
