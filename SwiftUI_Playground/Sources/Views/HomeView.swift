@@ -14,7 +14,7 @@ struct HomeView: View {
     var body: some View {
         ZStack {
             backgroundField()
-            VStack(spacing: 16) {
+            VStack(spacing: 8) {
                 topField()
                 middleField()
                 bottomField()
