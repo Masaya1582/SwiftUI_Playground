@@ -9,100 +9,64 @@ import SwiftUI
 import UIKit
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var timeElapsed: TimeInterval = 0
+    @State private var timer: Timer?
+    @State private var isRunning = false
 
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 16) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.showSourceTypeAlert) {
-            Alert(
-                title: Text("Select SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        VStack {
+            Text("Stopwatch")
+                .font(.title)
+                .foregroundColor(.blue)
+
+            Text(timeString(timeElapsed))
+                .font(.system(size: 50, weight: .bold, design: .default))
+                .foregroundColor(isRunning ? .green : .black)
+                .padding()
+
+            HStack(spacing: 20) {
+                Button(action: {
+                    self.startStopwatch()
+                }) {
+                    Image(systemName: isRunning ? "pause.circle" : "play.circle")
+                        .font(.system(size: 30))
+                        .foregroundColor(isRunning ? .red : .green)
                 }
-            )
-        }
-    }
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .green))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.showSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .yellow))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .red))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.brown, Color.blue]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
+                Button(action: {
+                    self.resetStopwatch()
+                }) {
+                    Image(systemName: "arrow.counterclockwise.circle")
+                        .font(.system(size: 30))
+                        .foregroundColor(.blue)
                 }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+            }
+            .padding()
         }
+        .onAppear(perform: {
+            self.timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+                if self.isRunning {
+                    self.timeElapsed += 0.1
+                }
+            }
+        })
+    }
+
+    private func startStopwatch() {
+        isRunning.toggle()
+    }
+
+    private func resetStopwatch() {
+        timeElapsed = 0
+        isRunning = false
+    }
+
+    // Function to format time as a string
+    private func timeString(_ time: TimeInterval) -> String {
+        let minutes = Int(time) / 60
+        let seconds = Int(time) % 60
+        let tenths = Int((time.truncatingRemainder(dividingBy: 1)) * 10)
+        return String(format: "%02d:%02d.%d", minutes, seconds, tenths)
     }
 }
 
