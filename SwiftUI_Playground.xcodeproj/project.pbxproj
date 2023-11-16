@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1E0CBD602AE25C44001917B9 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E0CBD5F2AE25C44001917B9 /* ImagePicker.swift */; };
+		1E49642A2B05FDB800D08385 /* Pokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4964292B05FDB800D08385 /* Pokemon.swift */; };
 		1E62EE712AD8D0080031CB1B /* FloatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E62EE702AD8D0080031CB1B /* FloatingView.swift */; };
 		1E771ADA2AF35B1C00119B16 /* HalfModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E771AD92AF35B1C00119B16 /* HalfModalView.swift */; };
 		4011E8692A49759C003F06BF /* SwiftUI_PlaygroundApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E8682A49759C003F06BF /* SwiftUI_PlaygroundApp.swift */; };
@@ -28,6 +29,7 @@
 
 /* Begin PBXFileReference section */
 		1E0CBD5F2AE25C44001917B9 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		1E4964292B05FDB800D08385 /* Pokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pokemon.swift; sourceTree = "<group>"; };
 		1E62EE702AD8D0080031CB1B /* FloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingView.swift; sourceTree = "<group>"; };
 		1E771AD92AF35B1C00119B16 /* HalfModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfModalView.swift; sourceTree = "<group>"; };
 		1EF7E5942ADCD9210032015B /* SwiftUI-Playground-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "SwiftUI-Playground-Info.plist"; sourceTree = SOURCE_ROOT; };
@@ -156,6 +158,7 @@
 			children = (
 				4011E87D2A497644003F06BF /* HomeModel.swift */,
 				1E0CBD5F2AE25C44001917B9 /* ImagePicker.swift */,
+				1E4964292B05FDB800D08385 /* Pokemon.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -318,6 +321,7 @@
 				4011E86B2A49759C003F06BF /* HomeView.swift in Sources */,
 				1E771ADA2AF35B1C00119B16 /* HalfModalView.swift in Sources */,
 				40779B7D2A528D3200505ABD /* CustomComponents.swift in Sources */,
+				1E49642A2B05FDB800D08385 /* Pokemon.swift in Sources */,
 				4011E8892A4976D0003F06BF /* LocalizableStrings.swift in Sources */,
 				4011E88F2A497727003F06BF /* HomeViewModel.swift in Sources */,
 				4011E87E2A497644003F06BF /* HomeModel.swift in Sources */,
