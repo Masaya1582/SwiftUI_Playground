@@ -1,0 +1,44 @@
+{
+    "items": [
+        {
+            "title": "Item 1",
+            "subtitle": "Description for Item 1",
+            "pictureURL": "https://masasophi.com/wp-content/uploads/2023/05/normal_swift.001.png"
+        },
+        {
+            "title": "Item 2",
+            "subtitle": "Description for Item 2",
+            "pictureURL": "https://masasophi.com/wp-content/uploads/2023/05/swiftui_image.001.png"
+        },
+        {
+            "title": "Item 3",
+            "subtitle": "Description for Item 3",
+            "pictureURL": "https://masasophi.com/wp-content/uploads/2023/05/normal_swift.001.png"
+        },
+        {
+            "title": "Item 4",
+            "subtitle": "Description for Item 4",
+            "pictureURL": "https://masasophi.com/wp-content/uploads/2023/05/swiftui_image.001.png"
+        },
+        {
+            "title": "Item 5",
+            "subtitle": "Description for Item 5",
+            "pictureURL": "https://masasophi.com/wp-content/uploads/2023/05/normal_swift.001.png"
+        },
+        {
+            "title": "Item 6",
+            "subtitle": "Description for Item 6",
+            "pictureURL": "https://masasophi.com/wp-content/uploads/2023/05/swiftui_image.001.png"
+        },
+        {
+            "title": "Item 7",
+            "subtitle": "Description for Item 7",
+            "pictureURL": "https://masasophi.com/wp-content/uploads/2023/05/normal_swift.001.png"
+        },
+        {
+            "title": "Item 8",
+            "subtitle": "Description for Item 8",
+            "pictureURL": "https://masasophi.com/wp-content/uploads/2023/05/swiftui_image.001.png"
+        },
+    ]
+}
