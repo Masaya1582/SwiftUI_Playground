@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		1E0CBD602AE25C44001917B9 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E0CBD5F2AE25C44001917B9 /* ImagePicker.swift */; };
+		1E4964222B05EA7D00D08385 /* sample.json in Resources */ = {isa = PBXBuildFile; fileRef = 1E4964212B05EA7D00D08385 /* sample.json */; };
+		1E4964242B05EA8500D08385 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4964232B05EA8500D08385 /* Item.swift */; };
+		1E4964262B05EACC00D08385 /* ItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E4964252B05EACC00D08385 /* ItemViewModel.swift */; };
 		1E62EE712AD8D0080031CB1B /* FloatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E62EE702AD8D0080031CB1B /* FloatingView.swift */; };
 		1E771ADA2AF35B1C00119B16 /* HalfModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E771AD92AF35B1C00119B16 /* HalfModalView.swift */; };
 		4011E8692A49759C003F06BF /* SwiftUI_PlaygroundApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E8682A49759C003F06BF /* SwiftUI_PlaygroundApp.swift */; };
@@ -28,6 +31,9 @@
 
 /* Begin PBXFileReference section */
 		1E0CBD5F2AE25C44001917B9 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		1E4964212B05EA7D00D08385 /* sample.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sample.json; sourceTree = "<group>"; };
+		1E4964232B05EA8500D08385 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		1E4964252B05EACC00D08385 /* ItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemViewModel.swift; sourceTree = "<group>"; };
 		1E62EE702AD8D0080031CB1B /* FloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingView.swift; sourceTree = "<group>"; };
 		1E771AD92AF35B1C00119B16 /* HalfModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfModalView.swift; sourceTree = "<group>"; };
 		1EF7E5942ADCD9210032015B /* SwiftUI-Playground-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "SwiftUI-Playground-Info.plist"; sourceTree = SOURCE_ROOT; };
@@ -127,6 +133,7 @@
 				4011E86C2A49759D003F06BF /* Assets.xcassets */,
 				4011E8812A49769B003F06BF /* Colors.xcassets */,
 				4011E8832A4976AA003F06BF /* Localizable.strings */,
+				1E4964212B05EA7D00D08385 /* sample.json */,
 				4011E8852A4976B2003F06BF /* Fonts */,
 			);
 			path = Resources;
@@ -136,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				4011E88E2A497727003F06BF /* HomeViewModel.swift */,
+				1E4964252B05EACC00D08385 /* ItemViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -156,6 +164,7 @@
 			children = (
 				4011E87D2A497644003F06BF /* HomeModel.swift */,
 				1E0CBD5F2AE25C44001917B9 /* ImagePicker.swift */,
+				1E4964232B05EA8500D08385 /* Item.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -258,6 +267,7 @@
 				4011E8842A4976AA003F06BF /* Localizable.strings in Resources */,
 				4011E8702A49759D003F06BF /* Preview Assets.xcassets in Resources */,
 				4011E86D2A49759D003F06BF /* Assets.xcassets in Resources */,
+				1E4964222B05EA7D00D08385 /* sample.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,10 +323,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E4964262B05EACC00D08385 /* ItemViewModel.swift in Sources */,
 				1E62EE712AD8D0080031CB1B /* FloatingView.swift in Sources */,
 				4011E88B2A4976DA003F06BF /* Fonts.swift in Sources */,
 				4011E86B2A49759C003F06BF /* HomeView.swift in Sources */,
 				1E771ADA2AF35B1C00119B16 /* HalfModalView.swift in Sources */,
+				1E4964242B05EA8500D08385 /* Item.swift in Sources */,
 				40779B7D2A528D3200505ABD /* CustomComponents.swift in Sources */,
 				4011E8892A4976D0003F06BF /* LocalizableStrings.swift in Sources */,
 				4011E88F2A497727003F06BF /* HomeViewModel.swift in Sources */,
