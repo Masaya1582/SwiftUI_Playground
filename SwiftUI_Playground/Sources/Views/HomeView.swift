@@ -6,102 +6,28 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    private let pikachu = Pokemon(id: 1, name: "Pikachu", type: "Electric")
+    private let bulbasaur = Pokemon(id: 2, name: "Bulbasaur", type: "Grass/Poison")
+    private let charmander = Pokemon(id: 3, name: "Charmander", type: "Fire")
+    private let duplicatePikachu = Pokemon(id: 1, name: "Pikachu", type: "Electric") // Same as pikachu
 
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.showSourceTypeAlert) {
-            Alert(
-                title: Text("Select SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        VStack {
+            Text("Check Console for output")
+                .onAppear {
+                    var pokemonSet: Set<Pokemon> = []
+                    pokemonSet.insert(pikachu)
+                    pokemonSet.insert(bulbasaur)
+                    pokemonSet.insert(charmander)
+                    pokemonSet.insert(duplicatePikachu) // Trying to add a duplicate Pokemon
+
+                    print("Number of unique Pokemon in the set: \(pokemonSet.count)")
+                    for pokemon in pokemonSet {
+                        print("Pokemon: \(pokemon.name), Type: \(pokemon.type)")
+                    }
                 }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .green))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.showSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .yellow))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .red))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.brown, Color.blue]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
         }
     }
 }
