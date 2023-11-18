@@ -6,102 +6,78 @@
 //
 
 import SwiftUI
-import UIKit
+
+enum Ability {
+    case electric
+    case fire
+    case water
+}
+
+enum AbilityError: Error {
+    case incompatibleAbilities
+    case unknownAbility
+}
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var firstAbility: Ability = .electric
+    @State private var secondAbility: Ability = .fire
+    @State private var errorMessage: String = ""
 
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
+        VStack {
+            Picker("First Ability", selection: $firstAbility) {
+                Text("Electric").tag(Ability.electric)
+                Text("Fire").tag(Ability.fire)
+                Text("Water").tag(Ability.water)
             }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.showSourceTypeAlert) {
-            Alert(
-                title: Text("Select SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+            .pickerStyle(SegmentedPickerStyle())
+            .padding()
+
+            Picker("Second Ability", selection: $secondAbility) {
+                Text("Electric").tag(Ability.electric)
+                Text("Fire").tag(Ability.fire)
+                Text("Water").tag(Ability.water)
+            }
+            .pickerStyle(SegmentedPickerStyle())
+            .padding()
+
+            Button("Interact Abilities") {
+                do {
+                    try performAbilityInteraction(firstAbility: firstAbility, secondAbility: secondAbility)
+                    errorMessage = "Abilities interacted successfully!"
+                } catch let error as AbilityError {
+                    errorMessage = errorMessage(from: error)
+                } catch {
+                    errorMessage = "Unknown error occurred"
                 }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
             }
+            .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
+            Text(errorMessage)
+                .modifier(CustomLabel(foregroundColor: .red, size: 20))
+            Spacer()
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .green))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.showSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .yellow))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .red))
+        .padding()
     }
 
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.yellow, Color.blue]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+    // Function simulating an interaction between two Pokémon abilities, throwing errors for incompatible interactions
+    private func performAbilityInteraction(firstAbility: Ability, secondAbility: Ability) throws {
+        switch (firstAbility, secondAbility) {
+        case (.electric, .water), (.water, .electric):
+            throw AbilityError.incompatibleAbilities
+        case (.fire, .water), (.water, .fire):
+            throw AbilityError.incompatibleAbilities
+        default:
+            break
+        }
+    }
+
+    // Function to generate error messages based on specific ability errors
+    private func errorMessage(from error: AbilityError) -> String {
+        switch error {
+        case .incompatibleAbilities:
+            return "These abilities are incompatible."
+        case .unknownAbility:
+            return "Unknown ability error."
         }
     }
 }
