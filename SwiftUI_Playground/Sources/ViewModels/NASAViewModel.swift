@@ -21,7 +21,10 @@ final class NASAViewModel: ObservableObject {
                 print("Error fetching data: \(error.localizedDescription)")
                 return
             }
-            guard let data = data else { return }
+            guard let data = data else {
+                print("No Data")
+                return
+            }
             do {
                 let decodedData = try JSONDecoder().decode(NASAData.self, from: data)
                 DispatchQueue.main.async {
