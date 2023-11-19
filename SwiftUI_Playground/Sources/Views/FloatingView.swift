@@ -73,8 +73,7 @@ struct FloatingView: View {
     }
 }
 
-struct FloatingView_Previews: PreviewProvider {
-    static var previews: some View {
-        FloatingView(dismissAction: {})
-    }
+#Preview {
+    FloatingView(dismissAction: {})
+
 }
