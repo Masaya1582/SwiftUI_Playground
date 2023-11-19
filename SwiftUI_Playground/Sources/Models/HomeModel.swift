@@ -27,3 +27,8 @@ struct Post: Codable {
     let title: String
     let body: String
 }
+
+struct Pokemon: Codable {
+    let id: Int
+    let name: String
+}
