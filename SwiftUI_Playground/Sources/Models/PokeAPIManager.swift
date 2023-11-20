@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-enum APIError: Error {
-    case invalidURL
-    case requestFailed
-}
-
 final class PokeAPIManager {
+    enum APIError: Error {
+        case invalidURL
+        case requestFailed
+    }
+    
     func fetchPokemon(withID id: Int, completion: @escaping(Result<Pokemon, APIError>) -> Void) {
         guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon/\(id)") else {
             completion(.failure(.invalidURL))
