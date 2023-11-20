@@ -106,8 +106,11 @@ struct HomeView: View {
     }
 }
 
-#Preview {
-    HomeView()
-        .preferredColorScheme(.light)
-
+struct HomeView_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeView()
+            .preferredColorScheme(.light)
+        HomeView()
+            .preferredColorScheme(.dark)
+    }
 }
