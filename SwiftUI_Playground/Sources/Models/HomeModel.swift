@@ -32,3 +32,12 @@ struct Pokemon: Codable {
     let id: Int
     let name: String
 }
+
+struct PokemonListResponse: Codable {
+    let results: [Pokemons]
+}
+
+struct Pokemons: Codable {
+    let name: String
+    let url: String
+}
