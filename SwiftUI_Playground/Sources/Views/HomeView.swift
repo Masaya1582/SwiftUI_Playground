@@ -6,103 +6,55 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    private let pokemons = [
+        Pokemon(name: "Pikachu", type: "Electric"),
+        Pokemon(name: "Bulbasaur", type: "Grass"),
+        Pokemon(name: "Charmander", type: "Fire"),
+        Pokemon(name: "Squirtle", type: "Water")
+    ]
 
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.showSourceTypeAlert) {
-            Alert(
-                title: Text("Select SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        NavigationView {
+            VStack {
+                Text("Pokemon Types")
+                    .font(.title)
+                    .padding()
+                Group {
+                    TypeSection(title: "Electric", pokemons: filterPokemons(type: "Electric"))
+                    TypeSection(title: "Fire", pokemons: filterPokemons(type: "Fire"))
+                    TypeSection(title: "Water", pokemons: filterPokemons(type: "Water"))
+                    TypeSection(title: "Grass", pokemons: filterPokemons(type: "Grass"))
                 }
-            )
+                .padding()
+            }
+            .navigationTitle("Pokemon Types")
         }
     }
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
+    private func filterPokemons(type: String) -> [Pokemon] {
+        return pokemons.filter { $0.type == type }
     }
+}
 
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
+struct TypeSection: View {
+    let title: String
+    let pokemons: [Pokemon]
 
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
+    var body: some View {
+        VStack {
+            Text(title)
+                .modifier(CustomLabel(foregroundColor: .black, size: 20))
+            ForEach(pokemons, id: \.name) { pokemon in
+                Text(pokemon.name)
+                    .modifier(CustomLabel(foregroundColor: .gray, size: 20))
             }
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .green))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.showSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .yellow))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .red))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.purple, Color.blue]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
-        }
+        .padding()
+        .cornerRadius(8)
+        .frame(width: 300)
+        .background(Color.gray.opacity(0.1))
     }
 }
 
