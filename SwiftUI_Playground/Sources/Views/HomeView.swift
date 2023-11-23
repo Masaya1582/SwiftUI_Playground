@@ -6,102 +6,76 @@
 //
 
 import SwiftUI
-import UIKit
+
+struct Pokemons {
+    let name: String
+    let type: String
+}
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    private let pokemons = [
+        Pokemons(name: "Pikachu", type: "Electric"),
+        Pokemons(name: "Bulbasaur", type: "Grass"),
+        Pokemons(name: "Charmander", type: "Fire"),
+        Pokemons(name: "Squirtle", type: "Water"),
+        Pokemons(name: "Jigglypuff", type: "Normal"),
+        Pokemons(name: "Gyarados", type: "Water"),
+        Pokemons(name: "Alakazam", type: "Psychic"),
+        Pokemons(name: "Gengar", type: "Ghost"),
+        Pokemons(name: "Dragonite", type: "Dragon"),
+        Pokemons(name: "Mewtwo", type: "Psychic"),
+        Pokemons(name: "Snorlax", type: "Normal"),
+        Pokemons(name: "Eevee", type: "Normal"),
+        Pokemons(name: "Magikarp", type: "Water"),
+        Pokemons(name: "Machamp", type: "Fighting"),
+        Pokemons(name: "Vaporeon", type: "Water")
+    ]
 
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.showSourceTypeAlert) {
-            Alert(
-                title: Text("Select SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        ScrollView {
+            VStack(spacing: 20) {
+                ForEach(pokemons, id: \.name) { pokemon in
+                    PokemonRowView(pokemon: pokemon)
                 }
-            )
+            }
+            .padding()
+        }
+    }
+}
+
+struct PokemonRowView: View {
+    let pokemon: Pokemons
+
+    var body: some View {
+        HStack {
+            Text(pokemon.name)
+                .font(.title)
+                .foregroundColor(.white)
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(getBackgroundColor(for: pokemon.type))
+                .cornerRadius(12)
+            Spacer()
         }
     }
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
+    private func getBackgroundColor(for type: String) -> Color {
+        let typeColors: [String: Color] = [
+            "electric": Color.yellow,
+            "grass": Color.green,
+            "fire": Color.red,
+            "water": Color.blue
+        ]
 
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
+        if let color = typeColors[type.lowercased()] {
+            return color
         } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .green))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.showSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .yellow))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .red))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.purple, Color.blue]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+            let randomColor = Color(
+                red: .random(in: 0...1),
+                green: .random(in: 0...1),
+                blue: .random(in: 0...1)
+            )
+            return randomColor
         }
     }
 }
