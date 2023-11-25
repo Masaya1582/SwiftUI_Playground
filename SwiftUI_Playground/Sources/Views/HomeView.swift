@@ -6,102 +6,68 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    // Favorite Ramen List View
+    @State private var ramen: [Ramen] = [
+        Ramen(name: "Spicy Shoyu Ramen", description: "Soy sauce based soup", image: "shoyu_ramen", isSpicy: true, price: 800),
+        Ramen(name: "Shio Ramen", description: "Salt based soup", image: "shio_ramen", isSpicy: false, price: 800),
+        Ramen(name: "Miso Ramen", description: "Miso based soup", image: "miso_ramen", isSpicy: true, price: 800),
+        Ramen(name: "Tonkotsu Ramen", description: "Pork bone based soup", image: "tonkotsu_ramen", isSpicy: false, price: 800),
+        Ramen(name: "Tantanmen", description: "Spicy ramen", image: "tantanmen", isSpicy: true, price: 900)
+    ]
 
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.showSourceTypeAlert) {
-            Alert(
-                title: Text("Select SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        NavigationView {
+            List(ramen, id: \.name) { ramen in
+                NavigationLink(destination: RamenDetailView(ramen: ramen)) {
+                    RamenRowView(ramen: ramen)
                 }
-            )
+            }
+            .navigationTitle("Ramen List")
         }
     }
+}
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
+struct RamenDetailView: View {
+    let ramen: Ramen
 
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
+    var body: some View {
+        VStack {
+            Image(ramen.image)
                 .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
+                .aspectRatio(contentMode: .fit)
+                .padding(.horizontal)
+            Text(ramen.description)
+                .modifier(CustomLabel(foregroundColor: .black, size: 20))
+                .padding(.horizontal)
+            Spacer()
+        }
+        .navigationTitle(ramen.name)
+    }
+}
+
+struct RamenRowView: View {
+    let ramen: Ramen
+
+    var body: some View {
+        HStack {
+            Image(ramen.image)
                 .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
+                .frame(width: 100, height: 100)
+                .cornerRadius(10)
+            VStack(alignment: .leading) {
+                Text(ramen.name)
+                    .font(.headline)
+                Text("\(ramen.price) yen")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
             }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .green))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.showSourceTypeAlert = true
+            Spacer()
+            if ramen.isSpicy {
+                Image(systemName: "flame.fill")
+                    .foregroundColor(.red)
             }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .yellow))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .red))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.purple, Color.blue]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
         }
     }
 }
