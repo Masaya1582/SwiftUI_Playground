@@ -9,99 +9,63 @@ import SwiftUI
 import UIKit
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
+    @State private var ballPosition = CGPoint(x: 200, y: 200)
+    @State private var ballDirection = CGSize(width: 15, height: 15)
+    @State private var paddlePosition = CGFloat(200)
+    @State private var rightPaddlePosition = CGFloat(200)
+    @GestureState private var dragOffset = CGSize.zero
+    let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
 
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
+        GeometryReader { geometry in
+            ZStack {
+                Color.black.edgesIgnoringSafeArea(.all)
+
+                Rectangle()
+                    .fill(Color.white)
+                    .frame(width: 20, height: geometry.size.height / 4)
+                    .position(x: 20, y: paddlePosition)
+
+                Rectangle()
+                    .fill(Color.white)
+                    .frame(width: 20, height: geometry.size.height / 4)
+                    .position(x: geometry.size.width - 20, y: rightPaddlePosition + dragOffset.height)
+                    .gesture(
+                        DragGesture()
+                            .onChanged { value in
+                                self.rightPaddlePosition = value.location.y
+                            }
+                    )
+
+                Circle()
+                    .fill(Color.white)
+                    .frame(width: 50, height: 50)
+                    .position(ballPosition)
+                    .onReceive(timer) { _ in
+                        self.ballPosition = CGPoint(x: self.ballPosition.x + self.ballDirection.width, y: self.ballPosition.y + self.ballDirection.height)
+
+                        if self.ballPosition.x <= 20 || self.ballPosition.x >= geometry.size.width - 20 {
+                            self.ballPosition = CGPoint(x: geometry.size.width / 2, y: geometry.size.height / 2)
+                            self.ballDirection.width *= -1
+                        }
+
+                        if self.ballPosition.y <= 0 || self.ballPosition.y >= geometry.size.height {
+                            self.ballDirection.height *= -1
+                        }
+
+                        if self.ballPosition.x <= 250 {
+                            self.paddlePosition = self.ballPosition.y - 10
+                        }
+
+                        let paddleFrame = CGRect(x: 20, y: self.paddlePosition - geometry.size.height / 8, width: 20, height: geometry.size.height / 4)
+                        let rightPaddleFrame = CGRect(x: geometry.size.width - 40, y: self.rightPaddlePosition - geometry.size.height / 8, width: 20, height: geometry.size.height / 4)
+                        let ballFrame = CGRect(x: self.ballPosition.x - 25, y: self.ballPosition.y - 25, width: 50, height: 50)
+
+                        if paddleFrame.intersects(ballFrame) || rightPaddleFrame.intersects(ballFrame) {
+                            self.ballDirection.width *= -1
+                        }
+                    }
             }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.showSourceTypeAlert) {
-            Alert(
-                title: Text("Select SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
-                }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .green))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.showSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .yellow))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .red))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.purple, Color.blue]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
         }
     }
 }
