@@ -6,103 +6,78 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModel()
-
+    @State private var activeID: Int?
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.showSourceTypeAlert) {
-            Alert(
-                title: Text("Select SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        VStack {
+            Spacer()
+            GeometryReader {
+                let size = $0.size
+                let padding = (size.width - 70) / 2
+
+                /// Circular Slider
+                ScrollView(.horizontal) {
+                    HStack(spacing: 35) {
+                        ForEach(1...8, id: \.self) { index in
+                            Image("img_dio")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 70, height: 70)
+                                .clipShape(.circle)
+                            /// Shadow
+                                .shadow(color: .black.opacity(0.15), radius: 5, x: 5, y: 5)
+                                .visualEffect { view, proxy in
+                                    view
+                                        .offset(y: offset(proxy))
+                                    /// Option - 2:2
+                                        .scaleEffect(1 + ((scale(proxy) / 2)))
+                                    /// Option - 1:2
+                                        .offset(y: scale(proxy) * 15)
+                                }
+                                .scrollTransition(.interactive, axis: .horizontal) { view, phase in
+                                    view
+                                    /// Option - 1:1 (For More Check out the Video!)
+                                    //.offset(y: phase.isIdentity && activeID == index ? 15 : 0)
+                                    /// Option - 2:1
+                                    //.scaleEffect(phase.isIdentity && activeID == index && pickerType == .scaled ? 1.5 : 1, anchor: .bottom)
+                                }
+                        }
+                    }
+                    .frame(height: size.height)
+                    .offset(y: -30)
+                    .scrollTargetLayout()
                 }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
+                .safeAreaPadding(.horizontal, padding)
+                .scrollIndicators(.hidden)
+                /// Snapping
+                .scrollTargetBehavior(.viewAligned)
+                .scrollPosition(id: $activeID)
+                .frame(height: size.height)
             }
+            .frame(height: 200)
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .green))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.showSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .yellow))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .red))
+        .ignoresSafeArea(.container, edges: .bottom)
     }
 
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.purple, Color.blue]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
-        }
+    /// Circular Slider View Offset
+    func offset(_ proxy: GeometryProxy) -> CGFloat {
+        let progress = progress(proxy)
+        /// Simply Moving View Up/Down Based on Progress
+        return progress < 0 ? progress * -30 : progress * 30
+    }
+
+    func scale(_ proxy: GeometryProxy) -> CGFloat {
+        let progress = min(max(progress(proxy), -1), 1)
+
+        return progress < 0 ? 1 + progress : 1 - progress
+    }
+
+    func progress(_ proxy: GeometryProxy) -> CGFloat {
+        /// View Width
+        let viewWidth = proxy.size.width
+        let minX = (proxy.bounds(of: .scrollView)?.minX ?? 0)
+        return minX / viewWidth
     }
 }
 
