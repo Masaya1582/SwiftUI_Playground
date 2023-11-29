@@ -31,6 +31,11 @@ internal enum Asset {
     internal static let pancakes = ImageAsset(name: "pancakes")
     internal static let pizza = ImageAsset(name: "pizza")
     internal static let spaghetti = ImageAsset(name: "spaghetti")
+    internal static let imgApple = ImageAsset(name: "img_apple")
+    internal static let imgDio = ImageAsset(name: "img_dio")
+    internal static let imgFrance = ImageAsset(name: "img_france")
+    internal static let imgHeadback = ImageAsset(name: "img_headback")
+    internal static let imgLaboratory = ImageAsset(name: "img_laboratory")
     internal static let imgBarack = ImageAsset(name: "img_barack")
     internal static let imgBiden = ImageAsset(name: "img_biden")
     internal static let imgBill = ImageAsset(name: "img_bill")
@@ -40,10 +45,6 @@ internal enum Asset {
     internal static let imgGerald = ImageAsset(name: "img_gerald")
     internal static let imgJimmy = ImageAsset(name: "img_jimmy")
     internal static let imgRonald = ImageAsset(name: "img_ronald")
-    internal static let imgApple = ImageAsset(name: "img_apple")
-    internal static let imgDio = ImageAsset(name: "img_dio")
-    internal static let imgHeadback = ImageAsset(name: "img_headback")
-    internal static let imgLaboratory = ImageAsset(name: "img_laboratory")
   }
   internal enum Colors {
     internal static let alertRed = ColorAsset(name: "alert_red")
