@@ -9,99 +9,104 @@ import SwiftUI
 import UIKit
 
 struct HomeView: View {
-    @StateObject private var viewModel = HomeViewModel()
+    @State private var showBreatheView: Bool = false
+    @State private var startAnimation: Bool = false
+    @State private var breatheAction: String = "Breathe In"
+
+    let gradient = LinearGradient(colors: [Color.purple.opacity(0.5), Color.blue.opacity(0.5)], startPoint: .topLeading, endPoint: .bottomTrailing)
 
     var body: some View {
         ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
+            content()
+        }
+        .onReceive(Timer.publish(every: 4, on: .main, in: .common).autoconnect()) { _ in
+            if showBreatheView {
+                breatheAction = (breatheAction == "Breathe Out" ? "Breathe In" : "Breathe Out")
+                withAnimation(.easeInOut(duration: 4).delay(0.1)) {
+                    startAnimation.toggle()
+                }
+                UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
             }
         }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.showSourceTypeAlert) {
-            Alert(
-                title: Text("Select SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+    }
+
+    private func content() -> some View {
+        VStack {
+            GeometryReader { proxy in
+                let size = proxy.size
+
+                VStack {
+                    Spacer()
+
+                    breatheView(size: size)
+
+                    Spacer()
+
+                    Button(action: startBreathing) {
+                        Text(showBreatheView ? "Finish Breathing" : "START")
+                            .fontWeight(.semibold)
+                            .foregroundColor(showBreatheView ? .black : .white)
+                            .padding(.vertical, 15)
+                            .frame(maxWidth: .infinity)
+                            .background {
+                                if showBreatheView {
+                                } else {
+                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                        .fill(gradient)
+                                }
+                            }
+                    }
+                    .padding()
+                    .opacity(showBreatheView ? 1 : 1)
+                    .animation(.easeInOut(duration: 0.3), value: showBreatheView)
                 }
-            )
+                .frame(width: size.width, height: size.height, alignment: .bottom)
+            }
+        }
+        .frame(maxHeight: .infinity, alignment: .top)
+    }
+
+    private func breatheView(size: CGSize) -> some View {
+        ZStack {
+            ForEach(1...8, id: \.self) { index in
+                Circle()
+                    .fill(gradient)
+                    .frame(width: 150, height: 150)
+                    .offset(x: startAnimation ? 0 : 75)
+                    .rotationEffect(.init(degrees: Double(index) * 45))
+                    .rotationEffect(.init(degrees: startAnimation ? -45 : 0))
+            }
+            .scaleEffect(startAnimation ? 0.8 : 1)
+
+            Text("Breathe In")
+                .font(.system(size: 30))
+                .foregroundColor(.black)
+                .padding()
+                .opacity(breatheAction == "Breathe In" && showBreatheView ? 1 : 0)
+                .animation(.easeInOut(duration: 1), value: breatheAction)
+
+            Text("Breathe Out")
+                .font(.system(size: 30))
+                .foregroundColor(.black)
+                .padding()
+                .opacity(breatheAction == "Breathe Out" && showBreatheView ? 1 : 0)
+                .animation(.easeInOut(duration: 1), value: breatheAction)
         }
     }
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
+    private func startBreathing() {
+        withAnimation(.interactiveSpring(response: 0.6, dampingFraction: 0.7, blendDuration: 0.7)) {
+            showBreatheView.toggle()
+        }
 
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
+        if showBreatheView {
+            withAnimation(.easeInOut(duration: 4).delay(0.05)) {
+                startAnimation = true
+            }
         } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
+            withAnimation(.easeInOut(duration: 1.5)) {
+                startAnimation = false
             }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .green))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.showSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .yellow))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .red))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.purple, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
         }
     }
 }
