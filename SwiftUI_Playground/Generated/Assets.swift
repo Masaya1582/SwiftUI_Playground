@@ -31,7 +31,6 @@ internal enum Asset {
     internal static let pancakes = ImageAsset(name: "pancakes")
     internal static let pizza = ImageAsset(name: "pizza")
     internal static let spaghetti = ImageAsset(name: "spaghetti")
-    internal static let imgApple = ImageAsset(name: "img_apple")
     internal static let imgBanana = ImageAsset(name: "img_banana")
     internal static let imgGrape = ImageAsset(name: "img_grape")
     internal static let imgMango = ImageAsset(name: "img_mango")
