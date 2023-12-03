@@ -73,21 +73,21 @@ struct HomeView: View {
                 viewModel.isFloatingViewVisible = true
             }
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .green))
+        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
 
         Button("Select an Image") {
             withAnimation {
                 viewModel.showSourceTypeAlert = true
             }
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .yellow))
+        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
 
         Button("Show HalfModalView") {
             withAnimation {
                 viewModel.isShowHalfModalView = true
             }
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .red))
+        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
     }
 
     @ViewBuilder
