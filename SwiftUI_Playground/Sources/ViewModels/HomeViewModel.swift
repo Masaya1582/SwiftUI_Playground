@@ -13,7 +13,7 @@ final class HomeViewModel: ObservableObject {
     @Published var halfModalText = ""
     @Published var isFloatingViewVisible = false
     @Published var isOpenImagePicker = false
-    @Published var showSourceTypeAlert = false
+    @Published var isShowSourceTypeAlert = false
     @Published var isShowHalfModalView = false
     @Published var sourceType: UIImagePickerController.SourceType?
     @Published var selectedImage: UIImage?

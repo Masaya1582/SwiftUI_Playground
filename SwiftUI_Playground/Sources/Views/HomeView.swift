@@ -27,7 +27,7 @@ struct HomeView: View {
             HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
                 .presentationDetents([.medium])
         }
-        .alert(isPresented: $viewModel.showSourceTypeAlert) {
+        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
             Alert(
                 title: Text("Select SourceType"),
                 message: nil,
@@ -77,7 +77,7 @@ struct HomeView: View {
 
         Button("Select an Image") {
             withAnimation {
-                viewModel.showSourceTypeAlert = true
+                viewModel.isShowSourceTypeAlert = true
             }
         }
         .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))

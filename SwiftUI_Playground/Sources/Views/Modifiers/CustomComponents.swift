@@ -37,7 +37,7 @@ struct CustomButton: ViewModifier {
 }
 
 /// 伸び縮みするButton
-struct GrowingButton: ButtonStyle {
+struct StretchableButton: ButtonStyle {
     let foregroundColor: Color
     let backgroundColor: Color
 
