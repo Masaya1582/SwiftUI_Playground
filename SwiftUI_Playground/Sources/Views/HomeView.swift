@@ -6,103 +6,115 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    @StateObject private var viewModel = HomeViewModel()
+    // MARK: - Properties
 
+    // MARK: - Body
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Select SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        NavigationView {
+            VStack {
+                // 1. Main feed list
+                List {
+                    ForEach(0..<10) { _ in
+                        TweetCardView()
+                    }
                 }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
+                .listStyle(PlainListStyle())
+                BottomNavigationBar()
             }
+            .navigationTitle("Home")
+            .navigationBarItems(leading: TwitterLogoView())
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
+        .preferredColorScheme(.dark)
     }
+}
 
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.purple, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
+// MARK: - Twitter Logo View
+struct TwitterLogoView: View {
+    var body: some View {
+        Image(systemName: "bird")
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 30, height: 30)
+            .foregroundColor(.white)
+    }
+}
+
+// MARK: - Tweet Card View
+struct TweetCardView: View {
+    var body: some View {
+        HStack(alignment: .top, spacing: 10) {
+            UnsplashProfileImage()
+            VStack(alignment: .leading, spacing: 4) {
+                HStack {
+                    Text("Username")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                    Text("@handle")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
                 }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+
+                Text("Here's some tweet content that the user has posted. It might be a bit longer and span multiple lines.")
+                    .foregroundColor(.white)
+
+                Text("3h ago")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+            }
         }
+    }
+
+    // MARK: - Unsplash Profile Image View
+    struct UnsplashProfileImage: View {
+        var body: some View {
+            AsyncImage(url: URL(string: "https://source.unsplash.com/random/300x300/?portrait")) { image in
+                image.resizable()
+            } placeholder: {
+                ProgressView()
+            }
+            .aspectRatio(contentMode: .fill)
+            .frame(width: 50, height: 50)
+            .clipShape(Circle())
+            .overlay(Circle().stroke(Color.gray, lineWidth: 1))
+        }
+    }
+}
+
+// MARK: - Bottom Navigation Bar View
+struct BottomNavigationBar: View {
+    var body: some View {
+        HStack {
+            Spacer()
+
+            // 1. Home icon
+            Image(systemName: "house")
+                .foregroundColor(.white) // Monochromatic color for dark mode
+
+            Spacer()
+
+            // 2. Search icon
+            Image(systemName: "magnifyingglass")
+                .foregroundColor(.white) // Monochromatic color for dark mode
+
+            Spacer()
+
+            // 3. Notifications icon
+            Image(systemName: "bell")
+                .foregroundColor(.white) // Monochromatic color for dark mode
+
+            Spacer()
+
+            // 4. Messages icon
+            Image(systemName: "envelope")
+                .foregroundColor(.white) // Monochromatic color for dark mode
+
+            Spacer()
+        }
+        .padding()
+        .background(Color(UIColor.systemBackground)) // Adapts to dark mode
+        .shadow(radius: 1)
     }
 }
 
