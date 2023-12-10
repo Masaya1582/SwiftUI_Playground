@@ -6,103 +6,100 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    @StateObject private var viewModel = HomeViewModel()
-
     var body: some View {
         ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Select SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+            // Pastel light blue background
+            Color(red: 0.8, green: 0.9, blue: 1.0)
+                .ignoresSafeArea()
+
+            VStack(spacing: 20) {
+                HStack {
+                    Spacer()
+                    // Settings button at the top right
+                    Button(action: settingsButtonTapped) {
+                        Image(systemName: "gear")
+                            .foregroundColor(.black)
+                            .imageScale(.large)
+                    }
+                    .padding()
                 }
-            )
-        }
-    }
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
+                Text("Quabble Panic Button")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .padding()
 
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
+                Text("If you're feeling unsafe or anxious...")
+                    .font(.title2)
+                    .foregroundColor(.primary)
+                    .padding(.bottom, 5)
 
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
+                Button(action: panicButtonTapped) {
+                    ZStack {
+                        Circle()
+                            .fill(Color.red) // Bright red button color
+                            .frame(width: 300, height: 300)
+                            .shadow(radius: 10)
 
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.purple, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
+                        Text("PRESS")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                    }
                 }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+                .padding()
+
+                VStack(alignment: .leading, spacing: 5) {
+                    Text("When you press the Panic Button, it will:")
+                        .font(.headline)
+                        .foregroundColor(.primary)
+
+                    Group {
+                        StepView(number: "1", description: "Call Boyfriend")
+                        StepView(number: "2", description: "Text Dad \"Hey Dad, are you free? Call me now please.\"")
+                        StepView(number: "3", description: "Text Ms Johnson (Therapist) \"I am not feeling well\"")
+                    }
+                }
+                .padding()
+            }
+            .padding()
         }
+    }
+
+    private func panicButtonTapped() {
+        print("Panic Button Tapped")
+    }
+
+    private func settingsButtonTapped() {
+        print("Settings Button Tapped")
+    }
+}
+
+struct StepView: View {
+    let number: String
+    let description: String
+
+    var body: some View {
+        HStack {
+            Text("\(number).")
+                .bold()
+                .foregroundColor(.primary)
+                .padding([.top, .bottom, .leading])
+
+            Text(description)
+                .foregroundColor(.secondary)
+                .padding([.top, .bottom, .trailing])
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.white)
+        .cornerRadius(10)
+        .shadow(radius: 5)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.gray, lineWidth: 1)
+        )
     }
 }
 
