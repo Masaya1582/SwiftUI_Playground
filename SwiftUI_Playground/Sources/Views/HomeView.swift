@@ -6,103 +6,79 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    @StateObject private var viewModel = HomeViewModel()
+    @State private var selection = 0
+    @State private var showNextView = false
 
     var body: some View {
         ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
+            TabView(selection: $selection) {
+                OnboardingView(title: "Step 1", description: "This is the first step.")
+                    .tag(0)
+                    .background(selection == 0 ? Color(red: 243 / 255, green: 215 / 255, blue: 145 / 255) : Color.clear)
+                OnboardingView(title: "Step 2", description: "This is the second step.")
+                    .tag(1)
+                    .background(selection == 1 ? Color(red: 174 / 255, green: 187 / 255, blue: 235 / 255) : Color.clear)
+                OnboardingView(title: "Step 3", description: "This is the final step.")
+                    .tag(2)
+                    .background(selection == 2 ? Color(red: 181 / 255, green: 232 / 255, blue: 211 / 255) : Color.clear)
             }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Select SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
-                }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.purple, Color.red]), startPoint: .top, endPoint: .bottom)
+            .tabViewStyle(PageTabViewStyle())
+            .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+            .background(selection == 0 ? Color(red: 243 / 255, green: 215 / 255, blue: 145 / 255) : selection == 1 ? Color(red: 174 / 255, green: 187 / 255, blue: 235 / 255) : selection == 2 ? Color(red: 181 / 255, green: 232 / 255, blue: 211 / 255) : Color.clear)
             .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
+
+            if selection == 2 {
+                VStack {
+                    Spacer()
+                    Button(action: {
+                        showNextView.toggle()
+                    }) {
+                        Text("Get Started")
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.black)
+                            .cornerRadius(25)
+                    }
+                    .padding()
+                    .fullScreenCover(isPresented: $showNextView, content: {
+                        ProgressView()
+                    })
                 }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+            }
         }
+    }
+}
+
+struct OnboardingView: View {
+    let title: String
+    let description: String
+
+    var body: some View {
+        VStack(spacing: 20) {
+            if title == "Step 1" {
+                Text("🔍")
+                    .font(.system(size: 50))
+            } else if title == "Step 2" {
+                Text("✍️")
+                    .font(.system(size: 50))
+            } else if title == "Step 3" {
+                Text("🤗")
+                    .font(.system(size: 50))
+            }
+
+            Text(title)
+                .font(.largeTitle)
+                .fontWeight(.bold)
+
+            Text(description)
+                .font(.body)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal)
+        }
+        .padding()
     }
 }
 
