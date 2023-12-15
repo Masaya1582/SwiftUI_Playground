@@ -17,7 +17,7 @@ struct HalfModalView: View {
         TextField("Type Something", text: $halfModalText)
             .modifier(CustomTextField())
         VintageSettingView(iconName: "apple.logo", title: "Apple")
-        VintageSettingView(iconName: "apple.logo", title: "Apple")
+        VintageSettingView(iconName: "applewatch.watchface", title: "Apple")
         Button("Close") {
             isShowHalfView = false
         }
