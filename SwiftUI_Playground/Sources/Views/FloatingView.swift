@@ -46,7 +46,7 @@ struct FloatingView: View {
         VStack(spacing: 42) {
             Text("Floating View")
                 .modifier(CustomLabel(foregroundColor: .black, size: 32))
-            Asset.Assets.imgApple.swiftUIImage
+            Asset.Assets.imgFrance.swiftUIImage
                 .resizable()
                 .scaledToFit()
                 .padding(.horizontal, 80)
