@@ -6,102 +6,86 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    @StateObject private var viewModel = HomeViewModel()
+    private let pills = ["SwiftUI", "iOS", "Swift", "Xcode", "Cocoa", "Objective-C", "Mobile Development", "Design Patterns", "Core Data", "Concurrency"]
 
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
+        PillCollectionView(pills: pills)
+    }
+}
+
+struct PillView: View {
+    var text: String
+    var action: () -> Void
+
+    var body: some View {
+        ZStack(alignment: .topTrailing) {
+            Text(text)
+                .fontWeight(.semibold)
+                .font(.system(size: 14))
+                .padding(.vertical, 8)
+                .padding(.horizontal, 30)
+                .frame(minWidth: 100, idealWidth: 150, maxWidth: .infinity, minHeight: 50)
+                .lineLimit(2)
+                .multilineTextAlignment(.center)
+                .background(Color.blue.opacity(0.2))
+                .cornerRadius(20)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(Color.blue, lineWidth: 1)
+                        .shadow(color: Color.blue.opacity(0.3), radius: 3, x: 0, y: 3)
+                )
+                .padding(.horizontal)
+
+            Button(action: action) {
+                Image(systemName: "xmark")
+                    .foregroundColor(.gray)
+                    .padding(10)
+                    .frame(width: 30, height: 30)
+                    .background(Color.white)
+                    .clipShape(Circle())
+                    .shadow(radius: 1)
             }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Select SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
-                }
-            )
+            .offset(x: 1, y: -5)
         }
     }
+}
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
+struct PillCollectionView: View {
+    let pills: [String]
+    @State private var isCollapsed = false
 
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.purple, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
+    var body: some View {
+        VStack {
+            Button(action: {
                 withAnimation {
-                    viewModel.isFloatingViewVisible = false
+                    isCollapsed.toggle()
                 }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+            }) {
+                Image(systemName: isCollapsed ? "chevron.down" : "chevron.up")
+                    .foregroundColor(.black)
+                    .imageScale(.large)
+                    .frame(height: 44, alignment: .top)
+                    .padding(.top)
+            }
+            .padding(.horizontal)
+
+            ScrollView {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 120), spacing: 10)], spacing: 10) {
+                    ForEach(pills, id: \.self) { pill in
+                        PillView(text: pill, action: {
+                            print("\(pill) pill X button tapped")
+                        })
+                    }
+                }
+                .padding()
+            }
+            .frame(maxHeight: isCollapsed ? 50 : .infinity)
+            .background(Color.white)
+            .cornerRadius(12)
+            .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 2)
+            .padding(.horizontal)
         }
     }
 }
