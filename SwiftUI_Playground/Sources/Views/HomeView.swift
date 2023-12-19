@@ -6,103 +6,130 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    @StateObject private var viewModel = HomeViewModel()
+    @State private var birdPosition = CGPoint(x: 100, y: 300)
+    @State private var isAlive = true
+    @State private var score = 0
+    @State private var pipes = [Pipe]()
+    private let birdSize = CGSize(width: 60, height: 50)
+    private let gravity = CGPoint(x: 0, y: 5)
+    private let flapHeight = -80
+    private let pipeWidth: CGFloat = 60
+    private let pipeGap: CGFloat = 150
+    private let pipeMoveSpeed: CGFloat = 3
+    private var birdFrame: CGRect {
+        CGRect(x: birdPosition.x - birdSize.width / 2, y: birdPosition.y - birdSize.height / 2, width: birdSize.width, height: birdSize.height)
+    }
 
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Select SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        GeometryReader { geometry in
+            ZStack {
+                ForEach(pipes) { pipe in
+                    PipeView(pipe: pipe, pipeWidth: pipeWidth)
                 }
+                BirdView(position: birdPosition, size: birdSize)
+                if !isAlive {
+                    Text("Game Over! Score: \(score)")
+                        .font(.largeTitle)
+                        .foregroundColor(.black)
+                        .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
+                }
+            }
+            .frame(width: geometry.size.width, height: geometry.size.height)
+            .background(Color.blue)
+            .onAppear {
+                startGame(size: geometry.size)
+            }
+            .onReceive(Timer.publish(every: 0.016, on: .main, in: .common).autoconnect()) { _ in
+                if isAlive {
+                    gameLoop(size: geometry.size)
+                }
+            }
+            .gesture(
+                TapGesture()
+                    .onEnded { _ in
+                        if isAlive {
+                            birdPosition.y += CGFloat(flapHeight)
+                        } else {
+                            startGame(size: geometry.size)
+                        }
+                    }
             )
         }
     }
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
+    private func startGame(size: CGSize) {
+        birdPosition = CGPoint(x: 100, y: size.height / 2)
+        isAlive = true
+        score = 0
+        pipes = []
+        for i in 0..<3 {
+            let pipePosition = CGPoint(x: size.width + CGFloat(i) * size.width / 2, y: CGFloat.random(in: (size.height / 2 - 200)...(size.height / 2 + 200)))
+            pipes.append(Pipe(id: i, position: pipePosition))
         }
     }
 
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
+    func gameLoop(size: CGSize) {
+        birdPosition.y += gravity.y
+        if birdPosition.y > size.height || birdPosition.y < 0 {
+            isAlive = false
+        }
+        for i in 0..<pipes.count {
+            pipes[i].position.x -= pipeMoveSpeed
+            if pipes[i].position.x < -pipeWidth {
+                pipes[i].position.x = size.width
+                pipes[i].position.y = CGFloat.random(in: (size.height / 2 - 200)...(size.height / 2 + 200))
+                score += 1
+            }
+            if pipes[i].frame.intersects(birdFrame) {
+                isAlive = false
             }
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
     }
+}
 
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.purple, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+struct BirdView: View {
+    var position: CGPoint
+    var size: CGSize
+
+    var body: some View {
+        Circle()
+            .fill(Color.yellow)
+            .frame(width: size.width, height: size.height)
+            .position(position)
+    }
+}
+
+struct PipeView: View {
+    var pipe: Pipe
+    var pipeWidth: CGFloat
+
+    var body: some View {
+        VStack {
+            Rectangle()
+                .fill(Color.green)
+                .frame(width: pipeWidth, height: pipe.topHeight)
+            Spacer().frame(height: 150)
+            Rectangle()
+                .fill(Color.green)
+                .frame(width: pipeWidth, height: pipe.bottomHeight)
         }
+        .position(pipe.position)
+    }
+}
+
+struct Pipe: Identifiable {
+    var id: Int
+    var position: CGPoint
+    var topHeight: CGFloat {
+        position.y - 150 / 2
+    }
+    var bottomHeight: CGFloat {
+        UIScreen.main.bounds.height - position.y - 150 / 2
+    }
+    var frame: CGRect {
+        CGRect(x: position.x - 30, y: 0, width: 60, height: UIScreen.main.bounds.height)
     }
 }
 
