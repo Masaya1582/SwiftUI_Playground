@@ -6,102 +6,51 @@
 //
 
 import SwiftUI
-import UIKit
+
+struct SQLCheatSheetItem: Identifiable {
+    let id = UUID()
+    let command: String
+    let explanation: String
+}
 
 struct HomeView: View {
-    @StateObject private var viewModel = HomeViewModel()
+    @State private var showAlert = false
+    @State private var alertMessage = ""
+    private let sqlCheatSheet: [SQLCheatSheetItem] = [
+        SQLCheatSheetItem(command: "SELECT column1, column2 FROM table_name;", explanation: "Retrieve specific columns (column1, column2) from the table."),
+        SQLCheatSheetItem(command: "DELETE FROM table_name WHERE condition;", explanation: "Remove rows from the table based on a specified condition."),
+        SQLCheatSheetItem(command: "INSERT INTO table_name (column1, column2) VALUES (value1, value2);", explanation: "Add a new row with specified values into the table."),
+        SQLCheatSheetItem(command: "ALTER TABLE table_name ADD column_name datatype;", explanation: "Add a new column to an existing table."),
+        SQLCheatSheetItem(command: "DROP TABLE table_name;", explanation: "Delete an entire table from the database."),
+        SQLCheatSheetItem(command: "CREATE INDEX index_name ON table_name (column_name);", explanation: "Create an index on a specific column in a table."),
+        SQLCheatSheetItem(command: "JOIN table1 ON table1.column = table2.column;", explanation: "Merge rows from two or more tables based on a related column."),
+        SQLCheatSheetItem(command: "GROUP BY column_name;", explanation: "Group rows with the same values in a specified column."),
+        SQLCheatSheetItem(command: "HAVING aggregate_function(column_name) condition;", explanation: "Filter group rows based on specified conditions."),
+        SQLCheatSheetItem(command: "COUNT(column_name);", explanation: "Count the number of rows that match a specific condition.")
+    ]
 
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Select SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        NavigationView {
+            List(sqlCheatSheet) { item in
+                VStack(alignment: .leading) {
+                    Text(item.command)
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                    Text(item.explanation)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
                 }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.purple, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    UIPasteboard.general.string = item.command
+                    alertMessage = "Copied: \(item.command)"
+                    showAlert = true
                 }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+            }
+            .navigationTitle("SQL Cheatsheet")
+            .alert(isPresented: $showAlert) {
+                Alert(title: Text("Copied"), message: Text(alertMessage))
+            }
         }
     }
 }
