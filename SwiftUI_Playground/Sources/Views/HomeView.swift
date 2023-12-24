@@ -6,104 +6,56 @@
 //
 
 import SwiftUI
-import UIKit
+
+enum CatchError: Error {
+    case noPokeBall
+    case pokemonFled
+    case pokemonNotFound
+}
+struct Pokemons {
+    let name: String
+}
 
 struct HomeView: View {
-    @StateObject private var viewModel = HomeViewModel()
+    @State private var capturedPokemon: Pokemons?
+    @State private var errorMessage: String?
 
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
+        VStack {
+            if let pokemon = capturedPokemon {
+                Text("You caught: \(pokemon.name)")
+                    .modifier(CustomLabel(foregroundColor: .black, size: 24))
+            } else if let errorMessage = errorMessage {
+                Text("Error: \(errorMessage)")
+                    .modifier(CustomLabel(foregroundColor: .red, size: 24))
             }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Select SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+            Button("Catch Pokemon") {
+                do {
+                    self.capturedPokemon = try catchPokemon()
+                } catch CatchError.noPokeBall {
+                    self.errorMessage = "No Poke Ball Left"
+                } catch CatchError.pokemonFled {
+                    self.errorMessage = "Pokemon Fled, Try Again!"
+                } catch {
+                    self.errorMessage = "Unknown error occurred"
                 }
-            )
+            }
+            .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
         }
     }
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
+    private func catchPokemon() throws -> Pokemons {
+        let successProbability = Int.random(in: 1...10)
 
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
+        if successProbability <= 5 {
+            throw CatchError.noPokeBall
+        } else if successProbability <= 8 {
+            throw CatchError.pokemonFled
         } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
+            return Pokemons(name: "Pikachu")
         }
     }
 
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.purple, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
-        }
-    }
 }
 
 struct HomeView_Previews: PreviewProvider {
