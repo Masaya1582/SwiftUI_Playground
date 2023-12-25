@@ -6,103 +6,53 @@
 //
 
 import SwiftUI
-import UIKit
+
+struct Pokemons {
+    let name: String
+    let type: String
+    let description: String
+}
 
 struct HomeView: View {
-    @StateObject private var viewModel = HomeViewModel()
+    private let pokemonArray = [
+        Pokemons(name: "Pikachu", type: "Electric", description: "A cute and powerful Electric-type Pokémon."),
+        Pokemons(name: "Bulbasaur", type: "Grass/Poison", description: "A Grass/Poison-type Pokémon with a plant on its back."),
+        Pokemons(name: "Charmander", type: "Fire", description: "A Fire-type Pokémon with a flame on its tail.")
+    ]
+    private let additionalInfo: [String: String] = [
+        "Pikachu": "Pikachu is known for its electric abilities and lightning-fast speed.",
+        "Bulbasaur": "Bulbasaur can use its plant bulb to absorb sunlight and grow stronger.",
+        "Charmander": "Charmander's flame on its tail indicates its health and emotions."
+    ]
 
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Select SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        NavigationView {
+            List(pokemonArray, id: \.name) { pokemon in
+                NavigationLink(destination: PokemonDetail(pokemon: pokemon, additionalInfo: additionalInfo[pokemon.name] ?? "")) {
+                    Text(pokemon.name)
+                        .modifier(CustomLabel(foregroundColor: .black, size: 24))
                 }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
             }
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
 
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
     }
+}
 
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.purple, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+struct PokemonDetail: View {
+    let pokemon: Pokemons
+    let additionalInfo: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 28) {
+            Text(pokemon.name)
+                .modifier(CustomLabel(foregroundColor: .black, size: 24))
+            Text(pokemon.description)
+                .modifier(CustomLabel(foregroundColor: .black, size: 20))
+            Text(additionalInfo)
+                .modifier(CustomLabel(foregroundColor: .gray, size: 16))
+            Spacer()
         }
+        .navigationTitle("Details")
     }
 }
 
