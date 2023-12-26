@@ -29,7 +29,7 @@ struct HomeView: View {
         }
         .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
             Alert(
-                title: Text("Choose SourceType"),
+                title: Text("Choose SourceTypes"),
                 message: nil,
                 primaryButton: .default(Text("Camera")) {
                     viewModel.sourceType = .camera
