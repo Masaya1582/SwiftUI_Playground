@@ -9,100 +9,129 @@ import SwiftUI
 import UIKit
 
 struct HomeView: View {
-    @StateObject private var viewModel = HomeViewModel()
+    @State private var searchText = ""
 
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading) {
+                    // Search Bar
+                    HStack {
+                        TextField("Search Twitter", text: $searchText)
+                            .padding(7)
+                            .padding(.horizontal, 25)
+                            .background(Color(.systemGray6))
+                            .cornerRadius(8)
+                            .overlay(
+                                HStack {
+                                    Image(systemName: "magnifyingglass")
+                                        .foregroundColor(.gray)
+                                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                        .padding(.leading, 8)
+
+                                    if !searchText.isEmpty {
+                                        Button(action: {
+                                            self.searchText = ""
+                                        }) {
+                                            Image(systemName: "xmark.circle.fill")
+                                                .foregroundColor(.gray)
+                                                .padding(.trailing, 8)
+                                        }
+                                    }
+                                }
+                            )
+                            .padding(.horizontal, 10)
+                    }
+                    .padding()
+
+                    // Tweets
+                    ForEach(0..<10) { _ in
+                        TweetCell()
+                    }
                 }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
             }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.purple, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
+            .navigationTitle("Home")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {}) {
+                        Image(systemName: "person.crop.circle")
+                            .foregroundColor(.black)
+                    }
                 }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {}) {
+                        Image(systemName: "sparkles")
+                            .foregroundColor(.black)
+                    }
+                }
+            }
         }
+    }
+}
+
+struct TweetCell: View {
+    var body: some View {
+        HStack(alignment: .top, spacing: 10) {
+            RemoteImage(url: "https://source.unsplash.com/random/100x100?face")
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 55, height: 55)
+                .clipShape(Circle())
+
+            VStack(alignment: .leading, spacing: 4) {
+                HStack {
+                    Text("Username")
+                        .font(.headline)
+                        .foregroundColor(.black)
+                    Text("@handle")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                    Spacer()
+                    Text("2h")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                }
+                Text("Tweet text goes here. This is the main content of the tweet, which can span multiple lines.")
+                    .foregroundColor(.black)
+            }
+        }
+        .padding()
+        .overlay(
+            Divider()
+                .padding(.leading, 65),
+            alignment: .bottom
+        )
+    }
+}
+
+// RemoteImage View for loading images from URLs
+struct RemoteImage: View {
+    let url: String
+    @State private var image: UIImage? = nil
+
+    var body: some View {
+        Group {
+            if let image = image {
+                Image(uiImage: image)
+                    .resizable()
+            } else {
+                Rectangle()
+                    .foregroundColor(.gray)
+            }
+        }
+        .onAppear {
+            loadImage(from: url)
+        }
+    }
+
+    private func loadImage(from url: String) {
+        guard let imageURL = URL(string: url) else { return }
+        URLSession.shared.dataTask(with: imageURL) { data, _, _ in
+            if let data = data, let loadedImage = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    self.image = loadedImage
+                }
+            }
+        }.resume()
     }
 }
 
