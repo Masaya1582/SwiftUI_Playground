@@ -24,7 +24,11 @@ internal enum FontFamily {
     internal static let regular = FontConvertible(name: "Caprasimo-Regular", family: "Caprasimo", path: "Caprasimo-Regular.ttf")
     internal static let all: [FontConvertible] = [regular]
   }
-  internal static let allCustomFonts: [FontConvertible] = [Caprasimo.all].flatMap { $0 }
+  internal enum RubikDoodleShadow {
+    internal static let regular = FontConvertible(name: "RubikDoodleShadow-Regular", family: "Rubik Doodle Shadow", path: "RubikDoodleShadow-Regular.ttf")
+    internal static let all: [FontConvertible] = [regular]
+  }
+  internal static let allCustomFonts: [FontConvertible] = [Caprasimo.all, RubikDoodleShadow.all].flatMap { $0 }
   internal static func registerAllCustomFonts() {
     allCustomFonts.forEach { $0.register() }
   }
