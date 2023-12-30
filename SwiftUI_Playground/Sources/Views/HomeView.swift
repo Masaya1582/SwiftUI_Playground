@@ -6,102 +6,139 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    @StateObject private var viewModel = HomeViewModel()
+    var body: some View {
+        SNSPostView()
+    }
+}
+
+struct SNSPostView: View {
+    var body: some View {
+        VStack {
+            // Header
+            HStack {
+                Text("Social Network")
+                    .font(.title)
+                    .fontWeight(.bold)
+
+                Spacer()
+
+                Image(systemName: "plus.square")
+                    .font(.title)
+
+                Image(systemName: "heart")
+                    .font(.title)
+
+                Image(systemName: "paperplane")
+                    .font(.title)
+            }
+            .padding()
+
+            // Posts
+            ScrollView {
+                VStack(spacing: 20) {
+                    ForEach(0..<10) { _ in
+                        PostView()
+                    }
+                }
+                .padding()
+            }
+
+            // Tab Bar
+            HStack {
+                Image(systemName: "house.fill")
+                    .font(.title)
+
+                Spacer()
+
+                Image(systemName: "magnifyingglass")
+                    .font(.title)
+
+                Spacer()
+
+                Image(systemName: "plus.square")
+                    .font(.title)
+
+                Spacer()
+
+                Image(systemName: "heart")
+                    .font(.title)
+
+                Spacer()
+
+                Image(systemName: "person")
+                    .font(.title)
+            }
+            .padding()
+        }
+    }
+}
+
+struct PostView: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Image(systemName: "person.circle.fill")
+                    .resizable()
+                    .frame(width: 40, height: 40)
+                    .clipShape(Circle())
+
+                Text("username")
+                    .font(.headline)
+
+                Spacer()
+
+                Image(systemName: "ellipsis")
+                    .font(.title)
+            }
+
+            ImageLoaderView(urlString: "https://source.unsplash.com/random")
+                .aspectRatio(contentMode: .fill)
+                .frame(height: 300)
+                .clipped()
+
+            HStack(spacing: 20) {
+                Image(systemName: "heart")
+                    .font(.title)
+
+                Image(systemName: "bubble.right")
+                    .font(.title)
+
+                Image(systemName: "paperplane")
+                    .font(.title)
+
+                Spacer()
+
+                Image(systemName: "bookmark")
+                    .font(.title)
+            }
+
+            Text("Liked by username and 1,234 others")
+                .font(.caption)
+
+            Text("Caption text goes here")
+                .font(.body)
+
+            Text("View all 123 comments")
+                .font(.caption)
+                .foregroundColor(.gray)
+
+            Text("2 hours ago")
+                .font(.caption)
+                .foregroundColor(.gray)
+        }
+    }
+}
+
+struct ImageLoaderView: View {
+    let urlString: String
 
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
-                }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.purple, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+        AsyncImage(url: URL(string: urlString)) { image in
+            image.resizable()
+        } placeholder: {
+            Color.gray
         }
     }
 }
