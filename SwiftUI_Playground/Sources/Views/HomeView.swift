@@ -6,104 +6,137 @@
 //
 
 import SwiftUI
-import UIKit
+import LocalAuthentication
 
 struct HomeView: View {
-    @StateObject private var viewModel = HomeViewModel()
+    @State private var isActive: Bool = false
+    @State private var secondsElapsed: Int = 0
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State private var isUnlocked: Bool = false
+    @State private var passcode: String = ""
+    @State private var animateField: Bool = false
+    @State private var noBiometricAccess: Bool = false
+    let lockPasscode: String = "1234"
+    let context = LAContext()
 
     var body: some View {
         ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+            VStack {
+                Text("\(secondsElapsed)")
+                    .font(.system(size: 72, weight: .bold, design: .rounded))
+                    .padding()
+
+                Button(action: {
+                    self.isActive.toggle()
+                    if self.isActive {
+                        self.secondsElapsed = 0
+                    }
+                }) {
+                    Text(isActive ? "Stop" : "Start")
+                        .font(.title2)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 40)
+                        .padding(.vertical, 20)
+                        .background(isActive ? Color.red : Color.green)
+                        .clipShape(Capsule())
                 }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
             }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
+            .onReceive(timer) { _ in
+                if self.isActive {
+                    self.secondsElapsed += 1
                 }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+            }
+
+            if !isUnlocked {
+                NumberPadPasscodeView(passcode: $passcode, animateField: $animateField, isUnlocked: $isUnlocked, noBiometricAccess: $noBiometricAccess, lockPasscode: lockPasscode, context: context)
+                    .transition(.move(edge: .bottom))
+            }
+        }
+        .onChange(of: passcode) { newValue in
+            if newValue.count == 4 {
+                if lockPasscode == passcode {
+                    withAnimation {
+                        isUnlocked = true
+                    }
+                } else {
+                    passcode = ""
+                    animateField.toggle()
+                }
+            }
         }
     }
+}
+
+@ViewBuilder
+private func NumberPadPasscodeView(passcode: Binding<String>, animateField: Binding<Bool>, isUnlocked: Binding<Bool>, noBiometricAccess: Binding<Bool>, lockPasscode: String, context: LAContext) -> some View {
+    VStack(spacing: 15) {
+        Text("Enter Passcode")
+            .font(.title.bold())
+            .frame(maxWidth: .infinity)
+
+        HStack(spacing: 10) {
+            ForEach(0..<4, id: \.self) { index in
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.black, lineWidth: 2)
+                    .frame(width: 50, height: 55)
+                    .overlay {
+                        if passcode.wrappedValue.count > index {
+                            Circle()
+                                .fill(Color.black)
+                                .frame(width: 15, height: 15)
+                        }
+                    }
+            }
+        }
+        .padding(.top, 35)
+
+        Spacer()
+
+        LazyVGrid(columns: Array(repeating: GridItem(), count: 3), spacing: 20) {
+            ForEach(1...9, id: \.self) { number in
+                Button(action: {
+                    if passcode.wrappedValue.count < 4 {
+                        passcode.wrappedValue.append("\(number)")
+                    }
+                }) {
+                    Text("\(number)")
+                        .font(.title)
+                        .foregroundColor(.black)
+                        .frame(width: 75, height: 75)
+                        .background(Circle().stroke(Color.black, lineWidth: 2))
+                }
+            }
+
+            Button(action: {
+                if !passcode.wrappedValue.isEmpty {
+                    passcode.wrappedValue.removeLast()
+                }
+            }) {
+                Image(systemName: "delete.left")
+                    .font(.title)
+                    .foregroundColor(.black)
+                    .frame(width: 75, height: 75)
+                    .background(Circle().stroke(Color.black, lineWidth: 2))
+            }
+
+            Button(action: {
+                if passcode.wrappedValue.count < 4 {
+                    passcode.wrappedValue.append("0")
+                }
+            }) {
+                Text("0")
+                    .font(.title)
+                    .foregroundColor(.black)
+                    .frame(width: 75, height: 75)
+                    .background(Circle().stroke(Color.black, lineWidth: 2))
+            }
+        }
+    }
+    .padding()
+    .background(Color.white)
+    .cornerRadius(20)
+    .shadow(radius: 10)
+    .padding(20)
 }
 
 struct HomeView_Previews: PreviewProvider {
