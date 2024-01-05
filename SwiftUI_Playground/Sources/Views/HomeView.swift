@@ -10,22 +10,39 @@ import SwiftUI
 struct HomeView: View {
     @State private var count = 3
     @State private var timer: Timer?
+    @State private var quizTimer: Timer?
+    @State private var currentIndex = 0
+    @State private var quizArray: [String] = ["It", "is", "a", "good", "day"]
+    @State private var shuffledArray: [String] = []
+    @State private var isShowAnswerView = false
 
     var body: some View {
-        VStack {
-            if count > 0 {
-                Text(String(count))
-                    .modifier(CustomLabel(foregroundColor: .black, size: 48))
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 120)
-                            .foregroundColor(.white)
-                            .frame(width: 200, height: 200)
-                            .shadow(color: .gray, radius: 4, x: 0, y: 2)
-                    )
+        NavigationStack {
+            VStack {
+                if count > 0 {
+                    Text("\(count)")
+                        .modifier(CustomLabel(foregroundColor: .black, size: 48))
+                        .padding()
+                        .background(
+                            RoundedRectangle(cornerRadius: 120)
+                                .foregroundColor(.white)
+                                .frame(width: 200, height: 200)
+                                .shadow(color: .gray, radius: 4, x: 0, y: 2)
+                        )
+                } else {
+                    if currentIndex < shuffledArray.count {
+                        Text(shuffledArray[currentIndex])
+                            .modifier(CustomLabel(foregroundColor: .black, size: 48))
+                    }
+                }
+                NavigationLink("", isActive: $isShowAnswerView) {
+                    AnswerView(correctAnswer: $quizArray)
+                }
+                .hidden()
             }
         }
         .onAppear {
+            shuffledArray = quizArray.shuffled()
             startTimer()
         }
         .onDisappear {
@@ -35,17 +52,33 @@ struct HomeView: View {
 
     private func startTimer() {
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            count -= 1
-            if count < 0 {
-                timer?.invalidate()
-                timer = nil
+            if count > 0 {
+                count -= 1
+                if count == 0 {
+                    startQuizTimer()
+                }
+            }
+        }
+    }
+
+    private func startQuizTimer() {
+        quizTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { _ in
+            if currentIndex < shuffledArray.count {
+                currentIndex += 1
+            } else {
+                quizTimer?.invalidate()
+                quizTimer = nil
+                isShowAnswerView = true
             }
         }
     }
 
     private func stopTimer() {
         timer?.invalidate()
+        quizTimer?.invalidate()
         timer = nil
+        quizTimer = nil
+        currentIndex = 0
     }
 }
 
