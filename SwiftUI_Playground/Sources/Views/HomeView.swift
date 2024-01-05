@@ -13,15 +13,17 @@ struct HomeView: View {
 
     var body: some View {
         VStack {
-            Text(String(count))
-                .modifier(CustomLabel(foregroundColor: .black, size: 48))
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 120)
-                        .foregroundColor(.white)
-                        .frame(width: 200, height: 200)
-                        .shadow(color: .gray, radius: 4, x: 0, y: 2)
-                )
+            if count > 0 {
+                Text(String(count))
+                    .modifier(CustomLabel(foregroundColor: .black, size: 48))
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 120)
+                            .foregroundColor(.white)
+                            .frame(width: 200, height: 200)
+                            .shadow(color: .gray, radius: 4, x: 0, y: 2)
+                    )
+            }
         }
         .onAppear {
             startTimer()
@@ -34,6 +36,10 @@ struct HomeView: View {
     private func startTimer() {
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             count -= 1
+            if count < 0 {
+                timer?.invalidate()
+                timer = nil
+            }
         }
     }
 
