@@ -12,52 +12,62 @@ struct HomeView: View {
     @State private var timer: Timer?
     @State private var quizTimer: Timer?
     @State private var currentIndex = 0
-    @State private var shuffledArray: [String] = []
-    @State private var firstQuizArray: [String] = []
-    @State private var actualQuizArray: [String] = []
-    @State private var realQuizArray: [String] = []
+    @State private var allQuizDataArray: [String] = []
+    @State private var eachQuizArray: [String] = []
+    @State private var formattedQuizArray: [String] = []
+    @State private var shuffledQuizArray: [String] = []
     @State private var isShowAnswerView = false
 
     var body: some View {
         NavigationStack {
             VStack {
                 if count > 0 {
-                    Text("\(count)")
-                        .modifier(CustomLabel(foregroundColor: .black, size: 48))
-                        .padding()
-                        .background(
-                            RoundedRectangle(cornerRadius: 120)
-                                .foregroundColor(.white)
-                                .frame(width: 200, height: 200)
-                                .shadow(color: .gray, radius: 4, x: 0, y: 2)
-                        )
+                    initialCounter
                 } else {
-                    if currentIndex < realQuizArray.count {
-                        Text(realQuizArray[currentIndex])
-                            .modifier(CustomLabel(foregroundColor: .black, size: 48))
+                    if currentIndex < shuffledQuizArray.count {
+                        quiz
                     }
                 }
                 NavigationLink("", isActive: $isShowAnswerView) {
-                    AnswerView(correctAnswer: $actualQuizArray)
+                    AnswerView(correctAnswer: $formattedQuizArray)
                 }
                 .hidden()
             }
         }
         .onAppear {
-            shuffledArray = loadCSV().shuffled()
-            firstQuizArray.append(shuffledArray[0])
-            actualQuizArray = firstQuizArray.first?
-                .components(separatedBy: ",")
-                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) } ?? []
-            realQuizArray = actualQuizArray
-            realQuizArray.shuffle()
-            print("最初: \(firstQuizArray)")
-            print("実際のクイズ配列: \(actualQuizArray)")
+            setupQuizData()
             startTimer()
         }
         .onDisappear {
             stopTimer()
         }
+    }
+
+    var initialCounter: some View {
+        Text("\(count)")
+            .modifier(CustomLabel(foregroundColor: .black, size: 48))
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 120)
+                    .foregroundColor(.white)
+                    .frame(width: 200, height: 200)
+                    .shadow(color: .gray, radius: 4, x: 0, y: 2)
+            )
+    }
+
+    var quiz: some View {
+        Text(shuffledQuizArray[currentIndex])
+            .modifier(CustomLabel(foregroundColor: .black, size: 48))
+    }
+
+    private func setupQuizData() {
+        allQuizDataArray = loadCSV(with: "quiz1").shuffled()
+        eachQuizArray.append(allQuizDataArray[currentIndex])
+        formattedQuizArray = eachQuizArray.first?
+            .components(separatedBy: ",")
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) } ?? []
+        shuffledQuizArray = formattedQuizArray
+        shuffledQuizArray.shuffle()
     }
 
     private func startTimer() {
@@ -73,7 +83,7 @@ struct HomeView: View {
 
     private func startQuizTimer() {
         quizTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { _ in
-            if currentIndex < realQuizArray.count {
+            if currentIndex < shuffledQuizArray.count {
                 currentIndex += 1
             } else {
                 quizTimer?.invalidate()
@@ -91,19 +101,19 @@ struct HomeView: View {
         currentIndex = 0
     }
 
-    private func loadCSV() -> [String] {
-        guard let csvBundle = Bundle.main.path(forResource: "quiz1", ofType: "csv") else {
-            fatalError("ファイルが見つかりません")
+    private func loadCSV(with name: String) -> [String] {
+        guard let csvBundle = Bundle.main.path(forResource: name, ofType: "csv") else {
+            fatalError("CSV not found")
         }
-        var dataArray: [String] = []
+        var csvDataArray: [String] = []
         do {
             let csvData = try String(contentsOfFile: csvBundle, encoding: .utf8)
-            dataArray = csvData.components(separatedBy: "\n")
-            dataArray.removeLast()
+            csvDataArray = csvData.components(separatedBy: "\n")
+            csvDataArray.removeLast()
         } catch {
-            print("エラー: \(error)")
+            print("Error: \(error.localizedDescription)")
         }
-        return dataArray
+        return csvDataArray
     }
 }
 
