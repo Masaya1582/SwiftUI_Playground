@@ -17,29 +17,37 @@ struct HomeView: View {
     @State private var formattedQuizArray: [String] = []
     @State private var shuffledQuizArray: [String] = []
     @State private var isShowAnswerView = false
+    @State private var isTryOneMore = false
+    @State private var quizForOneMore: [String] = []
+    @State private var tryAgainCount = 3
 
     var body: some View {
-        NavigationStack {
-            VStack {
-                if count > 0 {
-                    initialCounter
-                } else {
-                    if currentIndex < shuffledQuizArray.count {
-                        quiz
-                    }
+        VStack {
+            if count > 0 {
+                initialCounter
+            } else {
+                if currentIndex < shuffledQuizArray.count {
+                    quiz
                 }
-                NavigationLink("", isActive: $isShowAnswerView) {
-                    AnswerView(correctAnswer: $formattedQuizArray)
-                }
-                .hidden()
             }
         }
+        .fullScreenCover(isPresented: $isShowAnswerView) {
+            AnswerView(tryAgainCount: $tryAgainCount, correctAnswer: $formattedQuizArray, isTryOneMore: $isTryOneMore, isShowAnswerView: $isShowAnswerView)
+        }
         .onAppear {
-            setupQuizData()
             startTimer()
+            setupQuizData()
+            quizForOneMore = shuffledQuizArray
         }
         .onDisappear {
             stopTimer()
+            tryAgainCount -= 1
+            resetAndRestartQuiz()
+        }
+        .onChange(of: isTryOneMore) { newValue in
+            if newValue {
+                resetAndRestartQuiz()
+            }
         }
     }
 
@@ -56,8 +64,14 @@ struct HomeView: View {
     }
 
     var quiz: some View {
-        Text(shuffledQuizArray[currentIndex])
+        Text(isTryOneMore ? quizForOneMore[currentIndex] : shuffledQuizArray[currentIndex])
             .modifier(CustomLabel(foregroundColor: .black, size: 48))
+    }
+
+    private func resetAndRestartQuiz() {
+        count = 3
+        currentIndex = 0
+        shuffledQuizArray = quizForOneMore
     }
 
     private func setupQuizData() {
@@ -83,7 +97,7 @@ struct HomeView: View {
 
     private func startQuizTimer() {
         quizTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { _ in
-            if currentIndex < shuffledQuizArray.count {
+            if currentIndex < (isTryOneMore ? quizForOneMore.count : shuffledQuizArray.count) {
                 currentIndex += 1
             } else {
                 quizTimer?.invalidate()
