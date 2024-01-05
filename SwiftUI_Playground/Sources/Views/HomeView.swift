@@ -12,8 +12,10 @@ struct HomeView: View {
     @State private var timer: Timer?
     @State private var quizTimer: Timer?
     @State private var currentIndex = 0
-    @State private var quizArray: [String] = ["It", "is", "a", "good", "day"]
     @State private var shuffledArray: [String] = []
+    @State private var firstQuizArray: [String] = []
+    @State private var actualQuizArray: [String] = []
+    @State private var realQuizArray: [String] = []
     @State private var isShowAnswerView = false
 
     var body: some View {
@@ -30,19 +32,27 @@ struct HomeView: View {
                                 .shadow(color: .gray, radius: 4, x: 0, y: 2)
                         )
                 } else {
-                    if currentIndex < shuffledArray.count {
-                        Text(shuffledArray[currentIndex])
+                    if currentIndex < realQuizArray.count {
+                        Text(realQuizArray[currentIndex])
                             .modifier(CustomLabel(foregroundColor: .black, size: 48))
                     }
                 }
                 NavigationLink("", isActive: $isShowAnswerView) {
-                    AnswerView(correctAnswer: $quizArray)
+                    AnswerView(correctAnswer: $actualQuizArray)
                 }
                 .hidden()
             }
         }
         .onAppear {
-            shuffledArray = quizArray.shuffled()
+            shuffledArray = loadCSV().shuffled()
+            firstQuizArray.append(shuffledArray[0])
+            actualQuizArray = firstQuizArray.first?
+                .components(separatedBy: ",")
+                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) } ?? []
+            realQuizArray = actualQuizArray
+            realQuizArray.shuffle()
+            print("最初: \(firstQuizArray)")
+            print("実際のクイズ配列: \(actualQuizArray)")
             startTimer()
         }
         .onDisappear {
@@ -63,7 +73,7 @@ struct HomeView: View {
 
     private func startQuizTimer() {
         quizTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { _ in
-            if currentIndex < shuffledArray.count {
+            if currentIndex < realQuizArray.count {
                 currentIndex += 1
             } else {
                 quizTimer?.invalidate()
@@ -79,6 +89,21 @@ struct HomeView: View {
         timer = nil
         quizTimer = nil
         currentIndex = 0
+    }
+
+    private func loadCSV() -> [String] {
+        guard let csvBundle = Bundle.main.path(forResource: "quiz1", ofType: "csv") else {
+            fatalError("ファイルが見つかりません")
+        }
+        var dataArray: [String] = []
+        do {
+            let csvData = try String(contentsOfFile: csvBundle, encoding: .utf8)
+            dataArray = csvData.components(separatedBy: "\n")
+            dataArray.removeLast()
+        } catch {
+            print("エラー: \(error)")
+        }
+        return dataArray
     }
 }
 
