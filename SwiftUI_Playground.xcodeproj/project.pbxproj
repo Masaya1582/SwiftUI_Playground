@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1E0CBD602AE25C44001917B9 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E0CBD5F2AE25C44001917B9 /* ImagePicker.swift */; };
+		1E1BB15B2B47A7FE00E0A468 /* AnswerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E1BB15A2B47A7FE00E0A468 /* AnswerView.swift */; };
+		1E1BB15D2B47BE5D00E0A468 /* quiz1.csv in Resources */ = {isa = PBXBuildFile; fileRef = 1E1BB15C2B47BE5D00E0A468 /* quiz1.csv */; };
 		1E62EE712AD8D0080031CB1B /* FloatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E62EE702AD8D0080031CB1B /* FloatingView.swift */; };
 		1E771ADA2AF35B1C00119B16 /* HalfModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E771AD92AF35B1C00119B16 /* HalfModalView.swift */; };
 		4011E8692A49759C003F06BF /* SwiftUI_PlaygroundApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E8682A49759C003F06BF /* SwiftUI_PlaygroundApp.swift */; };
@@ -30,6 +32,8 @@
 
 /* Begin PBXFileReference section */
 		1E0CBD5F2AE25C44001917B9 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		1E1BB15A2B47A7FE00E0A468 /* AnswerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerView.swift; sourceTree = "<group>"; };
+		1E1BB15C2B47BE5D00E0A468 /* quiz1.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = quiz1.csv; sourceTree = "<group>"; };
 		1E62EE702AD8D0080031CB1B /* FloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingView.swift; sourceTree = "<group>"; };
 		1E771AD92AF35B1C00119B16 /* HalfModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfModalView.swift; sourceTree = "<group>"; };
 		1EF7E5942ADCD9210032015B /* SwiftUI-Playground-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "SwiftUI-Playground-Info.plist"; sourceTree = SOURCE_ROOT; };
@@ -140,6 +144,7 @@
 			isa = PBXGroup;
 			children = (
 				4011E88E2A497727003F06BF /* HomeViewModel.swift */,
+				1E1BB15C2B47BE5D00E0A468 /* quiz1.csv */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -148,6 +153,7 @@
 			isa = PBXGroup;
 			children = (
 				4011E86A2A49759C003F06BF /* HomeView.swift */,
+				1E1BB15A2B47A7FE00E0A468 /* AnswerView.swift */,
 				1E62EE702AD8D0080031CB1B /* FloatingView.swift */,
 				1E771AD92AF35B1C00119B16 /* HalfModalView.swift */,
 				40779B7B2A528D2800505ABD /* Modifiers */,
@@ -262,6 +268,7 @@
 				4011E88D2A4976EC003F06BF /* Caprasimo-Regular.ttf in Resources */,
 				4011E8822A49769B003F06BF /* Colors.xcassets in Resources */,
 				401E4F1E2B3E675D0004D507 /* RubikDoodleShadow-Regular.ttf in Resources */,
+				1E1BB15D2B47BE5D00E0A468 /* quiz1.csv in Resources */,
 				4011E8842A4976AA003F06BF /* Localizable.strings in Resources */,
 				4011E8702A49759D003F06BF /* Preview Assets.xcassets in Resources */,
 				4011E86D2A49759D003F06BF /* Assets.xcassets in Resources */,
@@ -321,6 +328,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E62EE712AD8D0080031CB1B /* FloatingView.swift in Sources */,
+				1E1BB15B2B47A7FE00E0A468 /* AnswerView.swift in Sources */,
 				4011E88B2A4976DA003F06BF /* Fonts.swift in Sources */,
 				4011E86B2A49759C003F06BF /* HomeView.swift in Sources */,
 				1E771ADA2AF35B1C00119B16 /* HalfModalView.swift in Sources */,

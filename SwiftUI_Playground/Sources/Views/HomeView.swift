@@ -6,103 +6,128 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    @StateObject private var viewModel = HomeViewModel()
+    @State private var count = 3
+    @State private var timer: Timer?
+    @State private var quizTimer: Timer?
+    @State private var currentIndex = 0
+    @State private var allQuizDataArray: [String] = []
+    @State private var eachQuizArray: [String] = []
+    @State private var formattedQuizArray: [String] = []
+    @State private var shuffledQuizArray: [String] = []
+    @State private var isShowAnswerView = false
+    @State private var isTryOneMore = false
+    @State private var quizForOneMore: [String] = []
+    @State private var tryAgainCount = 3
 
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
+        VStack {
+            if count > 0 {
+                initialCounter
+            } else {
+                if currentIndex < shuffledQuizArray.count {
+                    quiz
+                }
             }
         }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
+        .fullScreenCover(isPresented: $isShowAnswerView) {
+            AnswerView(tryAgainCount: $tryAgainCount, correctAnswer: $formattedQuizArray, isTryOneMore: $isTryOneMore, isShowAnswerView: $isShowAnswerView)
         }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
+        .onAppear {
+            startTimer()
+            setupQuizData()
+            quizForOneMore = shuffledQuizArray
         }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
-                }
+        .onDisappear {
+            stopTimer()
+            tryAgainCount -= 1
+            resetAndRestartQuiz()
+        }
+        .onChange(of: isTryOneMore) { newValue in
+            if newValue {
+                resetAndRestartQuiz()
+            }
+        }
+    }
+
+    var initialCounter: some View {
+        Text("\(count)")
+            .modifier(CustomLabel(foregroundColor: .black, size: 48))
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 120)
+                    .foregroundColor(.white)
+                    .frame(width: 200, height: 200)
+                    .shadow(color: .gray, radius: 4, x: 0, y: 2)
             )
-        }
     }
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
+    var quiz: some View {
+        Text(isTryOneMore ? quizForOneMore[currentIndex] : shuffledQuizArray[currentIndex])
+            .modifier(CustomLabel(foregroundColor: .black, size: 48))
     }
 
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
+    private func resetAndRestartQuiz() {
+        count = 3
+        currentIndex = 0
+        shuffledQuizArray = quizForOneMore
     }
 
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
+    private func setupQuizData() {
+        allQuizDataArray = loadCSV(with: "quiz1").shuffled()
+        eachQuizArray.append(allQuizDataArray[currentIndex])
+        formattedQuizArray = eachQuizArray.first?
+            .components(separatedBy: ",")
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) } ?? []
+        shuffledQuizArray = formattedQuizArray
+        shuffledQuizArray.shuffle()
     }
 
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
+    private func startTimer() {
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            if count > 0 {
+                count -= 1
+                if count == 0 {
+                    startQuizTimer()
                 }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+            }
         }
+    }
+
+    private func startQuizTimer() {
+        quizTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { _ in
+            if currentIndex < (isTryOneMore ? quizForOneMore.count : shuffledQuizArray.count) {
+                currentIndex += 1
+            } else {
+                quizTimer?.invalidate()
+                quizTimer = nil
+                isShowAnswerView = true
+            }
+        }
+    }
+
+    private func stopTimer() {
+        timer?.invalidate()
+        quizTimer?.invalidate()
+        timer = nil
+        quizTimer = nil
+        currentIndex = 0
+    }
+
+    private func loadCSV(with name: String) -> [String] {
+        guard let csvBundle = Bundle.main.path(forResource: name, ofType: "csv") else {
+            fatalError("CSV not found")
+        }
+        var csvDataArray: [String] = []
+        do {
+            let csvData = try String(contentsOfFile: csvBundle, encoding: .utf8)
+            csvDataArray = csvData.components(separatedBy: "\n")
+            csvDataArray.removeLast()
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+        return csvDataArray
     }
 }
 
