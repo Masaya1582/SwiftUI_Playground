@@ -9,8 +9,10 @@ import SwiftUI
 import UIKit
 
 struct HomeView: View {
+    // MARK: - Properties
     @StateObject private var viewModel = HomeViewModel()
 
+    // MARK: - Body
     var body: some View {
         ZStack {
             backgroundField()
@@ -106,6 +108,7 @@ struct HomeView: View {
     }
 }
 
+// MARK: - Preview
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
