@@ -23,7 +23,7 @@ struct HomeView: View {
             }
         }
         .onAppear {
-            print("Hello World")
+            print("Hello Canada!")
         }
         .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
             ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
