@@ -11,6 +11,7 @@ import UIKit
 struct HomeView: View {
     // MARK: - Properties
     @StateObject private var viewModel = HomeViewModel()
+    private let pokeAPIManager = PokeAPIManager()
 
     // MARK: - Body
     var body: some View {
@@ -23,7 +24,10 @@ struct HomeView: View {
             }
         }
         .onAppear {
-            print("Hello Canada!")
+            let randomID = Int.random(in: 1...100)
+            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
+                print("ポケモン: \(pokemon)")
+            }
         }
         .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
             ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
