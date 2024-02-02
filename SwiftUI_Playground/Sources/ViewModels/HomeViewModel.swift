@@ -19,9 +19,9 @@ final class HomeViewModel: ObservableObject {
     @Published var selectedImage: UIImage?
     @Published var posts: [Post] = []
 
-    init() {
-        fetchPosts()
-    }
+//    init() {
+//        fetchPosts()
+//    }
 
     /// URLSessionとCombineを学ぶ
     private func fetchPosts() {
