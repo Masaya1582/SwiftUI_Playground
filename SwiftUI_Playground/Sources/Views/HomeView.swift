@@ -28,6 +28,7 @@ struct HomeView: View {
             pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
                 print("ポケモン: \(pokemon)")
             }
+            print("DEBUG: TEST")
         }
         .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
             ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
