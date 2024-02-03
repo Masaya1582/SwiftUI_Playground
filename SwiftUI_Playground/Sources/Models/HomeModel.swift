@@ -18,6 +18,7 @@ final class HomeModel {
         self.age = age
         self.height = height
         self.isMan = isMen
+        print("TEST")
     }
 }
 
