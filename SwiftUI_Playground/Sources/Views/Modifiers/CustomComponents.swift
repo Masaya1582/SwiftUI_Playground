@@ -142,3 +142,19 @@ struct CardViewModifier: ViewModifier {
             .shadow(radius: 5)
     }
 }
+
+struct LoadingCircleView: View {
+    @State private var isAnimating = false
+
+    var body: some View {
+        Circle()
+            .trim(from: 0, to: 0.7) // Adjust the circle to appear as a ring
+            .stroke(AngularGradient(gradient: Gradient(colors: [.blue, .purple, .pink]), center: .center), lineWidth: 8) // Use AngularGradient for a colorful effect
+            .frame(width: 50, height: 50) // Size of the loading circle
+            .rotationEffect(Angle(degrees: self.isAnimating ? 360 : 0)) // Rotate the circle
+            .animation(Animation.linear(duration: 1).repeatForever(autoreverses: false), value: isAnimating) // Continuous rotation animation
+            .onAppear() {
+                self.isAnimating = true // Start the animation when the view appears
+            }
+    }
+}
