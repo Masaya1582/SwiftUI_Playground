@@ -12,16 +12,18 @@ struct HalfModalView: View {
     @Binding var isShowHalfView: Bool
 
     var body: some View {
-        Text("This is Half Modal View")
-            .modifier(CustomLabel(foregroundColor: .black, size: 24))
-        TextField("Type Something", text: $halfModalText)
-            .modifier(CustomTextField())
-        VintageSettingView(iconName: "apple.logo", title: "Apple")
-        VintageSettingView(iconName: "applewatch.watchface", title: "Apple")
-        Button("Close") {
-            isShowHalfView = false
+        VStack {
+            Text("This is Half Modal View")
+                .modifier(CustomLabel(foregroundColor: .black, size: 24))
+            TextField("Type Something", text: $halfModalText)
+                .modifier(CustomTextField())
+            VintageSettingView(iconName: "apple.logo", title: "Apple")
+            VintageSettingView(iconName: "applewatch.watchface", title: "Apple")
+            Button("Close") {
+                isShowHalfView = false
+            }
+            .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: .orange))
     }
 }
 
