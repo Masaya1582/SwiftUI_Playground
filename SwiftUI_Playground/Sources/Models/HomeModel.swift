@@ -28,7 +28,12 @@ struct Post: Codable {
     let body: String
 }
 
-struct Pokemon: Codable {
-    let id: Int
-    let name: String
+struct PokemonList: Codable {
+    let results: [Pokemon]
 }
+
+struct Pokemon: Codable, Identifiable {
+    let name: String
+    var id: String { name }
+}
+
