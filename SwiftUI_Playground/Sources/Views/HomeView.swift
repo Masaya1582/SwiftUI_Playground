@@ -6,111 +6,58 @@
 //
 
 import SwiftUI
-import UIKit
+
+struct FlowerShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+
+        // Center of the flower
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        let radius: CGFloat = min(rect.width, rect.height) / 2
+
+        // Number of petals
+        let petalCount = 5
+        let petalArc: CGFloat = .pi * 2 / CGFloat(petalCount)
+
+        for i in 0..<petalCount {
+            let angle = petalArc * CGFloat(i)
+            let petalCenter = CGPoint(x: center.x + radius * cos(angle), y: center.y + radius * sin(angle))
+            let petalRadius = radius / 3 // Adjust for petal size
+
+            // Draw each petal as a circle
+            path.addEllipse(in: CGRect(x: petalCenter.x - petalRadius, y: petalCenter.y - petalRadius, width: petalRadius * 2, height: petalRadius * 2))
+        }
+
+        // Draw the center of the flower
+        path.addEllipse(in: CGRect(x: center.x - radius / 4, y: center.y - radius / 4, width: radius / 2, height: radius / 2))
+
+        return path
+    }
+}
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
+    @State private var isBloomed = false
 
-    // MARK: - Body
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("ポケモンDetail: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
-                }
-            )
-        }
-    }
+        VStack {
+            FlowerShape()
+                .fill(isBloomed ? Color.pink : Color.green)
+                .scaleEffect(isBloomed ? 1 : 0.1)
+                .opacity(isBloomed ? 1 : 0)
+                .animation(.easeInOut(duration: 2), value: isBloomed)
+                .padding(50)
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
+            Button(action: {
                 withAnimation {
-                    viewModel.isFloatingViewVisible = false
+                    isBloomed.toggle()
                 }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+            }) {
+                Text(isBloomed ? "Close" : "Bloom")
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(isBloomed ? Color.red : Color.blue)
+                    .cornerRadius(10)
+            }
         }
     }
 }
