@@ -9,109 +9,52 @@ import SwiftUI
 import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
+    @State private var waveOffset: CGFloat = 0
 
-    // MARK: - Body
+    let timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
+
     var body: some View {
         ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
+            LinearGradient(gradient: Gradient(colors: [.blue, .green]), startPoint: .top, endPoint: .bottom)
+                .edgesIgnoringSafeArea(.all)
+
+            WaveShape(offset: waveOffset)
+                .fill(Color.white)
+                .opacity(0.7)
+                .blendMode(.overlay)
+                .frame(height: 200)
+                .shadow(color: .black, radius: 5, x: 0, y: 5)
+        }
+        .onReceive(timer) { _ in
+            withAnimation(Animation.linear(duration: 1)) {
+                self.waveOffset += 5
             }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("ポケモンDetailsだよ: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
-                }
-            )
         }
     }
+}
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
+struct WaveShape: Shape {
+    var offset: CGFloat
 
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
+    func path(in rect: CGRect) -> Path {
+        let width = rect.width
+        let height = rect.height
+        let midHeight = height / 2
+        let waveHeight: CGFloat = 20
+
+        var path = Path()
+        path.move(to: CGPoint(x: 0, y: midHeight))
+
+        for x in stride(from: 0, through: width, by: 10) {
+            let y = midHeight + sin((CGFloat(x) + offset) * 0.05) * waveHeight
+            path.addLine(to: CGPoint(x: x, y: y))
         }
-    }
 
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
+        path.addLine(to: CGPoint(x: width, y: height))
+        path.addLine(to: CGPoint(x: 0, y: height))
+        path.closeSubpath()
 
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
-        }
+        return path
     }
 }
 
