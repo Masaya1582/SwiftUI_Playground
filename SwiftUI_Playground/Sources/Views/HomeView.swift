@@ -6,111 +6,76 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
+    @State private var userInput: String = ""
+    @State private var messages: [String] = []
 
-    // MARK: - Body
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("ポケモンDetailsだよ: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        NavigationView {
+            VStack {
+                ScrollView {
+                    LazyVStack {
+                        ForEach(messages, id: \.self) { message in
+                            ChatBubble(message: message)
+                        }
+                    }
                 }
-            )
-        }
-    }
+                .padding()
+                .background(Color(red: 0.9, green: 1.0, blue: 0.9)) // Light green background
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
+                HStack {
+                    TextField("Type your message...", text: $userInput)
+                        .textFieldStyle(.roundedBorder)
+                        .padding(.leading)
 
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
+                    Button(action: sendMessage) {
+                        Image(systemName: "arrow.right.circle.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 44, height: 44)
+                            .foregroundColor(.blue)
+                    }
+                    .padding(.trailing)
                 }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+            }
+            .navigationBarTitle("Chat Room", displayMode: .inline)
+        }
+    }
+
+    private func sendMessage() {
+        guard !userInput.isEmpty else { return }
+        messages.append("User: \(userInput)")
+        userInput = "" // Clear the input field
+
+        // Simulate a response
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.messages.append("ChatGPT: That's an interesting point!")
+        }
+    }
+}
+
+struct ChatBubble: View {
+    let message: String
+
+    var body: some View {
+        HStack {
+            if message.starts(with: "User: ") {
+                Spacer()
+                Text(message)
+                    .foregroundColor(.green) // Changed text color to green
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(10)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+            } else {
+                Text(message)
+                    .foregroundColor(.green) // Changed text color to green
+                    .padding()
+                    .background(Color.blue.opacity(0.2))
+                    .cornerRadius(10)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
         }
     }
 }
