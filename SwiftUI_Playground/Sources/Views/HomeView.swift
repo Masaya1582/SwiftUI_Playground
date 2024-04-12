@@ -9,109 +9,68 @@ import SwiftUI
 import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
 
     // MARK: - Body
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("ポケモンDetailsだよ: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        EmojisAnimatedPicker()
+    }
+}
+
+struct EmojisAnimatedPicker: View {
+
+    let emojis = Emoji.create()
+
+    @State private var selection = [Emoji]()
+    @Namespace private var namespace
+
+    let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 5)
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            ScrollView {
+                LazyVGrid(columns: columns, spacing: 10) {
+                    ForEach(selection) { item in
+                        Text(item.content)
+                            .foregroundColor(.clear)
+                            .matchedGeometryEffect(id: item.id, in: namespace, isSource: selection.contains(item))
+                    }
                 }
-            )
+                .padding()
+            }
+
+            Spacer()
+            Divider()
+
+            HStack {
+                ForEach(emojis) { item in
+                    Text(item.content)
+                        .matchedGeometryEffect(id: item.id, in: namespace, isSource: !selection.contains(item))
+                        .onTapGesture {
+                            withAnimation(.spring()) {
+                                tapEmoji(item)
+                            }
+                        }
+                }
+            }
+            .padding()
         }
     }
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
+    func tapEmoji(_ emoji: Emoji) {
+        if let index = selection.firstIndex(of: emoji) {
+            selection.remove(at: index)
         } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
+            selection.append(emoji)
         }
     }
+}
 
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
+struct Emoji: Identifiable, Hashable {
+    let id = UUID()
+    let content: String
 
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
-        }
+    static func create() -> [Emoji] {
+        ["🪐", "🌍", "🌕", "🌿", "🌊", "🌎", "🌑", "🌞", "🌌", "🎶", "📚"].map { Emoji(content: $0) }
     }
 }
 
