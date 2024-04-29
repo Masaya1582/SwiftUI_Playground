@@ -7,6 +7,7 @@
 import SwiftUI
 
 struct FloatingView: View {
+    // MARK: - Properties
     @State var dismissAction: (() -> Void)
 
     var body: some View {

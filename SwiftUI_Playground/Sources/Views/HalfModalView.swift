@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct HalfModalView: View {
+    // MARK: - Properties
     @Binding var halfModalText: String
     @Binding var isShowHalfView: Bool
 
