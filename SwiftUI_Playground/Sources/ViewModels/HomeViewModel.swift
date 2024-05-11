@@ -8,31 +8,39 @@
 import SwiftUI
 import Combine
 
-final class HomeViewModel: ObservableObject {
-    @Published var name = ""
-    @Published var halfModalText = ""
-    @Published var isFloatingViewVisible = false
-    @Published var isOpenImagePicker = false
-    @Published var isShowSourceTypeAlert = false
-    @Published var isShowHalfModalView = false
-    @Published var sourceType: UIImagePickerController.SourceType?
-    @Published var selectedImage: UIImage?
-    @Published var posts: [Post] = []
+final class PokemonViewModel: ObservableObject {
+    @Published var pokemons: [Pokemon] = []
+    private var cancellables = Set<AnyCancellable>()
+    private var dataService = DataService()
 
-    init() {
-        fetchPosts()
+    func loadPokemon() {
+        dataService.fetchPokemon()
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print("Error: \(error)")
+                }
+            }, receiveValue: { [weak self] pokemons in
+                self?.pokemons = pokemons
+            })
+            .store(in: &cancellables)
     }
+}
 
-    /// URLSessionとCombineを学ぶ
-    private func fetchPosts() {
-        if let url = URL(string: "https://jsonplaceholder.typicode.com/posts") {
-            URLSession.shared.dataTaskPublisher(for: url)
-                .map(\.data)
-                .decode(type: [Post].self, decoder: JSONDecoder())
-                .replaceError(with: [])
-                .receive(on: DispatchQueue.main)
-                .assign(to: &$posts)
+final class DataService {
+    var cancellables = Set<AnyCancellable>()
+
+    func fetchPokemon() -> AnyPublisher<[Pokemon], Error> {
+        guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon?limit=100") else {
+            fatalError("URL not Found")
         }
+        return URLSession.shared.dataTaskPublisher(for: url)
+            .map(\.data)
+            .decode(type: PokemonList.self, decoder: JSONDecoder())
+            .map { $0.results }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
     }
-
 }
