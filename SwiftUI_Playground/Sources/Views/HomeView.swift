@@ -9,108 +9,123 @@ import SwiftUI
 import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
-
-    // MARK: - Body
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("ポケモンDetailsだよ: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 10) {
+
+                    Text("Stories")
+                        .font(.system(size: 20, design: .default))
+                        .foregroundColor(.black)
+                        .padding(.leading)
+
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 10) {
+                            ForEach(0..<10) { _ in
+                                VStack {
+                                    Image(systemName: "person.circle")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: 60, height: 60)
+                                        .clipShape(Circle())
+                                        .overlay(Circle().stroke(Color(red: 230 / 255, green: 230 / 255, blue: 232 / 255), lineWidth: 1.5))
+
+                                    Text("Username")
+                                        .font(.system(size: 12, design: .default))
+                                        .foregroundColor(.black)
+                                }
+                            }
+                        }
+                        .padding(.horizontal)
+                    }
+
+                    ForEach(0..<10) { _ in
+                        VStack(alignment: .leading, spacing: 10) {
+                            HStack {
+                                Image(systemName: "person.circle")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 30, height: 30)
+                                    .clipShape(Circle())
+                                    .overlay(Circle().stroke(Color(red: 230 / 255, green: 230 / 255, blue: 232 / 255), lineWidth: 1.5))
+
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Username")
+                                        // .font(.system(size: 17, weight: Font.Weight.medium, design: .default))
+                                        .foregroundColor(.black)
+
+                                    Text("Location")
+                                        .font(.system(size: 12, design: .default))
+                                        .foregroundColor(Color(red: 138 / 255, green: 138 / 255, blue: 138 / 255))
+                                }
+
+                                Spacer()
+
+                                Button(action: {}) {
+                                    Image(systemName: "ellipsis")
+                                        .foregroundColor(.black)
+                                }
+                            }
+
+                            Image("placeholder")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(height: 200)
+                                .clipped()
+
+                            HStack {
+                                Button(action: {}) {
+                                    Image(systemName: "heart")
+                                        .foregroundColor(.black)
+                                }
+
+                                Button(action: {}) {
+                                    Image(systemName: "bubble.right")
+                                        .foregroundColor(.black)
+                                }
+
+                                Button(action: {}) {
+                                    Image(systemName: "paperplane")
+                                        .foregroundColor(.black)
+                                }
+
+                                Spacer()
+
+                                Button(action: {}) {
+                                    Image(systemName: "bookmark")
+                                        .foregroundColor(.black)
+                                }
+                            }
+                            .padding(.vertical)
+
+                            Text("Liked by username and others")
+                                // .font(.system(size: 17, weight: Font.Weight.medium, design: .default))
+                                .foregroundColor(.black)
+
+                            Text("Caption")
+                                // .font(.system(size: 17, weight: Font.Weight.medium, design: .default))
+                                .foregroundColor(.black)
+
+                            Text("View all comments")
+                                .font(.system(size: 12, design: .default))
+                                .foregroundColor(Color(red: 138 / 255, green: 138 / 255, blue: 138 / 255))
+
+                            Text("2 hours ago")
+                                .font(.system(size: 12, design: .default))
+                                .foregroundColor(Color(red: 138 / 255, green: 138 / 255, blue: 138 / 255))
+                        }
+                        .padding(.horizontal)
+                    }
                 }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
             }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
+            .navigationBarTitle("Instagram", displayMode: .inline)
+            .navigationBarItems(leading: Button(action: {}) {
+                Image(systemName: "camera")
+                    .foregroundColor(.black)
+            }, trailing: Button(action: {}) {
+                Image(systemName: "paperplane")
+                    .foregroundColor(.black)
             })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
         }
     }
 }
