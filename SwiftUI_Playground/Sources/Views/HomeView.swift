@@ -9,110 +9,97 @@ import SwiftUI
 import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
+    @State private var searchText: String = ""
+    @State private var selectedTab: Int = 0
 
-    // MARK: - Body
+    private let chats = [
+        Chat(name: "John Doe", message: "Hey, how are you?", isUnread: true),
+        Chat(name: "Jane Smith", message: "Let's meet up later!", isUnread: false),
+        Chat(name: "Michael Brown", message: "Check out this cool link!", isUnread: true)
+    ]
+
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("ポケモンDetailsだよ: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        NavigationView {
+            VStack {
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(.gray)
+                        .padding(.leading, 10)
+
+                    TextField("Search", text: $searchText)
+                        .padding(10)
+                        .padding(.leading, -10)
                 }
+                .background(Color(.systemGray6))
+                .cornerRadius(15)
+                .padding(.horizontal)
+
+                TabView(selection: $selectedTab) {
+                    List(chats) { chat in
+                        HStack {
+                            Image(systemName: "person.fill")
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 40, height: 40)
+                                .clipShape(Circle())
+                                .overlay(Circle().stroke(Color(red: 230 / 255, green: 230 / 255, blue: 232 / 255), lineWidth: 1.5))
+
+                            VStack(alignment: .leading) {
+                                Text(chat.name)
+                                    // .font(.system(size: 17, weight: Font.Weight.medium, design: .default))
+                                    .foregroundColor(chat.isUnread ? .black : .gray)
+
+                                Text(chat.message)
+                                    .font(.system(size: 12, design: .default))
+                                    .foregroundColor(chat.isUnread ? .black : .gray)
+                            }
+
+                            Spacer()
+
+                            Text("12:34")
+                                .font(.system(size: 12, design: .default))
+                                .foregroundColor(chat.isUnread ? .black : .gray)
+                        }
+                    }
+                    .tabItem {
+                        Image(systemName: "message.fill")
+                        Text("Chats")
+                    }
+                    .tag(0)
+
+                    Text("Status")
+                        .tabItem {
+                            Image(systemName: "circle.grid.cross.fill")
+                            Text("Status")
+                        }
+                        .tag(1)
+
+                    Text("Calls")
+                        .tabItem {
+                            Image(systemName: "phone.fill")
+                            Text("Calls")
+                        }
+                        .tag(2)
+                }
+                .accentColor(.black)
+            }
+            .navigationBarTitle("WhatsApp", displayMode: .inline)
+            .navigationBarItems(trailing:
+                                    HStack {
+                Button(action: {}) {
+                    Image(systemName: "square.and.pencil")
+                        .foregroundColor(.black)
+                }
+            }
             )
         }
     }
+}
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
-        }
-    }
+struct Chat: Identifiable {
+    let id = UUID()
+    let name: String
+    let message: String
+    let isUnread: Bool
 }
 
 // MARK: - Preview
