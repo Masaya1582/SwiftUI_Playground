@@ -9,109 +9,40 @@ import SwiftUI
 import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
+    @State private var selectedDate = Date()
+    @State private var numberOfGuests = 1
+    @State private var specialRequests = ""
 
-    // MARK: - Body
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("ポケモンDetailsだよ: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        NavigationView {
+            Form {
+                Section(header: Text("Reservation Details")) {
+                    DatePicker("Date and Time", selection: $selectedDate, displayedComponents: [.date, .hourAndMinute])
+                        .datePickerStyle(GraphicalDatePickerStyle())
+
+                    Stepper(value: $numberOfGuests, in: 1...20) {
+                        Text("Number of Guests: \(numberOfGuests)")
+                    }
+
+                    TextField("Special Requests", text: $specialRequests)
                 }
-            )
-        }
-    }
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
+                Button(action: submitReservation) {
+                    Text("Book Reservation")
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                        .background(Color.black)
+                        .cornerRadius(8)
                 }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+                .buttonStyle(PlainButtonStyle())
+            }
+            .navigationTitle("Book a Table")
         }
+        .background(Color.blue.opacity(0.1))
+    }
+
+    func submitReservation() {
+        // Placeholder for reservation submission logic
     }
 }
 
