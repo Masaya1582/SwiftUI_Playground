@@ -9,109 +9,102 @@ import SwiftUI
 import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
-
-    // MARK: - Body
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("ポケモンDetailsだよ: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        NavigationView {
+            List {
+                ForEach(menuItems) { item in
+                    NavigationLink(destination: MenuItemDetailView(item: item)) {
+                        MenuItemRow(item: item)
+                    }
                 }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
             }
+            .navigationTitle("Ramen Menu")
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
     }
 
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+    var menuItems: [MenuItem] {
+        [
+            MenuItem(name: "Shoyu Ramen", description: "Soy sauce flavored ramen with chicken broth.", price: "$12.99", imageUrl: "https://source.unsplash.com/featured/?ramen"),
+            MenuItem(name: "Miso Ramen", description: "Miso flavored ramen with pork broth.", price: "$13.99", imageUrl: "https://source.unsplash.com/featured/?ramen"),
+            MenuItem(name: "Tonkotsu Ramen", description: "Rich pork bone broth ramen.", price: "$14.99", imageUrl: "https://source.unsplash.com/featured/?ramen"),
+            MenuItem(name: "Shio Ramen", description: "Salt flavored ramen with clear broth.", price: "$11.99", imageUrl: "https://source.unsplash.com/featured/?ramen")
+        ]
+    }
+}
+
+struct MenuItem: Identifiable {
+    var id = UUID()
+    var name: String
+    var description: String
+    var price: String
+    var imageUrl: String
+}
+
+struct MenuItemRow: View {
+    var item: MenuItem
+
+    var body: some View {
+        HStack {
+            AsyncImage(url: URL(string: item.imageUrl)) { image in
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 80, height: 80)
+                    .clipped()
+            } placeholder: {
+                ProgressView()
+            }
+            .cornerRadius(8)
+
+            VStack(alignment: .leading) {
+                Text(item.name)
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                Text(item.description)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                Text(item.price)
+                    .font(.subheadline)
+                    .foregroundColor(.primary)
+            }
+            .padding(.leading, 8)
         }
+        .padding(.vertical, 8)
+    }
+}
+
+struct MenuItemDetailView: View {
+    var item: MenuItem
+
+    var body: some View {
+        VStack {
+            AsyncImage(url: URL(string: item.imageUrl)) { image in
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(height: 300)
+                    .clipped()
+            } placeholder: {
+                ProgressView()
+            }
+            .cornerRadius(8)
+
+            Text(item.name)
+                .font(.largeTitle)
+                .padding(.top, 16)
+
+            Text(item.description)
+                .font(.body)
+                .padding(.top, 8)
+
+            Text(item.price)
+                .font(.title)
+                .padding(.top, 8)
+
+            Spacer()
+        }
+        .padding()
+        .navigationTitle(item.name)
     }
 }
 
