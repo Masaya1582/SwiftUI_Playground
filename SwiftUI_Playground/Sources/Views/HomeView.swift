@@ -9,109 +9,125 @@ import SwiftUI
 import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
+    @State private var isRegistered = false
+    @State private var username = ""
+    @State private var password = ""
+    @State private var showProfileCustomization = false
+    @State private var showGeneralChat = false
+    @State private var userProfile = UserProfile()
+    @State private var themeColor: Color = .black
 
-    // MARK: - Body
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("ポケモンDetailsだよ: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        NavigationView {
+            VStack {
+                ThemeSelectionView(themeColor: $themeColor)
+                if isRegistered {
+                    ProfileView(userProfile: $userProfile, showProfileCustomization: $showProfileCustomization, showGeneralChat: $showGeneralChat)
+                } else {
+                    RegistrationLoginView(isRegistered: $isRegistered, username: $username, password: $password)
                 }
-            )
+                Spacer()
+                Text("empSKemp")
+                    .font(.caption)
+                    .foregroundColor(.gray)
+                    .padding([.leading, .bottom], 10)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .navigationTitle(isRegistered ? "Profile" : "Register/Login")
+        }
+        .accentColor(themeColor)
+        .preferredColorScheme(themeColor == .black ? .dark : .light) // Added to support black theme
+    }
+}
+
+struct RegistrationLoginView: View {
+    @Binding var isRegistered: Bool
+    @Binding var username: String
+    @Binding var password: String
+
+    var body: some View {
+        VStack {
+            TextField("Username", text: $username)
+                .textFieldStyle(.roundedBorder)
+                .padding()
+            SecureField("Password", text: $password)
+                .textFieldStyle(.roundedBorder)
+                .padding()
+
+            Button(action: {
+                isRegistered.toggle()
+            }) {
+                Text(isRegistered ? "Log In" : "Register")
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.blue))
+            }
+            .disabled(username.count < 6 || password.count < 6)
         }
     }
+}
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
+struct ProfileView: View {
+    @Binding var userProfile: UserProfile
+    @Binding var showProfileCustomization: Bool
+    @Binding var showGeneralChat: Bool
 
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
+    var body: some View {
+        VStack {
+            userProfile.avatar
                 .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
+                .scaledToFit()
+                .frame(width: 100, height: 100)
+                .clipShape(Circle())
+                .padding()
+
+            Text(userProfile.name)
+                .font(.title)
+
+            Button("Customize Profile") {
+                showProfileCustomization = true
+            }
+            .sheet(isPresented: $showProfileCustomization) {
+                ProfileCustomizationView(userProfile: $userProfile)
+            }
+
+            Button("General Chat") {
+                showGeneralChat = true
+            }
+            .sheet(isPresented: $showGeneralChat) {
+                GeneralChatView(userProfile: $userProfile)
+            }
         }
     }
+}
 
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
+struct ProfileCustomizationView: View {
+    @Binding var userProfile: UserProfile
 
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
+    var body: some View {
+        Text("Profile Customization")
     }
+}
 
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+struct GeneralChatView: View {
+    @Binding var userProfile: UserProfile
+
+    var body: some View {
+        Text("General Chat")
+    }
+}
+
+struct ThemeSelectionView: View {
+    @Binding var themeColor: Color
+
+    var body: some View {
+        Picker("Theme", selection: $themeColor) {
+            Text("Black").tag(Color.black)
+            Text("White").tag(Color.white)
         }
+        .pickerStyle(.segmented)
+        .padding()
     }
 }
 
@@ -123,4 +139,14 @@ struct HomeView_Previews: PreviewProvider {
         HomeView()
             .preferredColorScheme(.dark)
     }
+}
+
+struct UserProfile {
+    var avatar: Image = Image("duck")
+    var name: String = "Username"
+    var currency: Double = 0.0
+}
+
+extension Color {
+    static let monochrome = Color.gray
 }
