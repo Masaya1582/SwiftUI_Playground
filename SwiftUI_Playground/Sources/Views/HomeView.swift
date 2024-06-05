@@ -6,111 +6,172 @@
 //
 
 import SwiftUI
-import UIKit
+import Combine
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
+    @State private var countdown: Int = 59
+    @State private var initialCountdown: Int = 59
+    @State private var timer: Timer.TimerPublisher = Timer.publish(every: 1, on: .main, in: .common)
+    @State private var cancellable: Cancellable?
+    @State private var sequenceNumber: Int = 0
+    @State private var isPlaying: Bool = false
+    @State private var highlightedNumbers: Set<Int> = []
+    @State private var showRestartButton: Bool = false
+    @State private var showEditSheet: Bool = false
 
-    // MARK: - Body
+    let buttonNumbers = 1...4
+
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
+        NavigationView {
+            VStack {
+                Text("REST")
+                    .font(.caption)
+                    .foregroundColor(.gray)
+
+                Text(String(format: "%02d:%02d", countdown / 60, countdown % 60))
+                    .font(.system(size: 48, weight: .bold, design: .default))
+                    .padding(.vertical)
+
+                Button(action: {
+                    self.isPlaying.toggle()
+                    if self.isPlaying {
+                        self.startTimer()
+                    } else {
+                        self.resetTimer()
+                    }
+                }) {
+                    Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 64, height: 64)
+                        .foregroundColor(.black)
+                }
+                .padding(.vertical)
+
+                HStack {
+                    ForEach(buttonNumbers, id: \.self) { number in
+                        Button(action: {
+                            self.sequenceNumber = number
+                            self.highlightSequence(number: number)
+                        }) {
+                            Text("\(number)")
+                                .frame(width: 44, height: 44)
+                                .font(.title)
+                                .foregroundColor(.white)
+                                .background(self.highlightedNumbers.contains(number) ? Color.blue : Color.gray)
+                                .clipShape(Circle())
+                        }
+                    }
+                }
+
+                if showRestartButton {
+                    Button(action: {
+                        self.resetAll()
+                    }) {
+                        Text("Restart")
+                            .font(.system(size: 17, weight: .medium, design: .default))
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 30)
+                            .frame(height: 44)
+                            .padding(.vertical, 5)
+                            .background(Color.primary)
+                            .cornerRadius(10)
+                    }
+                    .padding(.top)
+                }
             }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        self.showEditSheet = true
+                    }) {
+                        Image(systemName: "pencil")
+                            .foregroundColor(.black)
+                    }
+                }
+            }
+            .sheet(isPresented: $showEditSheet) {
+                EditRestTimeView(countdown: $countdown, initialCountdown: $initialCountdown, showEditSheet: $showEditSheet)
+            }
+            .navigationTitle("Timer")
+        }
+    }
+
+    private func startTimer() {
+        self.isPlaying = true
+        self.cancellable = self.timer.autoconnect().sink { _ in
+            if self.countdown > 0 {
+                self.countdown -= 1
+            } else {
+                self.sequenceNumber = (self.sequenceNumber % buttonNumbers.count) + 1
+                self.highlightSequence(number: self.sequenceNumber)
+                self.countdown = self.initialCountdown
+                self.resetTimer()
+            }
+        }
+    }
+
+    private func resetTimer() {
+        self.cancellable?.cancel()
+        self.isPlaying = false
+    }
+
+    private func highlightSequence(number: Int) {
+        highlightedNumbers = Set(1...number)
+        showRestartButton = number == 4
+    }
+
+    private func resetAll() {
+        highlightedNumbers = []
+        showRestartButton = false
+        sequenceNumber = 0
+        countdown = initialCountdown
+        resetTimer()
+    }
+}
+
+struct EditRestTimeView: View {
+    @Binding var countdown: Int
+    @Binding var initialCountdown: Int
+    @Binding var showEditSheet: Bool
+    @State private var selectedMinutes: Int = 0
+    @State private var selectedSeconds: Int = 0
+
+    var body: some View {
+        NavigationView {
+            VStack {
+                HStack {
+                    Picker("Minutes", selection: $selectedMinutes) {
+                        ForEach(0..<60) { minute in
+                            Text("\(minute) min").tag(minute)
+                        }
+                    }
+                    .pickerStyle(WheelPickerStyle())
+                    .frame(height: 150)
+                    .clipped()
+
+                    Picker("Seconds", selection: $selectedSeconds) {
+                        ForEach(0..<60) { second in
+                            Text("\(second) sec").tag(second)
+                        }
+                    }
+                    .pickerStyle(WheelPickerStyle())
+                    .frame(height: 150)
+                    .clipped()
+                }
+                .padding(.horizontal)
+            }
+            .navigationBarTitle("Edit Rest Time", displayMode: .inline)
+            .navigationBarItems(trailing: Button("Done") {
+                let newCountdown = (selectedMinutes * 60) + selectedSeconds
+                countdown = newCountdown
+                initialCountdown = newCountdown
+                showEditSheet = false
+            })
         }
         .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("ポケモンDetailsだよ: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
-                }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+            selectedMinutes = countdown / 60
+            selectedSeconds = countdown % 60
         }
     }
 }
