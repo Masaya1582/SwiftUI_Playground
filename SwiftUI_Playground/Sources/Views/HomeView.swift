@@ -6,112 +6,122 @@
 //
 
 import SwiftUI
-import UIKit
+
+// MARK: Album Model and Sample Data
+struct Album: Identifiable {
+    var id = UUID().uuidString
+    var albumName: String
+}
+
+var albums: [Album] = [
+    Album(albumName: "Alique's Song"),
+    Album(albumName: "More"),
+    Album(albumName: "Big Jet Plane"),
+    Album(albumName: "Empty Floor"),
+    Album(albumName: "Black Hole Nights"),
+    Album(albumName: "Rain On Me"),
+    Album(albumName: "Stuck With U"),
+    Album(albumName: "7 rings"),
+    Album(albumName: "Bang Bang"),
+    Album(albumName: "In Between"),
+    Album(albumName: "More"),
+    Album(albumName: "Big Jet Plane"),
+    Album(albumName: "Empty Floor"),
+    Album(albumName: "Black Hole Nights"),
+]
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
-
-    // MARK: - Body
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
+        GeometryReader { geometry in
+            let safeArea = geometry.safeAreaInsets
+            let size = geometry.size
+            SocialMediaFeed(safeArea: safeArea, size: size)
+                .ignoresSafeArea(.container, edges: .top)
         }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("ポケモンDetailsだよ: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        .preferredColorScheme(.dark)
+    }
+}
+
+struct SocialMediaFeed: View {
+    var safeArea: EdgeInsets
+    var size: CGSize
+
+    var body: some View {
+        ScrollView(.vertical, showsIndicators: false) {
+            VStack {
+                artWork(size: size)
+
+                shareSongButton()
+                    .padding(.top, 10)
+
+                VStack(spacing: 15) {
+                    ForEach(albums) { album in
+                        spotifyLinkCard(album: album)
+                    }
                 }
+                .padding(.top, 10)
+            }
+        }
+    }
+
+    @ViewBuilder
+    func artWork(size: CGSize) -> some View {
+        let height = size.height * 0.45
+        Image("duck")
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .frame(width: size.width, height: height)
+            .clipped()
+            .overlay(
+                LinearGradient(
+                    gradient: Gradient(colors: [.clear, .black]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
             )
+    }
+
+    @ViewBuilder
+    func shareSongButton() -> some View {
+        Button("Share Your Song") {
+            // Action to share a new song
         }
+        .buttonStyle(.borderedProminent)
+        .padding()
     }
 
     @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
+    func spotifyLinkCard(album: Album) -> some View {
+        HStack {
+            Image("duck")
                 .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 60, height: 60)
+                .cornerRadius(8)
 
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
+            VStack(alignment: .leading, spacing: 4) {
+                Text(album.albumName)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+
+                Text("Shared by @username")
+                    .font(.caption)
+                    .foregroundColor(.gray)
+            }
+
+            Spacer()
+
+            Button(action: {
+                // Action to play music
+            }) {
+                Image(systemName: "play.circle.fill")
+                    .resizable()
+                    .frame(width: 30, height: 30)
+                    .foregroundColor(.white)
             }
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
-        }
+        .padding(.horizontal)
+        .padding(.vertical, 8)
     }
 }
 
