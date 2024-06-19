@@ -36,3 +36,19 @@ final class HomeViewModel: ObservableObject {
     }
 
 }
+
+final class NewsViewModel: ObservableObject {
+    @Published var articles: [NewsArticle] = [
+        NewsArticle(title: "Breaking News", description: "Some breaking news description.", postedDate: Date()),
+        NewsArticle(title: "Tech News", description: "Latest in tech world.", postedDate: Date().addingTimeInterval(-86400)),
+        NewsArticle(title: "Sports Update", description: "Latest sports update.", postedDate: Date().addingTimeInterval(-172800))
+    ]
+}
+
+extension DateFormatter {
+    static let newsDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        return formatter
+    }()
+}
