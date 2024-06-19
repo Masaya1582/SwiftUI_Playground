@@ -39,3 +39,10 @@ struct Pokemon: Codable {
     let id: Int
     let name: String
 }
+
+struct NewsArticle: Identifiable {
+    let id = UUID()
+    let title: String
+    let description: String
+    let postedDate: Date
+}
