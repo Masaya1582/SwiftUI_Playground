@@ -39,3 +39,22 @@ struct Pokemon: Codable {
     let id: Int
     let name: String
 }
+
+final class MemoManager: ObservableObject {
+    @Published var memos: [Memo] = []
+
+    func addMemo(content: String) {
+        let newMemo = Memo(content: content)
+        memos.append(newMemo)
+        saveMemos()
+    }
+
+    func saveMemos() {
+        // Here you would implement saving to a file or a database
+    }
+
+    func loadMemos() {
+        // Here you would implement loading from a file or a database
+    }
+}
+
