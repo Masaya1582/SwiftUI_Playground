@@ -39,3 +39,12 @@ struct Pokemon: Codable {
     let id: Int
     let name: String
 }
+
+struct Flight: Identifiable {
+    let id = UUID()
+    let airline: String
+    let departure: String
+    let arrival: String
+    let duration: String
+    let price: String
+}
