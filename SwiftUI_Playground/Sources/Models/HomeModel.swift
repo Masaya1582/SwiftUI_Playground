@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 final class HomeModel {
     var name: String
@@ -38,4 +39,10 @@ struct Post: Codable {
 struct Pokemon: Codable {
     let id: Int
     let name: String
+}
+
+struct Category: Identifiable, Equatable {
+    let id = UUID()
+    let name: String
+    let color: Color
 }
