@@ -21,18 +21,13 @@ final class HomeModel {
     }
 }
 
-struct Post: Codable {
-    let id: Int
-    let userId: Int
-    let title: String
-    let body: String
-
-    private enum CodingKeys: CodingKey {
-        case id
-        case userId
-        case title
-        case body
-    }
+struct Post: Identifiable {
+    var id = UUID()
+    var username: String
+    var profileImage: String
+    var postImage: String
+    var caption: String
+    var timeAgo: String
 }
 
 struct Pokemon: Codable {
