@@ -6,112 +6,98 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
+    private let posts = [
+        Post(username: "John Doe", profileImage: "img_george_w", postImage: "img_burger", caption: "This is a sample caption for the post", timeAgo: "2 hours ago"),
+        Post(username: "Jane Smith", profileImage: "img_donald", postImage: "img_spaghetti", caption: "Another sample caption for the post", timeAgo: "4 hours ago")
+    ]
 
-    // MARK: - Body
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("ポケモンDetailsだよ: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        ScrollView {
+            VStack {
+                ForEach(posts) { post in
+                    PostView(post: post)
                 }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
             }
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
     }
+}
 
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
+struct PostView: View {
+    var post: Post
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            // User Info
+            HStack {
+                Image(post.profileImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 40, height: 40)
+                    .clipShape(Circle())
+                    .overlay(Circle().stroke(Color.gray, lineWidth: 1))
+                VStack(alignment: .leading) {
+                    Text(post.username)
+                        .font(.headline)
+                    Text(post.timeAgo)
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
                 }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+                Spacer()
+                Button(action: {
+                    // Action for more options
+                }) {
+                    Image(systemName: "ellipsis")
+                        .foregroundColor(.gray)
+                }
+            }
+            .padding([.leading, .trailing, .top], 15)
+
+            // Post Image
+            Image(post.postImage)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(maxWidth: .infinity)
+                .clipped()
+
+            // Post Caption
+            Text(post.caption)
+                .font(.body)
+                .padding([.leading, .trailing], 15)
+                .padding(.top, 5)
+
+            // Action Buttons
+            HStack {
+                Button(action: {
+                    // Like action
+                }) {
+                    Image(systemName: "heart")
+                        .font(.title)
+                        .padding()
+                }
+                Button(action: {
+                    // Comment action
+                }) {
+                    Image(systemName: "message")
+                        .font(.title)
+                        .padding()
+                }
+                Button(action: {
+                    // Share action
+                }) {
+                    Image(systemName: "paperplane")
+                        .font(.title)
+                        .padding()
+                }
+                Spacer()
+            }
+            .padding([.leading, .trailing, .bottom], 10)
         }
+        .background(Color.white)
+        .cornerRadius(10)
+        .shadow(radius: 5)
+        .padding([.leading, .trailing, .top])
     }
 }
 
@@ -120,7 +106,5 @@ struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
             .preferredColorScheme(.light)
-        HomeView()
-            .preferredColorScheme(.dark)
     }
 }
