@@ -6,112 +6,159 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
-
-    // MARK: - Body
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
+        NavigationStack {
+            Home()
+                .navigationTitle("Particle Emitter")
         }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("ポケモンDetailsだよ: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+    }
+}
+
+
+struct Home: View {
+    @State private var isLiked: [Bool] = [false, false, false]
+    var body: some View {
+        VStack {
+            GeometryReader {
+                let size = $0.size
+
+                HStack(spacing: 20) {
+                    customButton(systemImage: "suit.heart.fill", status: isLiked[0], activeTint: .pink, inActiveTint: .white) {
+                        isLiked[0].toggle()
+                    }
+
+                    customButton(systemImage: "star.fill", status: isLiked[1], activeTint: .yellow, inActiveTint: .white) {
+                        isLiked[1].toggle()
+                    }
+
+                    customButton(systemImage: "square.and.arrow.up.fill", status: isLiked[2], activeTint: .blue, inActiveTint: .white) {
+                        isLiked[2].toggle()
+                    }
                 }
+                .frame(width: size.width, height: size.height)
+            }
+        }
+    }
+
+    @ViewBuilder
+    func customButton(systemImage: String, status: Bool, activeTint: Color, inActiveTint: Color, onTap: @escaping () -> ()) -> some View {
+        Button(action: onTap) {
+            Image(systemName: systemImage)
+                .font(.title2)
+                .particleEffect(//how to use the effect
+                    systemImage: systemImage,
+                    font: .boldSystemFont(ofSize: 18),
+                    status: status,
+                    activeTint: activeTint,
+                    inActiveTint: inActiveTint
+                )
+                .foregroundColor(status ? activeTint : inActiveTint)
+                .padding(.horizontal, 18)
+                .padding(.vertical, 8)
+                .background {
+                    Capsule()
+                        .fill(status ? activeTint.opacity(0.25) : Color.gray)
+                }
+        }
+    }
+}
+
+
+extension View {
+    @ViewBuilder
+    func particleEffect(systemImage: String, font: Font, status: Bool, activeTint: Color, inActiveTint: Color) -> some View {
+        self
+            .modifier(
+                ParticleModifier(systemImage: systemImage, font: font, status: status, activeTint: activeTint, inActiveTint: inActiveTint)
             )
-        }
     }
+}
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
+fileprivate struct ParticleModifier: ViewModifier {
+    var systemImage: String
+    var font: Font
+    var status: Bool
+    var activeTint: Color
+    var inActiveTint: Color
+    @State private var particles: [Particle] = []
 
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
+    func body(content: Content) -> some View {
+        content
+            .overlay(alignment: .top) {
+                ZStack {
+                    ForEach(particles) { particle in
+                        Image(systemName: systemImage)
+                            .font(nil)
+                            .foregroundColor(status ? activeTint : inActiveTint)
+                            .scaleEffect(particle.scale)
+                            .offset(x: particle.randomX, y: particle.randomY)
+                            .opacity(particle.opacity)
+                            .opacity(status ? 1 : 0)
+                            .animation(.none, value: status)
+                    }
                 }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
-        }
+                .onAppear {
+                    if particles.isEmpty {
+                        for _ in 1...15 {
+                            let particle = Particle()
+                            particles.append(particle)
+                        }
+                    }
+                }
+                .onChange(of: status) { newValue in
+                    if !newValue {
+                        for index in particles.indices {
+                            particles[index].reset()
+                        }
+                    } else {
+                        for index in particles.indices {
+                            let total: CGFloat = CGFloat(particles.count)
+                            let progress: CGFloat = CGFloat(index) / total
+
+                            let maxX: CGFloat = (progress > 0.5) ? 100 : -100
+                            let maxY: CGFloat = 60
+
+                            let randomX: CGFloat = ((progress > 0.5 ? progress - 0.5 : progress) * maxX)
+                            let randomY: CGFloat = ((progress > 0.5 ? progress - 0.5 : progress) * maxY) + 35
+                            let randomScale: CGFloat = .random(in: 0.35...1)
+
+                            withAnimation(.interactiveSpring(response: 0.6, dampingFraction: 0.7, blendDuration: 0.7)) {
+                                let extraRandomX: CGFloat = (progress < 0.5 ? .random(in: 0...10) : .random(in: -10...0))
+                                let extraRandomY: CGFloat = .random(in: 0...30)
+
+                                particles[index].randomX = randomX + extraRandomX
+                                particles[index].randomY = -randomY - extraRandomY
+                            }
+
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                particles[index].scale = randomScale
+                            }
+
+                            withAnimation(.interactiveSpring(response: 0.6, dampingFraction: 0.7, blendDuration: 0.7)
+                                .delay(0.25 + (Double(index) * 0.005))) {
+                                    particles[index].scale = 0.001
+                                }
+                        }
+                    }
+                }
+            }
+    }
+}
+
+struct Particle: Identifiable {
+    var id: UUID = .init()
+    var randomX: CGFloat = 0
+    var randomY: CGFloat = 0
+    var scale: CGFloat = 1
+    var opacity: CGFloat = 1
+
+    mutating func reset() {
+        randomX = 0
+        randomY = 0
+        scale = 1
+        opacity = 1
     }
 }
 
