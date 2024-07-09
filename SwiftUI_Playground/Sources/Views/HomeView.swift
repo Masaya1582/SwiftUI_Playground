@@ -6,113 +6,58 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
-
-    // MARK: - Body
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
+        ZStack(alignment: .bottom) {
+            Color(.systemBackground)
+                .edgesIgnoringSafeArea(.all)
+
+            FloatingTabBar()
         }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("ポケモンDetailsだよ: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+    }
+}
+
+struct FloatingTabBar: View {
+    @State private var selectedIndex = 0
+    private let items: [BottomBarItem] = [
+        BottomBarItem(icon: "house.fill", title: "Home", color: .purple),
+        BottomBarItem(icon: "heart", title: "Likes", color: .pink),
+        BottomBarItem(icon: "magnifyingglass", title: "Search", color: .orange),
+        BottomBarItem(icon: "person.fill", title: "Profile", color: .blue)
+    ]
+
+    var body: some View {
+        HStack {
+            ForEach(0..<items.count) { index in
+                Button(action: {
+                    selectedIndex = index
+                }) {
+                    HStack {
+                        Image(systemName: items[index].icon)
+                            .foregroundColor(index == selectedIndex ? items[index].color : .gray)
+                        if index == selectedIndex {
+                            Text(items[index].title)
+                                .foregroundColor(items[index].color)
+                                .transition(.slide)
+                        }
+                    }
                 }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
+                .padding(.horizontal)
             }
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
+        .padding()
+        .background(Color.white)
+        .cornerRadius(30)
+        .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: -5)
+        .padding(.horizontal)
     }
+}
 
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
-        }
-    }
+struct BottomBarItem {
+    let icon: String
+    let title: String
+    let color: Color
 }
 
 // MARK: - Preview
