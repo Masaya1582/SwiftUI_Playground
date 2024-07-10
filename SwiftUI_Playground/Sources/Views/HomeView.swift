@@ -6,112 +6,98 @@
 //
 
 import SwiftUI
-import UIKit
 
-struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
+/*
+ This component creates a scrollable grid of rectangle images with a specified width and height, and applies a custom border.
+ Additionally, the background color is changed to #17ABFF (rgb: 23, 171, 255).
 
-    // MARK: - Body
+ Steps:
+ 1. Create a custom view called RectangleImage that conforms to the View protocol.
+ 2. Define the width and height properties for the rectangle image.
+ 3. Add the body property to display the image with the specified width and height.
+ 4. Use the "chair" image as a placeholder for the rectangle image.
+ 5. Apply a custom border with specified color, width, corner radius, and corner smoothing.
+ 6. Update the ContentView to include the scrollable grid of RectangleImage and the new background color.
+ 7. Modify the grid to display two columns as per the user input.
+ 8. Add a title to the top left of the screen that says "social app".
+ */
+
+struct RectangleImage: View {
+    let width: CGFloat
+    let height: CGFloat
+
     var body: some View {
         ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("ポケモンDetailsだよ: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
-                }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
+            Image("img_spaghetti")
                 .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show Popup View") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
+                .aspectRatio(contentMode: .fill)
+                .frame(width: width, height: height)
+                .background(Color.white)
+                .clipShape(RoundedRectangle(cornerRadius: 37, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 37, style: .continuous)
+                    .stroke(Color(red: 250/255, green: 255/255, blue: 0/255), lineWidth: 4))
+            VStack {
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        // action
+                    }) {
+                        Image(systemName: "ellipsis")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(.black)
+                            .padding()
+                            .frame(width: 30, height: 30)
+                            .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0, y: 10)
+                    }
+                    .padding()
                 }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+                Spacer()
+            }
         }
+        .frame(width: width, height: height)
+    }
+}
+
+struct HomeView: View {
+    var body: some View {
+        VStack {
+            // Step 8: Add a title to the top left of the screen that says "social app"
+            HStack {
+                Text("Social App")
+                    .font(.system(size: 32, weight: .heavy, design: .rounded))
+                    .padding(.top, 30)
+                    .padding(.leading)
+                    .foregroundColor(.white)
+
+                Spacer()
+
+                Button(action: {
+
+                }) {
+                    Image(systemName: "gearshape.fill")
+                        .font(.system(size: 24, weight: .heavy))
+                        .foregroundColor(Color.white)
+                        .frame(width: 30, height: 30)
+                        .clipShape(Circle())
+                        .padding(.top, 30)
+                        .padding(.trailing, 30)
+                }
+            }
+            .padding(.top, 50)
+
+            Spacer()
+
+            ScrollView {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 175), spacing: 16), GridItem(.adaptive(minimum: 175), spacing: 16)], spacing: 16) {
+                    ForEach(0..<8) { _ in
+                        RectangleImage(width: 170, height: 250)
+                    }
+                }
+                .padding()
+            }
+        }
+        .background(Color(red: 23/255, green: 171/255, blue: 255/255))
+        .edgesIgnoringSafeArea(.all)
     }
 }
 
