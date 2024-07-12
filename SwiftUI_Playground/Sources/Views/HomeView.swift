@@ -26,7 +26,7 @@ struct HomeView: View {
         .onAppear {
             let randomID = Int.random(in: 1...100)
             pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("ポケモンDetailsだよ: \(pokemon)")
+                print("PokemoDetail: \(pokemon)")
             }
         }
         .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
@@ -54,7 +54,7 @@ struct HomeView: View {
 
     @ViewBuilder
     private func topField() -> some View {
-        Text("Today's Quote: \(viewModel.name)")
+        Text("Tomorrow's Quote: \(viewModel.name)")
             .modifier(CustomLabel(foregroundColor: .black, size: 28))
         Text(viewModel.halfModalText)
             .modifier(CustomLabel(foregroundColor: .black, size: 20))
@@ -77,7 +77,7 @@ struct HomeView: View {
 
     @ViewBuilder
     private func bottomField() -> some View {
-        Button("Show Popup View") {
+        Button("Show PopupView") {
             withAnimation {
                 viewModel.isFloatingViewVisible = true
             }
