@@ -6,112 +6,232 @@
 //
 
 import SwiftUI
-import UIKit
+
+// MARK: Album Model and Sample Data
+struct Album: Identifiable {
+    var id = UUID().uuidString
+    var albumName: String
+}
+
+var albums: [Album] = [
+    Album(albumName: "In Between"),
+    Album(albumName: "More"),
+    Album(albumName: "Big Jet Plane"),
+    Album(albumName: "Empty Floor"),
+    Album(albumName: "Black Hole Nights"),
+    Album(albumName: "Rain On Me"),
+    Album(albumName: "Stuck With U"),
+    Album(albumName: "7 rings"),
+    Album(albumName: "Bang Bang"),
+    Album(albumName: "In Between"),
+    Album(albumName: "More"),
+    Album(albumName: "Big Jet Plane"),
+    Album(albumName: "Empty Floor"),
+    Album(albumName: "Black Hole Nights")
+]
+
+struct Home: View {
+    // MARK: View Properties
+    var safeArea: EdgeInsets
+    var size: CGSize
+    var body: some View {
+        ScrollView(.vertical, showsIndicators: false) {
+            VStack {
+                // MARK: Artwork
+                artWork()
+
+                GeometryReader { proxy in
+                    // MARK: Since We Ignored Top Edge
+                    let minY = proxy.frame(in: .named("SCROLL")).minY - safeArea.top
+
+                    Button {
+
+                    } label: {
+                        Text("SHUFFLE PLAY")
+                            .font(.callout)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 45)
+                            .padding(.vertical, 12)
+                            .background {
+                                Capsule()
+                                    .fill(Color("Green").gradient)
+                            }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .offset(y: minY < 50 ? -(minY - 50) : 0)
+                }
+                .frame(height: 50)
+                .padding(.top, -34)
+                .zIndex(1)
+
+                VStack {
+                    Text("Popular")
+                        .fontWeight(.heavy)
+
+                    // MARK: Album View
+                    albumView()
+                }
+                .padding(.top, 10)
+                .zIndex(0)
+            }
+            .overlay(alignment: .top) {
+                headerView()
+            }
+        }
+        .coordinateSpace(name: "SCROLL")
+    }
+
+    @ViewBuilder
+    func artWork() -> some View {
+        let height = size.height * 0.45
+        GeometryReader { proxy in
+            let size = proxy.size
+            let minY = proxy.frame(in: .named("SCROLL")).minY
+            let progress = minY / (height * (minY > 0 ? 0.5 : 0.8))
+
+            Image("duck")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: size.width, height: size.height + (minY > 0 ? minY : 0))
+                .clipped()
+                .overlay(content: {
+                    ZStack(alignment: .bottom) {
+                        // MARK: Gradient Overlay
+                        Rectangle()
+                            .fill(
+                                .linearGradient(colors: [
+                                    .black.opacity(0 - progress),
+                                    .black.opacity(0.1 - progress),
+                                    .black.opacity(0.3 - progress),
+                                    .black.opacity(0.5 - progress),
+                                    .black.opacity(0.8 - progress),
+                                    .black.opacity(1)
+                                ], startPoint: .top, endPoint: .bottom)
+                            )
+
+                        VStack(spacing: 0) {
+                            Text("Jan\nBlomqvist")
+                                .font(.system(size: 45))
+                                .fontWeight(.bold)
+                                .multilineTextAlignment(.center)
+
+                            Text("509,082 Monthly Listeners".uppercased())
+                                .font(.caption)
+                                .fontWeight(.bold)
+                                .foregroundColor(.gray)
+                                .padding(.top, 15)
+                        }
+                        .opacity(1 + (progress > 0 ? -progress : progress))
+                        .padding(.bottom, 55)
+                        // Moving With ScrollView
+                        .offset(y: minY < 0 ? minY : 0)
+                    }
+                })
+                .offset(y: -minY)
+        }
+        .frame(height: height + safeArea.top)
+    }
+
+    @ViewBuilder
+    func albumView() -> some View {
+        VStack(spacing: 25) {
+            ForEach(albums.indices, id: \.self) { index in
+                HStack(spacing: 25) {
+                    Text("\(index + 1)")
+                        .font(.callout)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.gray)
+
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(albums[index].albumName)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
+
+                        Text("2,282,928")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                    Image(systemName: "ellipsis")
+                        .foregroundColor(.gray)
+                }
+            }
+        }
+        .padding(15)
+    }
+
+    // MARK: HeaderView
+    @ViewBuilder
+    func headerView() -> some View {
+        GeometryReader { proxy in
+            let minY = proxy.frame(in: .named("SCROLL")).minY
+            let height = size.height * 0.45
+            let progress = minY / (height * (minY > 0 ? 0.5 : 0.8))
+            let titleProgress = minY / height
+
+            HStack(spacing: 15) {
+                Button {
+
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .font(.title3)
+                        .foregroundColor(.white)
+                }
+
+                Spacer(minLength: 0)
+
+                Button {
+
+                } label: {
+                    Text("FOLLOWING")
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .border(.white, width: 1.5)
+                }
+                .opacity(1 + progress)
+
+                Button {
+
+                } label: {
+                    Image(systemName: "ellipsis")
+                        .font(.title3)
+                        .foregroundColor(.white)
+                }
+            }
+            .overlay(content: {
+                Text("Jan Blomqvist")
+                    .fontWeight(.semibold)
+                // Your Choice Where to display the title
+                    .offset(y: -titleProgress > 0.75 ? 0 : 45)
+                    .clipped()
+                    .animation(.easeInOut(duration: 0.25), value: -titleProgress > 0.75)
+            })
+            .padding(.top, safeArea.top + 10)
+            .padding([.horizontal, .bottom], 15)
+            .background(content: {
+                Color.black
+                    .opacity(-progress > 1 ? 1 : 0)
+            })
+            .offset(y: -minY)
+        }
+        .frame(height: 35)
+    }
+}
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
-
-    // MARK: - Body
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
+        GeometryReader {
+            let safeArea = $0.safeAreaInsets
+            let size = $0.size
+            Home(safeArea: safeArea, size: size)
+                .ignoresSafeArea(.container, edges: .top)
         }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("PokemoDetail: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
-                }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Tomorrow's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show PopupView") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
-        }
+        .preferredColorScheme(.dark)
     }
 }
 
