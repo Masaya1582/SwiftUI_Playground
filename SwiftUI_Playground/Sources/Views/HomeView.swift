@@ -6,111 +6,125 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
+    @State private var restaurantName: String = ""
+    @State private var mealName: String = ""
+    @State private var price: String = ""
+    @State private var review: String = ""
+    @State private var images: [UIImage] = []
+    @State private var showImagePicker: Bool = false
+    @State private var isHomeCooked: Bool = false
 
-    // MARK: - Body
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("PokemoDetail: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        NavigationView {
+            VStack {
+                Toggle("Home Cooked", isOn: $isHomeCooked)
+                    .padding()
+
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
+                        ForEach(images.indices, id: \.self) { index in
+                            Image(uiImage: images[index])
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 200, height: 200)
+                                .padding()
+                                .onTapGesture {
+                                    images.remove(at: index)
+                                }
+                        }
+                    }
                 }
-            )
+
+                Button(action: {
+                    showImagePicker = true
+                }) {
+                    Label("Add Photo", systemImage: "camera")
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(10)
+                }
+                .padding()
+                .sheet(isPresented: $showImagePicker) {
+                    ImagePicker(images: $images)
+                }
+
+                if !isHomeCooked {
+                    TextField("Enter restaurant name", text: $restaurantName)
+                        .textFieldStyle(.roundedBorder)
+                        .padding()
+
+                    TextField("Enter price", text: $price)
+                        .textFieldStyle(.roundedBorder)
+                        .keyboardType(.decimalPad)
+                        .padding()
+                }
+
+                TextField("Enter meal name", text: $mealName)
+                    .textFieldStyle(.roundedBorder)
+                    .padding()
+
+                TextField("Enter review", text: $review)
+                    .textFieldStyle(.roundedBorder)
+                    .padding()
+
+                Button(action: logMeal) {
+                    Text("Log Meal")
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(10)
+                }
+                .padding()
+
+                Spacer()
+            }
+            .navigationTitle("Food Log")
         }
     }
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Tomorrow's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
+    private func logMeal() {
+        if isHomeCooked {
+            print("Meal logged: \(mealName), Review: \(review)")
         } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
+            print("Meal logged: \(restaurantName) - \(mealName) - Price: \(price), Review: \(review)")
         }
     }
+}
 
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show PopupView") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
+struct ImagePicker: UIViewControllerRepresentable {
+    @Binding var images: [UIImage]
 
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
+    func makeUIViewController(context: Context) -> some UIViewController {
+        let picker = UIImagePickerController()
+        picker.allowsEditing = false
+        picker.sourceType = .photoLibrary
+        picker.delegate = context.coordinator
+        return picker
     }
 
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {}
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+        var parent: ImagePicker
+
+        init(_ parent: ImagePicker) {
+            self.parent = parent
+        }
+
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+            if let image = info[.originalImage] as? UIImage {
+                parent.images.append(image)
+            }
+            picker.dismiss(animated: true)
         }
     }
 }
