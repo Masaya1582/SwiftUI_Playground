@@ -35,7 +35,23 @@ struct Post: Codable {
     }
 }
 
-struct Pokemon: Codable {
-    let id: Int
+struct Pokemon: Identifiable {
+    let id = UUID()
     let name: String
+    let type: String
+    var isCaught: Bool = false // Track if the Pokemon is caught
 }
+
+final class Pokedex: ObservableObject {
+    @Published var pokemonList: [Pokemon] = [
+        Pokemon(name: "Pikachu", type: "Electric"),
+        Pokemon(name: "Bulbasaur", type: "Grass"),
+        Pokemon(name: "Charmander", type: "Fire"),
+        // Add more Pokemon here!
+    ]
+}
+
+//struct Pokemon: Codable {
+//    let id: Int
+//    let name: String
+//}
