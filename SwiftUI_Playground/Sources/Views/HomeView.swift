@@ -6,111 +6,155 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
+    @State private var selectedTab = 0
+    @State private var selectedAirport = "All"
+    @State private var showingImagePicker = false
+    @State private var inputImage: UIImage?
+    @State private var galleryImages: [GalleryImage] = []
+    let allAirports = ["All", "JFK", "LAX", "SFO", "ORD", "ATL", "DFW", "DEN", "CLT", "LAS", "PHX", "MIA", "MCO", "EWR", "SEA", "MSP", "DTW", "PHL", "BOS", "LGA", "IAD"]
 
-    // MARK: - Body
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("PokemoDetail: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        TabView(selection: $selectedTab) {
+            // Post Tab
+            NavigationView {
+                VStack {
+                    Picker("Select an Airport", selection: $selectedAirport) {
+                        ForEach(allAirports, id: \.self) { airport in
+                            Text(airport).tag(airport)
+                        }
+                    }
+                    .pickerStyle(.menu)
+
+                    Button(action: {
+                        showingImagePicker = true
+                    }) {
+                        if let inputImage = inputImage {
+                            Image(uiImage: inputImage)
+                                .resizable()
+                                .scaledToFit()
+                        } else {
+                            Image(systemName: "photo")
+                                .resizable()
+                                .scaledToFit()
+                        }
+                    }
+                    .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
+                        ImagePicker(image: $inputImage)
+                    }
+
+                    Spacer()
+
+                    Button("Upload Post") {
+                        uploadPost()
+                        resetPostTab()
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .padding()
                 }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Tomorrow's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show PopupView") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
+                .navigationTitle("Post")
             }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
+            .tabItem {
+                Label("Post", systemImage: "paperplane.fill")
             }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
+            .tag(0)
 
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
+            // Gallery Tab
+            NavigationView {
+                GalleryView(galleryImages: $galleryImages, selectedAirport: $selectedAirport, allAirports: allAirports)
             }
+            .tabItem {
+                Label("Gallery", systemImage: "photo.on.rectangle.angled")
+            }
+            .tag(1)
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
     }
 
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
+    func loadImage() {
+        guard let inputImage = inputImage else { return }
+        let newImage = GalleryImage(image: inputImage, airport: selectedAirport)
+        galleryImages.append(newImage)
+    }
+
+    func uploadPost() {
+        // Implement upload functionality here
+    }
+
+    func resetPostTab() {
+        inputImage = nil
+        selectedAirport = "All"
+    }
+}
+
+struct GalleryImage: Identifiable {
+    let id = UUID()
+    let image: UIImage
+    let airport: String
+}
+
+struct GalleryView: View {
+    @Binding var galleryImages: [GalleryImage]
+    @Binding var selectedAirport: String
+    let allAirports: [String]
+
+    var filteredImages: [GalleryImage] {
+        selectedAirport == "All" ? galleryImages : galleryImages.filter { $0.airport == selectedAirport }
+    }
+
+    var body: some View {
+        VStack {
+            Picker("Airport", selection: $selectedAirport) {
+                ForEach(allAirports, id: \.self) { airport in
+                    Text(airport).tag(airport)
                 }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+            }
+            .pickerStyle(.menu)
+            .padding()
+
+            List {
+                ForEach(filteredImages) { galleryImage in
+                    VStack {
+                        Image(uiImage: galleryImage.image)
+                            .resizable()
+                            .scaledToFit()
+                        Text(galleryImage.airport)
+                    }
+                }
+            }
+        }
+        .navigationTitle("Gallery")
+    }
+}
+
+struct ImagePicker: UIViewControllerRepresentable {
+    @Binding var image: UIImage?
+
+    func makeUIViewController(context: Context) -> some UIViewController {
+        let picker = UIImagePickerController()
+        picker.delegate = context.coordinator
+        return picker
+    }
+
+    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {}
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+        let parent: ImagePicker
+
+        init(_ parent: ImagePicker) {
+            self.parent = parent
+        }
+
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            if let uiImage = info[.originalImage] as? UIImage {
+                parent.image = uiImage
+            }
+
+            picker.dismiss(animated: true)
         }
     }
 }
