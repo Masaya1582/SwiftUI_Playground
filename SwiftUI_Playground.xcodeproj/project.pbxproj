@@ -211,6 +211,7 @@
 				4011E8622A49759C003F06BF /* Frameworks */,
 				4011E8632A49759C003F06BF /* Resources */,
 				40779B5A2A4EDE0700505ABD /* SwiftLint */,
+				B0BB0E637A221C1050EC7761 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -289,6 +290,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint >/dev/null; then\n  swiftlint autocorrect --format # 自動修正の有効化\n  swiftlint\nelse\n  echo \"SwiftLint does not exist, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		B0BB0E637A221C1050EC7761 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SwiftUI_Playground/Pods-SwiftUI_Playground-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SwiftUI_Playground/Pods-SwiftUI_Playground-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SwiftUI_Playground/Pods-SwiftUI_Playground-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DFBBD629AC954EA4ABE7499C /* [CP] Check Pods Manifest.lock */ = {

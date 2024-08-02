@@ -7,5 +7,7 @@ target 'SwiftUI_Playground' do
 
   # Pods for SwiftUI_Playground
     pod 'SwiftGen', '~> 6.0'
+    pod 'APIKit'
+    pod 'SwiftyJSON'
 
 end
