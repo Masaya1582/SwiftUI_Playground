@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftyJSON
 
 final class HomeModel {
     var name: String
@@ -21,18 +22,19 @@ final class HomeModel {
     }
 }
 
-struct Post: Codable {
-    let id: Int
+struct Post: Decodable {
     let userId: Int
+    let id: Int
     let title: String
     let body: String
 
-    private enum CodingKeys: CodingKey {
-        case id
-        case userId
-        case title
-        case body
+    init(json: JSON) {
+        self.userId = json["userId"].intValue
+        self.id = json["id"].intValue
+        self.title = json["title"].stringValue
+        self.body = json["body"].stringValue
     }
+
 }
 
 struct Pokemon: Codable {
