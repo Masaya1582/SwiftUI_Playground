@@ -17,25 +17,28 @@ final class PostsViewModel: ObservableObject {
     @Published var error: Error?
 
     private var cancellables = Set<AnyCancellable>()
+    private let repository: PostRepositoryProtocol
 
-    func fetchPosts() {
+    init(repository: PostRepositoryProtocol = PostRepository()) {
+        self.repository = repository
+    }
+
+    func fetchPosts(postId: Int) {
         isLoading = true
-        let request = GetPostsRequest()
 
-        Session.shared.send(request) { result in // Use Session.shared and closure
-            switch result {
-            case .success(let posts):
-                DispatchQueue.main.async { // Ensure UI updates on main thread
-                    self.posts = posts
-                }
-            case .failure(let error):
-                DispatchQueue.main.async {
-                    self.error = error
-                }
-            }
-            DispatchQueue.main.async { // Always update loading state on main thread
+        repository.fetchPost(postId: postId)
+            .receive(on: DispatchQueue.main) // Receive values on the main thread for UI updates
+            .sink(receiveCompletion: { completion in
                 self.isLoading = false
-            }
-        }
+                switch completion {
+                case .failure(let error):
+                    self.error = error
+                case .finished:
+                    break // No action needed upon successful completion
+                }
+            }, receiveValue: { post in
+                self.posts = [post] // Assuming you want to display a single post
+            })
+            .store(in: &cancellables)
     }
 }

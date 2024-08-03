@@ -12,6 +12,7 @@
 		1E771ADA2AF35B1C00119B16 /* HalfModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E771AD92AF35B1C00119B16 /* HalfModalView.swift */; };
 		1EABF3F22C5DFC2B008DB0EB /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EABF3F12C5DFC2B008DB0EB /* Post.swift */; };
 		1EABF3F42C5DFD0F008DB0EB /* PostsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EABF3F32C5DFD0F008DB0EB /* PostsViewModel.swift */; };
+		1EABF3F72C5E000E008DB0EB /* PostRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EABF3F62C5E000E008DB0EB /* PostRepository.swift */; };
 		4011E8692A49759C003F06BF /* SwiftUI_PlaygroundApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E8682A49759C003F06BF /* SwiftUI_PlaygroundApp.swift */; };
 		4011E86B2A49759C003F06BF /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E86A2A49759C003F06BF /* HomeView.swift */; };
 		4011E86D2A49759D003F06BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4011E86C2A49759D003F06BF /* Assets.xcassets */; };
@@ -36,6 +37,7 @@
 		1E771AD92AF35B1C00119B16 /* HalfModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfModalView.swift; sourceTree = "<group>"; };
 		1EABF3F12C5DFC2B008DB0EB /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		1EABF3F32C5DFD0F008DB0EB /* PostsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsViewModel.swift; sourceTree = "<group>"; };
+		1EABF3F62C5E000E008DB0EB /* PostRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRepository.swift; sourceTree = "<group>"; };
 		1EF7E5942ADCD9210032015B /* SwiftUI-Playground-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "SwiftUI-Playground-Info.plist"; sourceTree = SOURCE_ROOT; };
 		3977D086BE021AF13A042E9A /* Pods_SwiftUI_Playground.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftUI_Playground.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4011E8652A49759C003F06BF /* SwiftUI_Playground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftUI_Playground.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -70,6 +72,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1EABF3F52C5E0003008DB0EB /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				1EABF3F62C5E000E008DB0EB /* PostRepository.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
 		4011E85C2A49759C003F06BF = {
 			isa = PBXGroup;
 			children = (
@@ -122,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				4011E8682A49759C003F06BF /* SwiftUI_PlaygroundApp.swift */,
+				1EABF3F52C5E0003008DB0EB /* Repositories */,
 				4011E87C2A497630003F06BF /* Models */,
 				4011E87B2A49762D003F06BF /* Views */,
 				4011E87A2A497628003F06BF /* ViewModels */,
@@ -345,6 +356,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E62EE712AD8D0080031CB1B /* FloatingView.swift in Sources */,
+				1EABF3F72C5E000E008DB0EB /* PostRepository.swift in Sources */,
 				4011E88B2A4976DA003F06BF /* Fonts.swift in Sources */,
 				4011E86B2A49759C003F06BF /* HomeView.swift in Sources */,
 				1E771ADA2AF35B1C00119B16 /* HalfModalView.swift in Sources */,

@@ -8,30 +8,23 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject private var viewModel = PostsViewModel()
+    @StateObject var viewModel = PostsViewModel()
 
     var body: some View {
-        NavigationView {
-            List(viewModel.posts, id: \.id) { post in
-                VStack(alignment: .leading) {
-                    Text(post.title)
-                        .font(.headline)
-                    Text(post.body)
-                        .font(.subheadline)
-                }
+        VStack(alignment: .leading) {
+            if viewModel.isLoading {
+                ProgressView()
+            } else if let error = viewModel.error {
+                Text("Error: \(error.localizedDescription)")
+            } else if let post = viewModel.posts.first { // Or use viewModel.post if it's a single post
+                Text(post.title)
+                    .font(.headline)
+                Text(post.body)
+                    .font(.subheadline)
             }
-            .navigationTitle("Posts")
-            .onAppear {
-                viewModel.fetchPosts()
-            }
-            .overlay {
-                if viewModel.isLoading {
-                    ProgressView()
-                }
-            }
-//            .alert(item: $viewModel.error) { error in
-//                Alert(title: Text("Error"), message: Text(error.localizedDescription), dismissButton: .default(Text("OK")))
-//            }
+        }
+        .onAppear {
+            viewModel.fetchPosts(postId: 1) // Fetch a post when the view appears
         }
     }
 }

@@ -9,23 +9,28 @@
 import APIKit
 import SwiftyJSON
 
-struct GetPostsRequest: Request {
-    typealias Response = [Post]
+struct GETRequest<T: Decodable>: Request {
+    typealias Response = T
 
-    var baseURL: URL {
-        return URL(string: "https://jsonplaceholder.typicode.com")!
-    }
-
-    var path: String {
-        return "/posts"
-    }
-
+    var baseURL: URL
+    var path: String
     var method: HTTPMethod {
         return .get
     }
 
-    func response(from object: Any, urlResponse: HTTPURLResponse) throws -> [Post] {
+    var queryParameters: [String: Any]?
+
+    init(baseURL: URL, path: String, queryParameters: [String: Any]? = nil) {
+        self.baseURL = baseURL
+        self.path = path
+        self.queryParameters = queryParameters
+    }
+
+    func response(from object: Any, urlResponse: HTTPURLResponse) throws -> T {
         let json = JSON(object)
-        return json.arrayValue.map { Post(json: $0) }
+        // TがDecodableに準拠している場合、JSONDecoderを使用してデコード
+        let data = try json.rawData()
+        let decoder = JSONDecoder()
+        return try decoder.decode(T.self, from: data)
     }
 }
