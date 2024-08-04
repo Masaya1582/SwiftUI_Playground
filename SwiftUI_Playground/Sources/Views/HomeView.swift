@@ -6,112 +6,149 @@
 //
 
 import SwiftUI
-import UIKit
+import MapKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
+    init(){
+        UITabBar.appearance().isTranslucent = false
+        UITabBar.appearance().barTintColor = UIColor(.red)
+    }
 
-    // MARK: - Body
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("PokemoDetail: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        TabView {
+            MapView()
+                .tabItem {
+                    Label("Explore", systemImage: "magnifyingglass")
                 }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Tomorrow's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show PopupView") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
+            SampleView()
+                .tabItem {
+                    Label("Wishlists", systemImage: "suit.heart").environment(\.symbolVariants, .none)
                 }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+            SampleView()
+                .tabItem {
+
+                    Text("Trips")
+                    Image(systemName: "a.circle")
+                }
+            SampleView()
+                .tabItem {
+                    Label("Inbox", systemImage: "bubble.middle.bottom")
+                        .environment(\.symbolVariants, .none)
+                }
+            SampleView()
+                .tabItem {
+                    Label("Profile", systemImage: "person")
+                        .environment(\.symbolVariants, .none)
+                }
+
         }
+        .accentColor(.red)
+    }
+}
+
+
+struct SampleView: View {
+    var body: some View {
+        Text("Sample View")
+            .font(.title)
+    }
+}
+
+struct MapView: View {
+    @State private var region = MKCoordinateRegion(
+        center: CLLocationCoordinate2D(latitude: 40.7128, longitude: -74.0060),
+        span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5)
+    )
+    @State var searchClicked = false
+
+    var body: some View {
+        VStack {
+            // 1. Search bar
+            ZStack(alignment: .trailing) {
+                Button(action: {
+                    print("outer button pressed")
+                    searchClicked = true
+                }) {
+                    HStack {
+                        Spacer()
+                            .frame(width: 5.0)
+                        Image(systemName: "magnifyingglass")
+                        Spacer()
+                            .frame(width: 14.0)
+                        VStack(alignment: .leading){
+
+                            Text("Where to?").bold()
+                                .font(.system(size: 14))
+
+                            Text("Anywhere • Any week • Add guests")
+                                .fontWeight(.light)
+                                .foregroundColor(.gray)
+                                .font(.system(size: 12))
+
+                        }
+
+                        Spacer()
+                    }
+                    .padding()
+                    .accentColor(.black)
+
+                    .clipShape(RoundedRectangle(cornerRadius: 14.0, style: .continuous))
+                    .background(
+                        RoundedRectangle(cornerRadius: 30.0)
+                            .fill(.white)
+
+                    )
+                    .shadow(color: .gray.opacity(0.4), radius: 6, x: 0, y: 0)
+
+                }
+                .frame(maxWidth: 350.0)
+                .padding()
+
+
+
+                Button(action: {}) {
+                    Circle()    .strokeBorder(Color.gray,lineWidth: 0.5)
+                        .foregroundColor(.white)
+                        .frame(width: 40.0, height: 40.0)
+                        .overlay(Image(systemName: "slider.horizontal.3"))
+                        .padding()
+                        .accentColor(Color.black)
+
+
+                        .clipShape(RoundedRectangle(cornerRadius: 30.0, style: .continuous))
+
+                }
+                .padding()
+            }
+
+            // 2. Categories list
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 20) {
+                    ForEach(["Treehouses", "Countryside", "Castles", "Vinyards", "Mansions"], id: \.self) { title in
+                        Button(action: {}) {
+                            VStack {
+                                Image(systemName: "building.columns")
+                                    .foregroundColor(.black)
+                                    .font(.system(size: 25))
+                                Text(title)
+                                    .foregroundColor(Color(hue: 1.0, saturation: 0.0, brightness: 0.089))
+                                    .font(.system(size: 14))
+                            }
+                            .padding(.leading, 10.0)
+                        }
+                    }
+                }
+            }
+            .padding(.leading, 10)
+
+
+            // 3. Map view
+            ZStack(alignment: .bottom) {
+                Map(coordinateRegion: $region, showsUserLocation: false, userTrackingMode: .constant(.follow))
+                    .frame(width: 400, height: 500)
+            }
+        }
+        .background(Color.white.shadow(color: Color(hue: 1.0, saturation: 0.0, brightness: 0.578), radius: 0.5, x: 0, y: 1))
     }
 }
 
