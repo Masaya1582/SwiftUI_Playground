@@ -6,111 +6,79 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
+    private let analysts = ["Analyst1", "Analyst2", "Analyst3", "Analyst4", "Analyst5"]
+    private let teslaStockPrice = 724.54
+    private let priceChange = -5.32
+    @State private var saveListing = false
 
-    // MARK: - Body
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("PokemoDetail: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        VStack {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 15) {
+                    ForEach(analysts, id: \.self) { analyst in
+                        Image("duck") // Placeholder for headshots
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 60, height: 60)
+                            .clipShape(Circle())
+                            .overlay(Circle().stroke(Color.black, lineWidth: 2))
+                            .shadow(radius: 3)
+                    }
                 }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Tomorrow's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show PopupView") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
+                .padding(.horizontal)
             }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
+            .padding(.top)
 
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
+            Divider()
 
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
+            VStack(alignment: .leading) {
+                Text("Tesla, Inc.")
+                    .font(.title)
+                    .bold()
 
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
+                HStack {
+                    Text("\(teslaStockPrice, specifier: "%.2f") USD")
+                        .font(.title2)
+                        .bold()
+
+                    Spacer()
+
+                    Image(systemName: priceChange >= 0 ? "arrow.up.right" : "arrow.down.right")
+                        .foregroundColor(priceChange >= 0 ? .green : .red)
+
+                    Text("\(priceChange >= 0 ? "+" : "")\(priceChange, specifier: "%.2f")")
+                        .foregroundColor(priceChange >= 0 ? .green : .red)
                 }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+            }
+            .padding()
+
+            Text("Elon Musk is the CEO of Tesla, Inc., and is known for his work in revolutionizing the electric vehicle industry, as well as his involvement with SpaceX, Neuralink, and other innovative technology companies.")
+                .padding()
+
+            Text("Introductory call: $400/hour")
+                .font(.headline)
+                .padding()
+
+            Toggle(isOn: $saveListing) {
+                Text("Save this listing")
+            }
+            .padding()
+
+            Spacer()
+
+            Button(action: {
+                // Action for booking the call
+            }) {
+                Text("Book now")
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+            }
+            .padding()
         }
     }
 }
