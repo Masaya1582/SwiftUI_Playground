@@ -6,113 +6,275 @@
 //
 
 import SwiftUI
-import UIKit
+
+// This component is an airbnb search view with a segmented control for stays and experiences.
+// It allows users to search for destinations, select dates, and add guests.
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
+    @Environment(\.dismiss) private var dismiss
 
-    // MARK: - Body
+    @State var segmentationSelection : staysAndExperiences = .stays
+    enum staysAndExperiences : String, CaseIterable {
+        case stays = "Stays"
+        case experiences = "Experiences"
+    }
+
+    // 1. Create a function to generate destination images with the globe.americas symbol
+    func destinationImage() -> some View {
+        Image(systemName: "globe.americas")
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .foregroundColor(.gray)
+            .frame(width: 90)
+            .background()
+            .padding()
+    }
+
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("PokemoDetail: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        ZStack (alignment: .topLeading){
+            Color.white.opacity(0.8).edgesIgnoringSafeArea(.all)
+            VStack {
+                Spacer().frame(height: 10)
+
+                // 2. Update the header with the segmented control
+                HStack (alignment: .center){
+                    Spacer().frame(width: 5)
+
+                    Button(action: {
+                        dismiss()
+
+                    }) {
+                        Circle()
+                            .strokeBorder(Color.gray,lineWidth: 0.5)
+                            .foregroundColor(.black)
+                            .frame(width: 30.0, height: 30.0)
+                            .overlay(Image(systemName: "xmark"))
+                            .font(.system(size: 12))
+                            .padding()
+                            .accentColor(Color.black)
+                            .clipShape(RoundedRectangle(cornerRadius: 30.0, style: .continuous))
+
+                    }
+
+                    Picker("", selection: $segmentationSelection) {
+                        ForEach(staysAndExperiences.allCases, id: \.self) { option in
+                            Text(option.rawValue)
+                        }
+                    }.pickerStyle(SegmentedPickerStyle())
+                        .padding()
                 }
-            )
-        }
-    }
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Tomorrow's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
+                VStack (alignment: .leading){
+                    Text("Where to?")
+                        .bold()
+                        .font(.title)
+                        .padding()
 
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
+                    // 3. Update the search button
+                    Button(action: {
 
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show PopupView") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
+                    }) {
+                        HStack {
+                            Spacer()
+                                .frame(width: 5.0)
+                            Image(systemName: "magnifyingglass")
+                            Spacer()
+                                .frame(width: 14.0)
+                            VStack(alignment: .leading){
+                                Text("Search destinations").bold()
+                                    .font(.system(size: 14))
+                                    .foregroundColor(.gray)
+                            }
+                            Spacer()
+                        }
+                        .padding()
+                        .accentColor(.black)
+                        .frame(height: 60)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(.gray, lineWidth: 1)
+                        )
+                    }
+                    .frame(maxWidth: 350.0)
+                    .padding()
 
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
+                    Spacer().frame(height: 10)
 
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
+                    // 4. Update the scroll view with destination images
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 20) {
+                            Button(action: {
 
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
+                            }) {
+                                VStack (alignment: .leading){
+                                    Spacer().frame(height: 5)
+                                    destinationImage()
+                                        .cornerRadius(10)
+                                        .overlay(RoundedRectangle(cornerRadius: 10)
+                                            .stroke(.black, lineWidth: 1.5))
+                                    Spacer().frame(height: 10)
+
+                                    Text("I'm flexible").foregroundColor(Color(hue: 1.0, saturation: 0.0, brightness: 0.089))
+                                        .font(.system(size: 14))
+                                        .fontWeight(.bold)
+                                        .padding(.leading, 1)
+
+                                }
+                                .padding(.leading, 8.0)
+                            }
+                            Button(action: {
+
+                            }) {
+                                VStack (alignment: .leading){
+                                    Spacer().frame(height: 5)
+                                    destinationImage()
+                                        .cornerRadius(10)
+                                        .overlay(RoundedRectangle(cornerRadius: 10)
+                                            .stroke(.gray, lineWidth: 1))
+                                    Spacer().frame(height: 10)
+
+                                    Text("Europe").foregroundColor(Color(hue: 1.0, saturation: 0.0, brightness: 0.089))
+                                        .font(.system(size: 14))
+                                        .padding(.leading, 1)
+
+                                }
+                            }
+                            Button(action: {
+
+                            }) {
+                                VStack (alignment: .leading){
+                                    Spacer().frame(height: 5)
+                                    destinationImage()
+                                        .cornerRadius(10)
+                                        .overlay(RoundedRectangle(cornerRadius: 10)
+                                            .stroke(.gray, lineWidth: 1))
+                                    Spacer().frame(height: 10)
+
+                                    Text("South Africa").foregroundColor(Color(hue: 1.0, saturation: 0.0, brightness: 0.089))
+                                        .font(.system(size: 14))
+                                        .padding(.leading, 1)
+
+                                }
+                            }
+                        }
+                    }.padding(.leading, 10)
+                    Spacer().frame(height: 10)
                 }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
-        }
+                .frame(maxWidth: 335)
+                .padding()
+                .background(.white)
+                .cornerRadius(20)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(Color(hue: 1.0, saturation: 0.0, brightness: 0.01, opacity: 0.2), lineWidth: 0.5)
+                )
+                .shadow(color: .gray.opacity(0.4), radius: 4, x: 0, y: 2)
+
+                Spacer().frame(height: 20)
+
+                // 5. Update the date and guest selection sections
+                VStack (alignment: .leading){
+                    Spacer().frame(height: 8)
+
+                    HStack {
+                        Spacer().frame(width: 10)
+                        Text("When").foregroundColor(.gray).bold().font(.system(size: 14))
+
+                        Spacer()
+                        Text("Any week").bold().font(.system(size: 14))
+                        Spacer().frame(width: 10)
+                    }
+                    Spacer().frame(height: 8)
+                }
+                .frame(maxWidth: 335)
+                .padding()
+                .background(.white)
+                .cornerRadius(12)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color(hue: 1.0, saturation: 0.0, brightness: 0.01, opacity: 0.2), lineWidth: 0.5)
+                )
+                .shadow(color: .gray.opacity(0.4), radius: 4, x: 0, y: 2)
+
+                Spacer().frame(height: 20)
+
+                VStack (alignment: .leading){
+                    Spacer().frame(height: 8)
+
+                    HStack {
+                        Spacer().frame(width: 10)
+                        Text("Who").foregroundColor(.gray).bold().font(.system(size: 14))
+
+                        Spacer()
+                        Text("Add guests").bold().font(.system(size: 14))
+                        Spacer().frame(width: 10)
+                    }
+                    Spacer().frame(height: 8)
+                }
+                .frame(maxWidth: 335)
+                .padding()
+                .background(.white)
+                .cornerRadius(12)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color(hue: 1.0, saturation: 0.0, brightness: 0.01, opacity: 0.2), lineWidth: 0.5)
+                )
+                .shadow(color: .gray.opacity(0.4), radius: 4, x: 0, y: 2)
+
+                Spacer()
+
+                // 6. Update the search and clear buttons
+                VStack (alignment: .center){
+                    Spacer().frame(height: 20)
+                    HStack {
+                        Spacer().frame(width: 30)
+                        Button(action: {
+
+                        }) {
+                            Text("Clear all")
+                                .bold()
+                                .font(.system(size: 16))
+                                .foregroundColor(.black)
+                                .underline()
+                        }
+
+                        Spacer()
+                        Button(action: {
+
+                        }) {
+                            HStack {
+                                Spacer().frame(width: 5)
+                                Image(systemName: "magnifyingglass").bold()
+                                Text("Search")
+                                    .fontWeight(.semibold)
+                                    .font(.system(size: 16))
+                                Spacer().frame(width: 5)
+                            }
+                            .padding(15.0)
+                            .foregroundColor(.white)
+                            .background(Color(red: 1.0, green: 0.2196078431372549, blue: 0.3607843137254902))
+                            .cornerRadius(8)
+                        }
+                        Spacer().frame(width: 30)
+                    }
+                }
+                .overlay(Rectangle().frame(width: nil, height: 1, alignment: .top).foregroundColor(Color(hue: 1.0, saturation: 0.0, brightness: 0.0, opacity: 0.5)), alignment: .top)
+                .background(.white)
+            }
+        }.background(BackgroundBlurView())
     }
+}
+
+struct BackgroundBlurView: UIViewRepresentable {
+    func makeUIView(context: Context) -> UIView {
+        let view = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+        DispatchQueue.main.async {
+            view.superview?.superview?.backgroundColor = .white //adjust this to .clear when implementing in your own code.
+        }
+        return view
+    }
+
+    func updateUIView(_ uiView: UIView, context: Context) {}
 }
 
 // MARK: - Preview
