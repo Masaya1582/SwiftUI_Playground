@@ -125,6 +125,7 @@ struct EnhancedStatsView: View {
     }
 }
 
+// swiftlint:disable large_tuple
 struct PlayerStatsDetailView: View {
     var player: (String, Int, Int, Int)
 
