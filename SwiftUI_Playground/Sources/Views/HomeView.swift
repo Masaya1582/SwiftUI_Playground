@@ -6,114 +6,106 @@
 //
 
 import SwiftUI
-import UIKit
+import Charts
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
-
-    // MARK: - Body
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("PokemoDetail: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Your Portfolio")
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .foregroundColor(.primary)
+                            Text("+32.02% vs last month")
+                                .font(.title3)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.green)
+                        }
+                        Spacer()
+                        Image(systemName: "bell")
+                            .imageScale(.large)
+                            .foregroundColor(.primary)
+                        Image(systemName: "person.crop.circle")
+                            .imageScale(.large)
+                            .foregroundColor(.primary)
+                    }
+                    .padding(.horizontal)
+
+                    Chart {
+                        ForEach(sampleData, id: \.id) { data in
+                            LineMark(
+                                x: .value("Date", data.date),
+                                y: .value("Value", data.value)
+                            )
+                            .foregroundStyle(.blue)
+                        }
+                    }
+                    .frame(height: 200)
+                    .padding(.horizontal)
+
+                    HStack(spacing: 20) {
+                        GraphCardView(title: "AAPL", data: sampleData)
+                        GraphCardView(title: "TSLA", data: sampleData)
+                    }
+                    .padding(.horizontal)
+
+                    HStack(spacing: 20) {
+                        GraphCardView(title: "AMZN", data: sampleData)
+                        GraphCardView(title: "GOOGL", data: sampleData)
+                    }
+                    .padding(.horizontal)
                 }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Tomorrow's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show PopupView") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
             }
+            .navigationTitle("Dashboard")
+            .navigationBarTitleDisplayMode(.inline)
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
-        }
+        .preferredColorScheme(.dark)
     }
 }
+
+struct GraphCardView: View {
+    var title: String
+    var data: [ChartData]
+
+    var body: some View {
+        VStack {
+            Text(title)
+                .font(.headline)
+                .fontWeight(.semibold)
+                .foregroundColor(.primary)
+            Chart {
+                ForEach(data, id: \.id) { data in
+                    LineMark(
+                        x: .value("Date", data.date),
+                        y: .value("Value", data.value)
+                    )
+                    .foregroundStyle(.blue)
+                }
+            }
+            .frame(height: 100)
+        }
+        .padding()
+        .background(Color(UIColor.secondarySystemBackground))
+        .cornerRadius(10)
+    }
+}
+
+struct ChartData {
+    let id: Int
+    let date: Date
+    let value: Double
+}
+
+private let sampleData: [ChartData] = [
+    ChartData(id: 0, date: Date().addingTimeInterval(-2400 * 5), value: 1),
+    ChartData(id: 1, date: Date().addingTimeInterval(-2400 * 4), value: 3),
+    ChartData(id: 2, date: Date().addingTimeInterval(-2400 * 3), value: 2),
+    ChartData(id: 3, date: Date().addingTimeInterval(-2400 * 2), value: 5),
+    ChartData(id: 4, date: Date().addingTimeInterval(-2400 * 1), value: 4)
+]
 
 // MARK: - Preview
 struct HomeView_Previews: PreviewProvider {
