@@ -35,7 +35,17 @@ struct Post: Codable {
     }
 }
 
-struct Pokemon: Codable {
-    let id: Int
+struct Pokemon: Decodable, Identifiable {
+    let id = UUID()
     let name: String
+    let imageURL: String
+
+    enum CodingKeys: String, CodingKey {
+        case name
+        case imageURL = "url"
+    }
+}
+
+struct PokemonResponse: Decodable {
+    let results: [Pokemon]
 }
