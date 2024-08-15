@@ -9,30 +9,26 @@ import SwiftUI
 import Combine
 
 final class HomeViewModel: ObservableObject {
-    @Published var name = ""
-    @Published var halfModalText = ""
-    @Published var isFloatingViewVisible = false
-    @Published var isOpenImagePicker = false
-    @Published var isShowSourceTypeAlert = false
-    @Published var isShowHalfModalView = false
-    @Published var sourceType: UIImagePickerController.SourceType?
-    @Published var selectedImage: UIImage?
-    @Published var posts: [Post] = []
+    @Published var pokemons: [Pokemon] = []
+    private var cancellables = Set<AnyCancellable>()
 
     init() {
-        fetchPosts()
+        fetchPokemons()
     }
 
-    /// URLSessionとCombineを学ぶ
-    private func fetchPosts() {
-        if let url = URL(string: "https://jsonplaceholder.typicode.com/posts") {
-            URLSession.shared.dataTaskPublisher(for: url)
-                .map(\.data)
-                .decode(type: [Post].self, decoder: JSONDecoder())
-                .replaceError(with: [])
-                .receive(on: DispatchQueue.main)
-                .assign(to: &$posts)
-        }
+    func fetchPokemons() {
+        guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon?limit=10") else { return }
+
+        URLSession.shared.dataTaskPublisher(for: url)
+            .tryMap { output -> Data in
+                print("Received Data: \(String(data: output.data, encoding: .utf8) ?? "")")
+                return output.data
+            }
+            .decode(type: PokemonResponse.self, decoder: JSONDecoder())
+            .map { $0.results }
+            .replaceError(with: [])
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$pokemons)
     }
 
 }
