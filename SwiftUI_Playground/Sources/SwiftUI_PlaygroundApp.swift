@@ -9,10 +9,13 @@ import SwiftUI
 
 @main
 struct SwiftUI_PlaygroundApp: App {
+    @StateObject private var colorSchemeManager = ColorSchemeManager()
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     var body: some Scene {
         WindowGroup {
             HomeView()
+                .environmentObject(colorSchemeManager)
+                .preferredColorScheme(colorSchemeManager.colorScheme)
         }
     }
 }
