@@ -6,112 +6,103 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
-
-    // MARK: - Body
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("PokemoDetail: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                // Room Image
+                Asset.Assets.imgSpaghetti.swiftUIImage
+                    .resizable()
+                    .scaledToFill()
+                    .frame(height: 250)
+                    .clipped()
+                    .cornerRadius(10)
+                    .overlay(
+                        VStack {
+                            Spacer()
+                            HStack {
+                                Spacer()
+                                Text("Deluxe Suite")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .background(Color.black.opacity(0.6))
+                                    .cornerRadius(10)
+                                    .padding([.trailing, .bottom], 10)
+                            }
+                        }
+                    )
+
+                // Room Details
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Deluxe Suite")
+                        .font(.title)
+                        .fontWeight(.bold)
+
+                    Text("Enjoy a luxurious stay in our deluxe suite with stunning views of the city skyline. The room features a king-size bed, ensuite bathroom, and modern amenities.")
+                        .font(.body)
+                        .foregroundColor(.secondary)
+
+                    HStack {
+                        Text("Price per night:")
+                            .font(.headline)
+                        Spacer()
+                        Text("$299")
+                            .font(.headline)
+                            .foregroundColor(.green)
+                    }
+
+                    // Room Amenities
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Label("Free Wi-Fi", systemImage: "wifi")
+                            Label("King-Size Bed", systemImage: "bed.double")
+                        }
+                        Spacer()
+                        VStack(alignment: .leading, spacing: 4) {
+                            Label("Breakfast Included", systemImage: "cup.and.saucer")
+                            Label("City View", systemImage: "binoculars")
+                        }
+                    }
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .padding(.vertical)
                 }
-            )
-        }
-    }
+                .padding(.horizontal)
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Tomorrow's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
+                // Reservation Dates
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Select Dates")
+                        .font(.title2)
+                        .fontWeight(.bold)
 
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
+                    DatePicker("Check-in", selection: .constant(Date()), displayedComponents: .date)
+                        .datePickerStyle(GraphicalDatePickerStyle())
 
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show PopupView") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
+                    DatePicker("Check-out", selection: .constant(Date().addingTimeInterval(86400)), displayedComponents: .date)
+                        .datePickerStyle(GraphicalDatePickerStyle())
                 }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+                .padding(.horizontal)
+
+                // Book Now Button
+                Button(action: {
+                    // Handle booking action
+                }) {
+                    Text("Book Now")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .cornerRadius(10)
+                        .padding(.horizontal)
+                }
+            }
+            .padding(.vertical)
         }
+        .navigationTitle("Hotel Room")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
