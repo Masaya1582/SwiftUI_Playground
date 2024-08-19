@@ -10,6 +10,7 @@
 		1E0CBD602AE25C44001917B9 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E0CBD5F2AE25C44001917B9 /* ImagePicker.swift */; };
 		1E62EE712AD8D0080031CB1B /* FloatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E62EE702AD8D0080031CB1B /* FloatingView.swift */; };
 		1E771ADA2AF35B1C00119B16 /* HalfModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E771AD92AF35B1C00119B16 /* HalfModalView.swift */; };
+		1E89F9C02C73130400DF6E7C /* sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1E89F9BF2C73130400DF6E7C /* sound.mp3 */; };
 		4011E8692A49759C003F06BF /* SwiftUI_PlaygroundApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E8682A49759C003F06BF /* SwiftUI_PlaygroundApp.swift */; };
 		4011E86B2A49759C003F06BF /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E86A2A49759C003F06BF /* HomeView.swift */; };
 		4011E86D2A49759D003F06BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4011E86C2A49759D003F06BF /* Assets.xcassets */; };
@@ -32,6 +33,7 @@
 		1E0CBD5F2AE25C44001917B9 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		1E62EE702AD8D0080031CB1B /* FloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingView.swift; sourceTree = "<group>"; };
 		1E771AD92AF35B1C00119B16 /* HalfModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfModalView.swift; sourceTree = "<group>"; };
+		1E89F9BF2C73130400DF6E7C /* sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sound.mp3; sourceTree = "<group>"; };
 		1EF7E5942ADCD9210032015B /* SwiftUI-Playground-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "SwiftUI-Playground-Info.plist"; sourceTree = SOURCE_ROOT; };
 		3977D086BE021AF13A042E9A /* Pods_SwiftUI_Playground.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftUI_Playground.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4011E8652A49759C003F06BF /* SwiftUI_Playground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftUI_Playground.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -128,6 +130,7 @@
 		4011E8782A497608003F06BF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				1E89F9BF2C73130400DF6E7C /* sound.mp3 */,
 				4011E86C2A49759D003F06BF /* Assets.xcassets */,
 				4011E8812A49769B003F06BF /* Colors.xcassets */,
 				4011E8832A4976AA003F06BF /* Localizable.strings */,
@@ -261,6 +264,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4011E88D2A4976EC003F06BF /* Caprasimo-Regular.ttf in Resources */,
+				1E89F9C02C73130400DF6E7C /* sound.mp3 in Resources */,
 				4011E8822A49769B003F06BF /* Colors.xcassets in Resources */,
 				401E4F1E2B3E675D0004D507 /* RubikDoodleShadow-Regular.ttf in Resources */,
 				4011E8842A4976AA003F06BF /* Localizable.strings in Resources */,
