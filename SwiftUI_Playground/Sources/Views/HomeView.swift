@@ -8,110 +8,97 @@
 import SwiftUI
 import UIKit
 
+struct Character: Identifiable {
+    let id = UUID()
+    let name: String
+    let image: String
+}
+
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
+    @State private var selectedCharacter: Character?
 
-    // MARK: - Body
+    let characters = [
+        Character(name: "Warrior", image: "warrior"),
+        Character(name: "Mage", image: "mage"),
+        Character(name: "Archer", image: "archer")
+    ]
+
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("PokemoDetail: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        VStack {
+            Text("Select Your Character")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .foregroundColor(.white)
+                .padding()
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 30) {
+                    ForEach(characters) { character in
+                        CharacterCardView(character: character, isSelected: selectedCharacter?.id == character.id)
+                            .onTapGesture {
+                                withAnimation(.spring()) {
+                                    selectedCharacter = character
+                                }
+                            }
+                    }
                 }
-            )
+                .padding(.horizontal, 20)
+            }
+            .padding(.vertical)
+
+            if let selectedCharacter = selectedCharacter {
+                Text("You selected: \(selectedCharacter.name)")
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                    .padding(.top)
+            } else {
+                Text("Tap on a character to select")
+                    .font(.title2)
+                    .foregroundColor(.gray)
+                    .padding(.top)
+            }
         }
+        .background(
+            LinearGradient(gradient: Gradient(colors: [.black, .blue]), startPoint: .top, endPoint: .bottom)
+                .edgesIgnoringSafeArea(.all)
+        )
     }
+}
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Tomorrow's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
+struct CharacterCardView: View {
+    let character: Character
+    var isSelected: Bool
 
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
+    var body: some View {
+        VStack {
+            Image(character.image)
                 .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
+                .scaledToFit()
+                .frame(width: 120, height: 120)
+                .shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 5)
+                .overlay(
+                    Circle()
+                        // .stroke(isSelected ? LinearGradient(gradient: Gradient(colors: [Color.yellow, Color.orange]), startPoint: .topLeading, endPoint: .bottomTrailing) : Color.clear, lineWidth: 4)
+                        .scaleEffect(isSelected ? 1.1 : 1.0)
+                        .animation(.easeInOut)
+                )
+                .padding()
 
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show PopupView") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
+            Text(character.name)
+                .font(.headline)
+                .fontWeight(.bold)
+                .foregroundColor(.white)
+                .padding(.top, 5)
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
-        }
+        .frame(width: 150, height: 200)
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .fill(LinearGradient(gradient: Gradient(colors: [.purple, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
+        )
+        .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 5)
+        .scaleEffect(isSelected ? 1.1 : 1.0)
+        .animation(.spring())
     }
 }
 
