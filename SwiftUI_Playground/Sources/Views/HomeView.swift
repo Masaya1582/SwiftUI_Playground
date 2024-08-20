@@ -9,109 +9,84 @@ import SwiftUI
 import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
+    @State private var animateClouds = false
+    @State private var animateRain = false
 
-    // MARK: - Body
     var body: some View {
         ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
+            // Background sky
+            LinearGradient(gradient: Gradient(colors: [.blue, .cyan]), startPoint: .top, endPoint: .bottom)
+                .ignoresSafeArea()
+
+            // Sun
+            Circle()
+                .fill(Color.yellow)
+                .frame(width: 120, height: 120)
+                .offset(x: -100, y: -200)
+                .blur(radius: 10)
+
+            // Moving clouds
+            Group {
+                CloudView()
+                    .offset(x: animateClouds ? 300 : -300, y: -150)
+                    .animation(.linear(duration: 8).repeatForever(autoreverses: true), value: animateClouds)
+
+                CloudView()
+                    .offset(x: animateClouds ? -300 : 300, y: -100)
+                    .animation(.linear(duration: 10).repeatForever(autoreverses: true), value: animateClouds)
+
+                CloudView()
+                    .offset(x: animateClouds ? 350 : -350, y: -200)
+                    .animation(.linear(duration: 7).repeatForever(autoreverses: true), value: animateClouds)
+            }
+
+            // Falling rain
+            ForEach(0..<20) { i in
+                RainDrop()
+                    .offset(x: CGFloat.random(in: -150...150), y: animateRain ? 300 : -300)
+                    .animation(
+                        Animation.linear(duration: Double.random(in: 1.5...2.5))
+                            .repeatForever(autoreverses: false)
+                            .delay(Double(i) * 0.1), value: animateRain
+                    )
             }
         }
         .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("PokemoDetail: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
-                }
-            )
+            animateClouds = true
+            animateRain = true
         }
     }
+}
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Tomorrow's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
+// Cloud view
+struct CloudView: View {
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color.white.opacity(0.8))
+                .frame(width: 200, height: 80)
+
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color.white.opacity(0.8))
+                .frame(width: 150, height: 60)
+                .offset(x: -60, y: 30)
+
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color.white.opacity(0.8))
+                .frame(width: 100, height: 50)
+                .offset(x: 60, y: 30)
+        }
+        .blur(radius: 3)
     }
+}
 
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show PopupView") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
-        }
+// Rain drop view
+struct RainDrop: View {
+    var body: some View {
+        Capsule()
+            .fill(Color.white)
+            .frame(width: 2, height: 15)
+            .opacity(0.5)
     }
 }
 
