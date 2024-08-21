@@ -20,6 +20,7 @@ final class HomeViewModel: ObservableObject {
     @Published var posts: [Post] = []
 
     init() {
+        print("PR TEST")
         fetchPosts()
     }
 
