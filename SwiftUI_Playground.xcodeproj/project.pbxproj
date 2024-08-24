@@ -25,6 +25,7 @@
 		401E4F1E2B3E675D0004D507 /* RubikDoodleShadow-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 401E4F1D2B3E675D0004D507 /* RubikDoodleShadow-Regular.ttf */; };
 		406148192B099409004D146A /* PokeAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406148182B099409004D146A /* PokeAPIManager.swift */; };
 		40779B7D2A528D3200505ABD /* CustomComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40779B7C2A528D3200505ABD /* CustomComponents.swift */; };
+		409F5E372C79905500A154C8 /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409F5E362C79905500A154C8 /* StoreManager.swift */; };
 		CABC9E129CED010448D92EF8 /* Pods_SwiftUI_Playground.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3977D086BE021AF13A042E9A /* Pods_SwiftUI_Playground.framework */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +51,7 @@
 		401E4F1D2B3E675D0004D507 /* RubikDoodleShadow-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RubikDoodleShadow-Regular.ttf"; sourceTree = "<group>"; };
 		406148182B099409004D146A /* PokeAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokeAPIManager.swift; sourceTree = "<group>"; };
 		40779B7C2A528D3200505ABD /* CustomComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomComponents.swift; sourceTree = "<group>"; };
+		409F5E362C79905500A154C8 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
 		FB2CBA843BD61E4CE3D7815E /* Pods-SwiftUI_Playground.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftUI_Playground.release.xcconfig"; path = "Target Support Files/Pods-SwiftUI_Playground/Pods-SwiftUI_Playground.release.xcconfig"; sourceTree = "<group>"; };
 		FB37E298E5BFB61BA5FA76C3 /* Pods-SwiftUI_Playground.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftUI_Playground.debug.xcconfig"; path = "Target Support Files/Pods-SwiftUI_Playground/Pods-SwiftUI_Playground.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -161,6 +163,7 @@
 				4011E87D2A497644003F06BF /* HomeModel.swift */,
 				1E0CBD5F2AE25C44001917B9 /* ImagePicker.swift */,
 				406148182B099409004D146A /* PokeAPIManager.swift */,
+				409F5E362C79905500A154C8 /* StoreManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -346,6 +349,7 @@
 				4011E8892A4976D0003F06BF /* LocalizableStrings.swift in Sources */,
 				4011E88F2A497727003F06BF /* HomeViewModel.swift in Sources */,
 				406148192B099409004D146A /* PokeAPIManager.swift in Sources */,
+				409F5E372C79905500A154C8 /* StoreManager.swift in Sources */,
 				4011E87E2A497644003F06BF /* HomeModel.swift in Sources */,
 				1E0CBD602AE25C44001917B9 /* ImagePicker.swift in Sources */,
 				4011E8872A4976C9003F06BF /* Assets.swift in Sources */,
