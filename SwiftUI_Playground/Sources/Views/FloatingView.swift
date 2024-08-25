@@ -6,6 +6,7 @@
 
 import SwiftUI
 
+// モーダルView
 struct FloatingView: View {
     // MARK: - Properties
     @State var dismissAction: (() -> Void)
