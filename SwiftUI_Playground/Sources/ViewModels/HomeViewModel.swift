@@ -5,34 +5,41 @@
 //  Created by MasayaNakakuki on 2023/06/26.
 //
 
-import SwiftUI
+import Foundation
 import Combine
 
-final class HomeViewModel: ObservableObject {
-    @Published var name = ""
-    @Published var halfModalText = ""
-    @Published var isFloatingViewVisible = false
-    @Published var isOpenImagePicker = false
-    @Published var isShowSourceTypeAlert = false
-    @Published var isShowHalfModalView = false
-    @Published var sourceType: UIImagePickerController.SourceType?
-    @Published var selectedImage: UIImage?
-    @Published var posts: [Post] = []
+final class PokemonViewModel: ObservableObject {
+    @Published var pokemonList: [Pokemon] = []
+    @Published var errorMessage: String? = nil
 
-    init() {
-        fetchPosts()
+    private var cancellables = Set<AnyCancellable>()
+    private let pokemonService = PokemonService()
+
+    func fetchPokemon() {
+        pokemonService.fetchPokemonList()
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] completion in
+                switch completion {
+                case .failure(let error):
+                    self?.handleError(error)
+                case .finished:
+                    break
+                }
+            }, receiveValue: { [weak self] pokemon in
+                self?.pokemonList = pokemon
+            })
+            .store(in: &cancellables)
     }
 
-    /// URLSessionとCombineを学ぶ
-    private func fetchPosts() {
-        if let url = URL(string: "https://jsonplaceholder.typicode.com/posts") {
-            URLSession.shared.dataTaskPublisher(for: url)
-                .map(\.data)
-                .decode(type: [Post].self, decoder: JSONDecoder())
-                .replaceError(with: [])
-                .receive(on: DispatchQueue.main)
-                .assign(to: &$posts)
+    private func handleError(_ error: APIError) {
+        switch error {
+        case .networkError(let error):
+            errorMessage = "Network error: \(error.localizedDescription)"
+        case .decodingError(let error):
+            errorMessage = "Decoding error: \(error.localizedDescription)"
+        case .unknownError:
+            errorMessage = "Unknown error occurred."
         }
     }
-
 }
+
