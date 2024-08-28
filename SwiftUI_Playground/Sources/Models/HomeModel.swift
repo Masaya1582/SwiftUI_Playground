@@ -39,3 +39,11 @@ struct Pokemon: Codable {
     let id: Int
     let name: String
 }
+
+struct Flower: Identifiable {
+    let id = UUID()
+    let name: String
+    let scientificName: String
+    let description: String
+    let imageName: String
+}
