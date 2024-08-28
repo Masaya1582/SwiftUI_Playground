@@ -9,109 +9,85 @@ import SwiftUI
 import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
+    private let sampleFlowers = [
+        Flower(name: "Rose", scientificName: "Rosa", description: "Roses are a popular flower known for their beauty and fragrance.", imageName: "rose"),
+        Flower(name: "Tulip", scientificName: "Tulipa", description: "Tulips are spring-blooming perennials that grow from bulbs.", imageName: "tulip"),
+        Flower(name: "Sunflower", scientificName: "Helianthus", description: "Sunflowers are known for their large, bright yellow petals.", imageName: "sunflower"),
+        Flower(name: "Orchid", scientificName: "Orchidaceae", description: "Orchids are a diverse and widespread family of flowering plants.", imageName: "orchid")
+    ]
 
-    // MARK: - Body
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("PokemoDetail: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        NavigationView {
+            List(sampleFlowers) { flower in
+                NavigationLink(destination: FlowerDetailView(flower: flower)) {
+                    FlowerRowView(flower: flower)
                 }
-            )
+            }
+            .navigationTitle("Flower Book")
         }
     }
+}
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Tomorrow's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
+struct FlowerDetailView: View {
+    let flower: Flower
+
+    var body: some View {
+        ScrollView {
+            VStack {
+                Image(flower.imageName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxHeight: 300)
+                    .cornerRadius(20)
+                    .shadow(radius: 10)
+                    .padding()
+
+                Text(flower.name)
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .padding(.top)
+
+                Text(flower.scientificName)
+                    .font(.title2)
+                    .foregroundColor(.secondary)
+
+                Text(flower.description)
+                    .font(.body)
+                    .padding()
+            }
+        }
+        .navigationBarTitle(Text(flower.name), displayMode: .inline)
     }
+}
 
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
+struct FlowerRowView: View {
+    let flower: Flower
+
+    var body: some View {
+        HStack {
+            Image(flower.imageName)
                 .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
+                .frame(width: 80, height: 80)
+                .cornerRadius(10)
+                .shadow(radius: 5)
 
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show PopupView") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
+            VStack(alignment: .leading) {
+                Text(flower.name)
+                    .font(.headline)
+                    .fontWeight(.bold)
+                Text(flower.scientificName)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                Text(flower.description)
+                    .font(.body)
+                    .lineLimit(3)
+                    .padding(.top, 4)
             }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
+            .padding(.leading, 10)
 
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
+            Spacer()
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
-        }
+        .padding(.vertical, 8)
     }
 }
 
