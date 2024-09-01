@@ -9,118 +9,125 @@ import SwiftUI
 import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
+    var recipe: Recipe // Assume this is a model containing your recipe data
 
-    // MARK: - Body
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("PokemoDetail: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+
+                // Recipe Image
+                Image(recipe.imageName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(height: 250)
+                    .clipped()
+                    .cornerRadius(10)
+                    .shadow(radius: 5)
+
+                // Recipe Title
+                Text(recipe.title)
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+
+                // Recipe Description
+                Text(recipe.description)
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .padding(.bottom, 16)
+
+                // Ingredients
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Ingredients")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+
+                    ForEach(recipe.ingredients, id: \.self) { ingredient in
+                        HStack(alignment: .top) {
+                            Image(systemName: "circle.fill")
+                                .font(.system(size: 8))
+                                .foregroundColor(.blue)
+                            Text(ingredient)
+                                .font(.body)
+                        }
+                    }
                 }
-            )
-        }
-    }
+                .padding(.vertical, 10)
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Tomorrow's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
+                // Instructions
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Instructions")
+                        .font(.title2)
+                        .fontWeight(.semibold)
 
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show PopupView") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
+                    ForEach(recipe.instructions.indices, id: \.self) { index in
+                        HStack(alignment: .top) {
+                            Text("\(index + 1).")
+                                .font(.body)
+                                .fontWeight(.bold)
+                            Text(recipe.instructions[index])
+                                .font(.body)
+                        }
+                    }
                 }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+                .padding(.vertical, 10)
+
+                // Notes
+                if !recipe.notes.isEmpty {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Notes")
+                            .font(.title2)
+                            .fontWeight(.semibold)
+
+                        Text(recipe.notes)
+                            .font(.body)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.top, 10)
+                }
+            }
+            .padding()
         }
+        .navigationTitle("Recipe Memo")
     }
 }
 
-// MARK: - Preview
+// Sample Recipe Model
+struct Recipe {
+    var imageName: String
+    var title: String
+    var description: String
+    var ingredients: [String]
+    var instructions: [String]
+    var notes: String
+}
+
+// Preview
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
-            .preferredColorScheme(.light)
-        HomeView()
-            .preferredColorScheme(.dark)
+        let sampleRecipe = Recipe(
+            imageName: "img_pancakes",
+            title: "Delicious Pancakes",
+            description: "Fluffy and light pancakes perfect for breakfast.",
+            ingredients: [
+                "2 cups flour",
+                "2 tablespoons sugar",
+                "1 tablespoon baking powder",
+                "1/2 teaspoon salt",
+                "2 eggs",
+                "1 1/2 cups milk",
+                "1/4 cup melted butter"
+            ],
+            instructions: [
+                "In a large bowl, mix together the flour, sugar, baking powder, and salt.",
+                "In another bowl, beat the eggs and then whisk in the milk and melted butter.",
+                "Pour the wet ingredients into the dry ingredients and stir until just combined.",
+                "Heat a lightly oiled griddle or frying pan over medium high heat.",
+                "Pour or scoop the batter onto the griddle, using approximately 1/4 cup for each pancake.",
+                "Brown on both sides and serve hot."
+            ],
+            notes: "Add a splash of vanilla extract for extra flavor."
+        )
+
+        HomeView(recipe: sampleRecipe)
     }
 }

@@ -12,7 +12,31 @@ struct SwiftUI_PlaygroundApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            let sampleRecipe = Recipe(
+                imageName: "img_pancakes",
+                title: "Delicious Pancakes",
+                description: "Fluffy and light pancakes perfect for breakfast.",
+                ingredients: [
+                    "2 cups flour",
+                    "2 tablespoons sugar",
+                    "1 tablespoon baking powder",
+                    "1/2 teaspoon salt",
+                    "2 eggs",
+                    "1 1/2 cups milk",
+                    "1/4 cup melted butter"
+                ],
+                instructions: [
+                    "In a large bowl, mix together the flour, sugar, baking powder, and salt.",
+                    "In another bowl, beat the eggs and then whisk in the milk and melted butter.",
+                    "Pour the wet ingredients into the dry ingredients and stir until just combined.",
+                    "Heat a lightly oiled griddle or frying pan over medium high heat.",
+                    "Pour or scoop the batter onto the griddle, using approximately 1/4 cup for each pancake.",
+                    "Brown on both sides and serve hot."
+                ],
+                notes: "Add a splash of vanilla extract for extra flavor."
+            )
+
+            HomeView(recipe: sampleRecipe)
         }
     }
 }
