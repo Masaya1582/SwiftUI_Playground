@@ -54,18 +54,18 @@ struct ARViewContainer: UIViewRepresentable {
                 // Get the position of the hit test
                 let position = simd_make_float3(firstResult.worldTransform.columns.3)
 
-                // Create a simple box entity
-                let box = MeshResource.generateBox(size: 0.2)
-                let material = SimpleMaterial(color: .blue, isMetallic: true)
-                let boxEntity = ModelEntity(mesh: box, materials: [material])
+                // Load the emoji model from a .usdz file
+                let emojiModelName = "3DEmoji.usdz" // Ensure you have this file in your project
+                if let emojiModel = try? ModelEntity.loadModel(named: emojiModelName) {
+                    emojiModel.position = position
 
-                // Set the position of the box
-                boxEntity.position = position
-
-                // Add the box to the scene
-                let anchorEntity = AnchorEntity(world: position)
-                anchorEntity.addChild(boxEntity)
-                arView.scene.addAnchor(anchorEntity)
+                    // Add the model to the scene
+                    let anchorEntity = AnchorEntity(world: position)
+                    anchorEntity.addChild(emojiModel)
+                    arView.scene.addAnchor(anchorEntity)
+                } else {
+                    print("Failed to load 3D emoji model")
+                }
             }
         }
     }

@@ -16,7 +16,7 @@ struct HomeView: View {
                 .edgesIgnoringSafeArea(.all) // Make the AR view full screen
             VStack {
                 Spacer()
-                Text("Tap on a detected plane to place a box")
+                Text("Tap on a detected plane to place Janko")
                     .padding()
                     .background(Color.black.opacity(0.5))
                     .foregroundColor(.white)
