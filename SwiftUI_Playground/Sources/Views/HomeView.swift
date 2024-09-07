@@ -6,112 +6,62 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
+    private let favoriteMovies = [
+        Movie(title: "Inception", genre: "Sci-Fi", description: "A skilled thief is given a chance at redemption if he can successfully perform an inception.", rating: 8.8, poster: "inception"),
+        Movie(title: "The Dark Knight", genre: "Action", description: "Batman battles the Joker as he descends deeper into chaos.", rating: 9.0, poster: "dark_knight"),
+        Movie(title: "Interstellar", genre: "Adventure", description: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.", rating: 8.6, poster: "interstellar")
+    ]
 
-    // MARK: - Body
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
+        NavigationView {
+            List(favoriteMovies) { movie in
+                MovieRowView(movie: movie)
             }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("PokemoDetail: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
-                }
-            )
+            .navigationTitle("Favorite Movies")
         }
     }
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Tomorrow's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
+}
 
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
+// MARK: - Movie Row View
+struct MovieRowView: View {
+    var movie: Movie
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 16) {
+            // Movie Poster
+            Image(movie.poster)
                 .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
+                .frame(width: 80, height: 120)
+                .cornerRadius(8)
 
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show PopupView") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
+            VStack(alignment: .leading, spacing: 8) {
+                // Movie Title
+                Text(movie.title)
+                    .font(.headline)
+                    .fontWeight(.bold)
 
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
+                // Movie Genre and Rating
+                HStack {
+                    Text(movie.genre)
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                    Spacer()
+                    Text(String(format: "%.1f", movie.rating))
+                        .font(.subheadline)
+                        .foregroundColor(.yellow)
                 }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+
+                // Movie Description
+                Text(movie.description)
+                    .font(.body)
+                    .lineLimit(3)
+                    .foregroundColor(.secondary)
+            }
         }
+        .padding(.vertical, 8)
     }
 }
 
