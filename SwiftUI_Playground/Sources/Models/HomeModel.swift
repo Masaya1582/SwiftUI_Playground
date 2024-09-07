@@ -39,3 +39,12 @@ struct Pokemon: Codable {
     let id: Int
     let name: String
 }
+
+struct Movie: Identifiable {
+    var id = UUID()
+    var title: String
+    var genre: String
+    var description: String
+    var rating: Double
+    var poster: String // Assume the poster is an image name in assets or URL
+}
