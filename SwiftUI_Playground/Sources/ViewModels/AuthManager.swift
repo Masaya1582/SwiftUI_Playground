@@ -18,6 +18,7 @@ final class AuthManager: ObservableObject {
                 self?.errorMessage = error.localizedDescription
             } else {
                 self?.isLoggedIn = true
+                self?.errorMessage = nil
             }
         }
     }
@@ -28,6 +29,7 @@ final class AuthManager: ObservableObject {
                 self?.errorMessage = error.localizedDescription
             } else {
                 self?.isLoggedIn = true
+                self?.errorMessage = nil
             }
         }
     }
