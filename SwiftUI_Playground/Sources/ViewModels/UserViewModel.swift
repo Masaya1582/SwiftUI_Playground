@@ -10,17 +10,17 @@ import Foundation
 import Combine
 
 final class UserViewModel: ObservableObject {
-    @Published var users: User?
+    @Published var user: User?
     @Published var isLoading = false
 
-    func fetchUsers() {
+    func fetchUsers(id: Int) {
         isLoading = true
-        APIClient.request(UserRequest(id: 3)) { [weak self] result in
+        APIClient.request(UserRequest(id: id)) { [weak self] result in
             DispatchQueue.main.async {
                 self?.isLoading = false
                 switch result {
                 case .success(let response):
-                    self?.users = response
+                    self?.user = response
                     print("ユーザ情報: \(response)")
                 case .failure(let error):
                     print("エラーだよ: \(error.localizedDescription)")
