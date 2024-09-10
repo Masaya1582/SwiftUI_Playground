@@ -13,6 +13,8 @@
 		1E78EB2A2C9033F700AE68EB /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E78EB292C9033F700AE68EB /* APIError.swift */; };
 		1E78EB2C2C9037F900AE68EB /* JSONDataParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E78EB2B2C9037F900AE68EB /* JSONDataParser.swift */; };
 		1E78EB2E2C903C7700AE68EB /* PokemonRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E78EB2D2C903C7700AE68EB /* PokemonRequest.swift */; };
+		1E78EB302C903E8C00AE68EB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E78EB2F2C903E8C00AE68EB /* AppDelegate.swift */; };
+		1E78EB322C903E9C00AE68EB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E78EB312C903E9C00AE68EB /* SceneDelegate.swift */; };
 		1E883AA52C8ADF7C00729FDC /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1E883AA42C8ADF7C00729FDC /* SwiftyJSON */; };
 		1E883AA82C8ADF8700729FDC /* APIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1E883AA72C8ADF8700729FDC /* APIKit */; };
 		1EE40DAB2C9020E400AFA0E0 /* FirebaseAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE40DAA2C9020E400AFA0E0 /* FirebaseAnalytics.swift */; };
@@ -68,6 +70,8 @@
 		1E78EB292C9033F700AE68EB /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
 		1E78EB2B2C9037F900AE68EB /* JSONDataParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDataParser.swift; sourceTree = "<group>"; };
 		1E78EB2D2C903C7700AE68EB /* PokemonRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonRequest.swift; sourceTree = "<group>"; };
+		1E78EB2F2C903E8C00AE68EB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		1E78EB312C903E9C00AE68EB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		1EE40DAA2C9020E400AFA0E0 /* FirebaseAnalytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAnalytics.swift; sourceTree = "<group>"; };
 		1EE40DB02C902E7200AFA0E0 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		1EE40DB32C902E8D00AFA0E0 /* UserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRequest.swift; sourceTree = "<group>"; };
@@ -199,6 +203,8 @@
 			isa = PBXGroup;
 			children = (
 				4011E8682A49759C003F06BF /* SwiftUI_PlaygroundApp.swift */,
+				1E78EB2F2C903E8C00AE68EB /* AppDelegate.swift */,
+				1E78EB312C903E9C00AE68EB /* SceneDelegate.swift */,
 				1EE40DAF2C902E6600AFA0E0 /* APIRequest */,
 				4011E87C2A497630003F06BF /* Models */,
 				4011E87B2A49762D003F06BF /* Views */,
@@ -417,6 +423,8 @@
 				1E771ADA2AF35B1C00119B16 /* HalfModalView.swift in Sources */,
 				1E78EB2E2C903C7700AE68EB /* PokemonRequest.swift in Sources */,
 				40779B7D2A528D3200505ABD /* CustomComponents.swift in Sources */,
+				1E78EB322C903E9C00AE68EB /* SceneDelegate.swift in Sources */,
+				1E78EB302C903E8C00AE68EB /* AppDelegate.swift in Sources */,
 				4011E8892A4976D0003F06BF /* LocalizableStrings.swift in Sources */,
 				1E78EB2C2C9037F900AE68EB /* JSONDataParser.swift in Sources */,
 				4011E88F2A497727003F06BF /* HomeViewModel.swift in Sources */,
