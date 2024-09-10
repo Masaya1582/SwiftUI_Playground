@@ -11,7 +11,6 @@
 		1E62EE712AD8D0080031CB1B /* FloatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E62EE702AD8D0080031CB1B /* FloatingView.swift */; };
 		1E771ADA2AF35B1C00119B16 /* HalfModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E771AD92AF35B1C00119B16 /* HalfModalView.swift */; };
 		1E78EB2A2C9033F700AE68EB /* APIGeneral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E78EB292C9033F700AE68EB /* APIGeneral.swift */; };
-		1E78EB2C2C9037F900AE68EB /* JSONDataParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E78EB2B2C9037F900AE68EB /* JSONDataParser.swift */; };
 		1E78EB2E2C903C7700AE68EB /* PokemonRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E78EB2D2C903C7700AE68EB /* PokemonRequest.swift */; };
 		1E78EB302C903E8C00AE68EB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E78EB2F2C903E8C00AE68EB /* AppDelegate.swift */; };
 		1E78EB322C903E9C00AE68EB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E78EB312C903E9C00AE68EB /* SceneDelegate.swift */; };
@@ -68,7 +67,6 @@
 		1E62EE702AD8D0080031CB1B /* FloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingView.swift; sourceTree = "<group>"; };
 		1E771AD92AF35B1C00119B16 /* HalfModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfModalView.swift; sourceTree = "<group>"; };
 		1E78EB292C9033F700AE68EB /* APIGeneral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIGeneral.swift; sourceTree = "<group>"; };
-		1E78EB2B2C9037F900AE68EB /* JSONDataParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDataParser.swift; sourceTree = "<group>"; };
 		1E78EB2D2C903C7700AE68EB /* PokemonRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonRequest.swift; sourceTree = "<group>"; };
 		1E78EB2F2C903E8C00AE68EB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1E78EB312C903E9C00AE68EB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -138,7 +136,6 @@
 			children = (
 				1EE40DB02C902E7200AFA0E0 /* APIClient.swift */,
 				1E78EB292C9033F700AE68EB /* APIGeneral.swift */,
-				1E78EB2B2C9037F900AE68EB /* JSONDataParser.swift */,
 				1EE40DB22C902E8600AFA0E0 /* Request */,
 			);
 			path = APIRequest;
@@ -426,7 +423,6 @@
 				1E78EB322C903E9C00AE68EB /* SceneDelegate.swift in Sources */,
 				1E78EB302C903E8C00AE68EB /* AppDelegate.swift in Sources */,
 				4011E8892A4976D0003F06BF /* LocalizableStrings.swift in Sources */,
-				1E78EB2C2C9037F900AE68EB /* JSONDataParser.swift in Sources */,
 				4011E88F2A497727003F06BF /* HomeViewModel.swift in Sources */,
 				1EE40DB42C902E8D00AFA0E0 /* UserRequest.swift in Sources */,
 				1EE40DB62C902ECA00AFA0E0 /* UserViewModel.swift in Sources */,

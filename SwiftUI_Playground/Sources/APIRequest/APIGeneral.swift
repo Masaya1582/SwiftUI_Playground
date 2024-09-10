@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import APIKit
 
 enum APIError: Error {
     case invalidData
@@ -25,6 +26,16 @@ enum APIError: Error {
         case .unknownError(let message):
             return "An unknown error occurred: \(message)"
         }
+    }
+}
+
+final class JSONDataParser: DataParser {
+    var contentType: String? {
+        return "application/json"
+    }
+
+    func parse(data: Data) throws -> Any {
+        return data
     }
 }
 
