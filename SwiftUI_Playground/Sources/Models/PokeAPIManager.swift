@@ -12,8 +12,8 @@ final class PokeAPIManager {
         case invalidURL
         case requestFailed
     }
-    
-    func fetchPokemon(withID id: Int, completion: @escaping(Result<Pokemon, APIError>) -> Void) {
+
+    func fetchPokemon(withID id: Int, completion: @escaping (Result<Pokemon, APIError>) -> Void) {
         guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon/\(id)") else {
             completion(.failure(.invalidURL))
             return

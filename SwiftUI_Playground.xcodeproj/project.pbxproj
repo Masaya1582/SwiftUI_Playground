@@ -13,6 +13,7 @@
 		1E883AA52C8ADF7C00729FDC /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1E883AA42C8ADF7C00729FDC /* SwiftyJSON */; };
 		1E883AA82C8ADF8700729FDC /* APIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1E883AA72C8ADF8700729FDC /* APIKit */; };
 		1EE40DAB2C9020E400AFA0E0 /* FirebaseAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE40DAA2C9020E400AFA0E0 /* FirebaseAnalytics.swift */; };
+		1EE40DAE2C902A3900AFA0E0 /* SwiftFormat in Frameworks */ = {isa = PBXBuildFile; productRef = 1EE40DAD2C902A3900AFA0E0 /* SwiftFormat */; };
 		4011E8692A49759C003F06BF /* SwiftUI_PlaygroundApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E8682A49759C003F06BF /* SwiftUI_PlaygroundApp.swift */; };
 		4011E86B2A49759C003F06BF /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E86A2A49759C003F06BF /* HomeView.swift */; };
 		4011E86D2A49759D003F06BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4011E86C2A49759D003F06BF /* Assets.xcassets */; };
@@ -103,6 +104,7 @@
 				4075FD322C8D4EB500C52938 /* FirebaseMessaging in Frameworks */,
 				4075FD302C8D4EB500C52938 /* FirebaseMLModelDownloader in Frameworks */,
 				4075FD342C8D4EB500C52938 /* FirebasePerformance in Frameworks */,
+				1EE40DAE2C902A3900AFA0E0 /* SwiftFormat in Frameworks */,
 				4075FD202C8D4EB500C52938 /* FirebaseDatabase in Frameworks */,
 				4075FD122C8D4EB500C52938 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
 				4075FD1A2C8D4EB500C52938 /* FirebaseAuth in Frameworks */,
@@ -282,6 +284,7 @@
 				4075FD372C8D4EB500C52938 /* FirebaseStorage */,
 				4075FD392C8D4EB500C52938 /* FirebaseStorageCombine-Community */,
 				4075FD3B2C8D4EB500C52938 /* FirebaseVertexAI-Preview */,
+				1EE40DAD2C902A3900AFA0E0 /* SwiftFormat */,
 			);
 			productName = SwiftUI_Playground;
 			productReference = 4011E8652A49759C003F06BF /* SwiftUI_Playground.app */;
@@ -316,6 +319,7 @@
 				1E883AA32C8ADF7C00729FDC /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 				1E883AA62C8ADF8700729FDC /* XCRemoteSwiftPackageReference "APIKit" */,
 				4075FD0E2C8D4EB500C52938 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				1EE40DAC2C902A3900AFA0E0 /* XCRemoteSwiftPackageReference "SwiftFormat" */,
 			);
 			productRefGroup = 4011E8662A49759C003F06BF /* Products */;
 			projectDirPath = "";
@@ -630,6 +634,14 @@
 				minimumVersion = 5.4.0;
 			};
 		};
+		1EE40DAC2C902A3900AFA0E0 /* XCRemoteSwiftPackageReference "SwiftFormat" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nicklockwood/SwiftFormat";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.54.4;
+			};
+		};
 		4075FD0E2C8D4EB500C52938 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -650,6 +662,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1E883AA62C8ADF8700729FDC /* XCRemoteSwiftPackageReference "APIKit" */;
 			productName = APIKit;
+		};
+		1EE40DAD2C902A3900AFA0E0 /* SwiftFormat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1EE40DAC2C902A3900AFA0E0 /* XCRemoteSwiftPackageReference "SwiftFormat" */;
+			productName = SwiftFormat;
 		};
 		4075FD0F2C8D4EB500C52938 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;

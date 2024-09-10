@@ -17,7 +17,7 @@ final class HomeModel {
         self.name = name
         self.age = age
         self.height = height
-        self.isMan = isMen
+        isMan = isMen
     }
 }
 

@@ -1,12 +1,12 @@
-// 
+//
 //  HomeViewModel.swift
 //  SwiftUI_Playground
 //
 //  Created by MasayaNakakuki on 2023/06/26.
 //
 
-import SwiftUI
 import Combine
+import SwiftUI
 
 final class HomeViewModel: ObservableObject {
     @Published var name = ""
@@ -34,5 +34,4 @@ final class HomeViewModel: ObservableObject {
                 .assign(to: &$posts)
         }
     }
-
 }

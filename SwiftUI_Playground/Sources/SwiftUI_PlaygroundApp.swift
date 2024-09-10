@@ -5,8 +5,8 @@
 //  Created by MasayaNakakuki on 2023/06/26.
 //
 
-import SwiftUI
 import Firebase
+import SwiftUI
 
 @main
 struct SwiftUI_PlaygroundApp: App {
@@ -19,20 +19,20 @@ struct SwiftUI_PlaygroundApp: App {
 }
 
 final class AppDelegate: NSObject, UIApplicationDelegate {
-    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+    func application(_: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options _: UIScene.ConnectionOptions) -> UISceneConfiguration {
         let config = UISceneConfiguration(name: nil, sessionRole: connectingSceneSession.role)
         config.delegateClass = SceneDelegate.self
         return config
     }
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+    func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         FirebaseApp.configure()
         return true
     }
 }
 
 final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-    func windowScene(_ windowScene: UIWindowScene, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
+    func windowScene(_: UIWindowScene, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
         if shortcutItem.type == "com.run.button" {
             print("Workoutを開始します")
         }

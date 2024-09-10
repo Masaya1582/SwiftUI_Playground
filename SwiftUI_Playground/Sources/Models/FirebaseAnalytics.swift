@@ -8,7 +8,7 @@
 
 import Firebase
 
-struct FirebaseAnalytics {
+enum FirebaseAnalytics {
     // MARK: - Tracking
     static func logEvent(_ event: Event) {
         Firebase.Analytics.logEvent(
@@ -44,8 +44,8 @@ struct FirebaseAnalytics {
             case .eventOne,
                  .eventTwo,
                  .eventThree:
-                 return nil
-            case .eventFour(let parameter):
+                return nil
+            case let .eventFour(parameter):
                 return ["parameter": parameter]
             }
         }
