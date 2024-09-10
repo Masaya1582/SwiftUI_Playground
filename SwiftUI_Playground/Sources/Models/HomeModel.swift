@@ -39,3 +39,13 @@ struct Pokemon: Codable {
     let id: Int
     let name: String
 }
+
+struct UserResponse: Decodable {
+    let users: [User]
+}
+
+struct User: Identifiable, Decodable {
+    let id: Int
+    let name: String
+    let email: String
+}

@@ -14,6 +14,9 @@
 		1E883AA82C8ADF8700729FDC /* APIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1E883AA72C8ADF8700729FDC /* APIKit */; };
 		1EE40DAB2C9020E400AFA0E0 /* FirebaseAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE40DAA2C9020E400AFA0E0 /* FirebaseAnalytics.swift */; };
 		1EE40DAE2C902A3900AFA0E0 /* SwiftFormat in Frameworks */ = {isa = PBXBuildFile; productRef = 1EE40DAD2C902A3900AFA0E0 /* SwiftFormat */; };
+		1EE40DB12C902E7200AFA0E0 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE40DB02C902E7200AFA0E0 /* APIClient.swift */; };
+		1EE40DB42C902E8D00AFA0E0 /* UserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE40DB32C902E8D00AFA0E0 /* UserRequest.swift */; };
+		1EE40DB62C902ECA00AFA0E0 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE40DB52C902ECA00AFA0E0 /* UserViewModel.swift */; };
 		4011E8692A49759C003F06BF /* SwiftUI_PlaygroundApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E8682A49759C003F06BF /* SwiftUI_PlaygroundApp.swift */; };
 		4011E86B2A49759C003F06BF /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E86A2A49759C003F06BF /* HomeView.swift */; };
 		4011E86D2A49759D003F06BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4011E86C2A49759D003F06BF /* Assets.xcassets */; };
@@ -60,6 +63,9 @@
 		1E62EE702AD8D0080031CB1B /* FloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingView.swift; sourceTree = "<group>"; };
 		1E771AD92AF35B1C00119B16 /* HalfModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfModalView.swift; sourceTree = "<group>"; };
 		1EE40DAA2C9020E400AFA0E0 /* FirebaseAnalytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAnalytics.swift; sourceTree = "<group>"; };
+		1EE40DB02C902E7200AFA0E0 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		1EE40DB32C902E8D00AFA0E0 /* UserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRequest.swift; sourceTree = "<group>"; };
+		1EE40DB52C902ECA00AFA0E0 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		1EF7E5942ADCD9210032015B /* SwiftUI-Playground-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "SwiftUI-Playground-Info.plist"; sourceTree = SOURCE_ROOT; };
 		4011E8652A49759C003F06BF /* SwiftUI_Playground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftUI_Playground.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4011E8682A49759C003F06BF /* SwiftUI_PlaygroundApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUI_PlaygroundApp.swift; sourceTree = "<group>"; };
@@ -117,6 +123,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1EE40DAF2C902E6600AFA0E0 /* APIRequest */ = {
+			isa = PBXGroup;
+			children = (
+				1EE40DB02C902E7200AFA0E0 /* APIClient.swift */,
+				1EE40DB22C902E8600AFA0E0 /* Request */,
+			);
+			path = APIRequest;
+			sourceTree = "<group>";
+		};
+		1EE40DB22C902E8600AFA0E0 /* Request */ = {
+			isa = PBXGroup;
+			children = (
+				1EE40DB32C902E8D00AFA0E0 /* UserRequest.swift */,
+			);
+			path = Request;
+			sourceTree = "<group>";
+		};
 		4011E85C2A49759C003F06BF = {
 			isa = PBXGroup;
 			children = (
@@ -167,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				4011E8682A49759C003F06BF /* SwiftUI_PlaygroundApp.swift */,
+				1EE40DAF2C902E6600AFA0E0 /* APIRequest */,
 				4011E87C2A497630003F06BF /* Models */,
 				4011E87B2A49762D003F06BF /* Views */,
 				4011E87A2A497628003F06BF /* ViewModels */,
@@ -190,6 +214,7 @@
 			isa = PBXGroup;
 			children = (
 				4011E88E2A497727003F06BF /* HomeViewModel.swift */,
+				1EE40DB52C902ECA00AFA0E0 /* UserViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -376,12 +401,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E62EE712AD8D0080031CB1B /* FloatingView.swift in Sources */,
+				1EE40DB12C902E7200AFA0E0 /* APIClient.swift in Sources */,
 				4011E88B2A4976DA003F06BF /* Fonts.swift in Sources */,
 				4011E86B2A49759C003F06BF /* HomeView.swift in Sources */,
 				1E771ADA2AF35B1C00119B16 /* HalfModalView.swift in Sources */,
 				40779B7D2A528D3200505ABD /* CustomComponents.swift in Sources */,
 				4011E8892A4976D0003F06BF /* LocalizableStrings.swift in Sources */,
 				4011E88F2A497727003F06BF /* HomeViewModel.swift in Sources */,
+				1EE40DB42C902E8D00AFA0E0 /* UserRequest.swift in Sources */,
+				1EE40DB62C902ECA00AFA0E0 /* UserViewModel.swift in Sources */,
 				1EE40DAB2C9020E400AFA0E0 /* FirebaseAnalytics.swift in Sources */,
 				406148192B099409004D146A /* PokeAPIManager.swift in Sources */,
 				4011E87E2A497644003F06BF /* HomeModel.swift in Sources */,
