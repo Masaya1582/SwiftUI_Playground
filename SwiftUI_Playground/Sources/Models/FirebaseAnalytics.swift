@@ -22,7 +22,7 @@ struct FirebaseAnalytics {
         case eventOne
         case eventTwo
         case eventThree
-        case eventWithParameter(String)
+        case eventFour(String)
 
         // MARK: - Name
         var name: String {
@@ -33,8 +33,8 @@ struct FirebaseAnalytics {
                 return "event_two"
             case .eventThree:
                 return "event_three"
-            case .eventWithParameter:
-                return "event_with_parameter"
+            case .eventFour:
+                return "event_four"
             }
         }
 
@@ -45,7 +45,7 @@ struct FirebaseAnalytics {
                  .eventTwo,
                  .eventThree:
                  return nil
-            case .eventWithParameter(let parameter):
+            case .eventFour(let parameter):
                 return ["parameter": parameter]
             }
         }
