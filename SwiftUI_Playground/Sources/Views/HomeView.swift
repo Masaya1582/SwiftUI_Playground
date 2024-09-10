@@ -12,7 +12,7 @@ struct HomeView: View {
     // MARK: - Properties
     @StateObject private var viewModel = HomeViewModel()
     @StateObject private var userViewModel = UserViewModel()
-    private let pokeAPIManager = PokeAPIManager()
+    @StateObject private var pokemonViewModel = PokemonViewModel()
 
     // MARK: - Body
     var body: some View {
@@ -26,9 +26,7 @@ struct HomeView: View {
         }
         .onAppear {
             let randomID = Int.random(in: 1 ... 10)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("PokemoDetail: \(pokemon)")
-            }
+            pokemonViewModel.fetchPokemon(id: randomID)
             userViewModel.fetchUsers(id: randomID)
         }
         .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {

@@ -12,6 +12,7 @@
 		1E771ADA2AF35B1C00119B16 /* HalfModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E771AD92AF35B1C00119B16 /* HalfModalView.swift */; };
 		1E78EB2A2C9033F700AE68EB /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E78EB292C9033F700AE68EB /* APIError.swift */; };
 		1E78EB2C2C9037F900AE68EB /* JSONDataParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E78EB2B2C9037F900AE68EB /* JSONDataParser.swift */; };
+		1E78EB2E2C903C7700AE68EB /* PokemonRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E78EB2D2C903C7700AE68EB /* PokemonRequest.swift */; };
 		1E883AA52C8ADF7C00729FDC /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1E883AA42C8ADF7C00729FDC /* SwiftyJSON */; };
 		1E883AA82C8ADF8700729FDC /* APIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1E883AA72C8ADF8700729FDC /* APIKit */; };
 		1EE40DAB2C9020E400AFA0E0 /* FirebaseAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE40DAA2C9020E400AFA0E0 /* FirebaseAnalytics.swift */; };
@@ -32,7 +33,7 @@
 		4011E88D2A4976EC003F06BF /* Caprasimo-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4011E88C2A4976EC003F06BF /* Caprasimo-Regular.ttf */; };
 		4011E88F2A497727003F06BF /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E88E2A497727003F06BF /* HomeViewModel.swift */; };
 		401E4F1E2B3E675D0004D507 /* RubikDoodleShadow-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 401E4F1D2B3E675D0004D507 /* RubikDoodleShadow-Regular.ttf */; };
-		406148192B099409004D146A /* PokeAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406148182B099409004D146A /* PokeAPIManager.swift */; };
+		406148192B099409004D146A /* PokemonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406148182B099409004D146A /* PokemonViewModel.swift */; };
 		4075FD102C8D4EB500C52938 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 4075FD0F2C8D4EB500C52938 /* FirebaseAnalytics */; };
 		4075FD122C8D4EB500C52938 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 4075FD112C8D4EB500C52938 /* FirebaseAnalyticsOnDeviceConversion */; };
 		4075FD142C8D4EB500C52938 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 4075FD132C8D4EB500C52938 /* FirebaseAnalyticsWithoutAdIdSupport */; };
@@ -66,6 +67,7 @@
 		1E771AD92AF35B1C00119B16 /* HalfModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfModalView.swift; sourceTree = "<group>"; };
 		1E78EB292C9033F700AE68EB /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
 		1E78EB2B2C9037F900AE68EB /* JSONDataParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDataParser.swift; sourceTree = "<group>"; };
+		1E78EB2D2C903C7700AE68EB /* PokemonRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonRequest.swift; sourceTree = "<group>"; };
 		1EE40DAA2C9020E400AFA0E0 /* FirebaseAnalytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAnalytics.swift; sourceTree = "<group>"; };
 		1EE40DB02C902E7200AFA0E0 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		1EE40DB32C902E8D00AFA0E0 /* UserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRequest.swift; sourceTree = "<group>"; };
@@ -85,7 +87,7 @@
 		4011E88C2A4976EC003F06BF /* Caprasimo-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Caprasimo-Regular.ttf"; sourceTree = "<group>"; };
 		4011E88E2A497727003F06BF /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		401E4F1D2B3E675D0004D507 /* RubikDoodleShadow-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RubikDoodleShadow-Regular.ttf"; sourceTree = "<group>"; };
-		406148182B099409004D146A /* PokeAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokeAPIManager.swift; sourceTree = "<group>"; };
+		406148182B099409004D146A /* PokemonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonViewModel.swift; sourceTree = "<group>"; };
 		4075FD3E2C8D4EC600C52938 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		40779B7C2A528D3200505ABD /* CustomComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomComponents.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -142,6 +144,7 @@
 			isa = PBXGroup;
 			children = (
 				1EE40DB32C902E8D00AFA0E0 /* UserRequest.swift */,
+				1E78EB2D2C903C7700AE68EB /* PokemonRequest.swift */,
 			);
 			path = Request;
 			sourceTree = "<group>";
@@ -221,6 +224,7 @@
 			children = (
 				4011E88E2A497727003F06BF /* HomeViewModel.swift */,
 				1EE40DB52C902ECA00AFA0E0 /* UserViewModel.swift */,
+				406148182B099409004D146A /* PokemonViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -241,7 +245,6 @@
 			children = (
 				4011E87D2A497644003F06BF /* HomeModel.swift */,
 				1E0CBD5F2AE25C44001917B9 /* ImagePicker.swift */,
-				406148182B099409004D146A /* PokeAPIManager.swift */,
 				1EE40DAA2C9020E400AFA0E0 /* FirebaseAnalytics.swift */,
 			);
 			path = Models;
@@ -412,6 +415,7 @@
 				1E78EB2A2C9033F700AE68EB /* APIError.swift in Sources */,
 				4011E86B2A49759C003F06BF /* HomeView.swift in Sources */,
 				1E771ADA2AF35B1C00119B16 /* HalfModalView.swift in Sources */,
+				1E78EB2E2C903C7700AE68EB /* PokemonRequest.swift in Sources */,
 				40779B7D2A528D3200505ABD /* CustomComponents.swift in Sources */,
 				4011E8892A4976D0003F06BF /* LocalizableStrings.swift in Sources */,
 				1E78EB2C2C9037F900AE68EB /* JSONDataParser.swift in Sources */,
@@ -419,7 +423,7 @@
 				1EE40DB42C902E8D00AFA0E0 /* UserRequest.swift in Sources */,
 				1EE40DB62C902ECA00AFA0E0 /* UserViewModel.swift in Sources */,
 				1EE40DAB2C9020E400AFA0E0 /* FirebaseAnalytics.swift in Sources */,
-				406148192B099409004D146A /* PokeAPIManager.swift in Sources */,
+				406148192B099409004D146A /* PokemonViewModel.swift in Sources */,
 				4011E87E2A497644003F06BF /* HomeModel.swift in Sources */,
 				1E0CBD602AE25C44001917B9 /* ImagePicker.swift in Sources */,
 				4011E8872A4976C9003F06BF /* Assets.swift in Sources */,
