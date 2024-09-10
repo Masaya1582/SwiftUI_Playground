@@ -25,11 +25,11 @@ struct HomeView: View {
             }
         }
         .onAppear {
-            let randomID = Int.random(in: 1 ... 100)
+            let randomID = Int.random(in: 1 ... 10)
             pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
                 print("PokemoDetail: \(pokemon)")
             }
-            userViewModel.fetchUsers()
+            userViewModel.fetchUsers(id: randomID)
         }
         .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
             ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)

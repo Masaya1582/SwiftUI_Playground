@@ -13,9 +13,9 @@ final class UserViewModel: ObservableObject {
     @Published var users: User?
     @Published var isLoading = false
 
-    func fetchUsers() {
+    func fetchUsers(id: Int) {
         isLoading = true
-        APIClient.request(UserRequest(id: 3)) { [weak self] result in
+        APIClient.request(UserRequest(id: id)) { [weak self] result in
             DispatchQueue.main.async {
                 self?.isLoading = false
                 switch result {
