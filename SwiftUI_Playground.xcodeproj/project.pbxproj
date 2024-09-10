@@ -51,6 +51,8 @@
 		4075FD3C2C8D4EB500C52938 /* FirebaseVertexAI-Preview in Frameworks */ = {isa = PBXBuildFile; productRef = 4075FD3B2C8D4EB500C52938 /* FirebaseVertexAI-Preview */; };
 		4075FD3F2C8D4EC600C52938 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4075FD3E2C8D4EC600C52938 /* GoogleService-Info.plist */; };
 		40779B7D2A528D3200505ABD /* CustomComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40779B7C2A528D3200505ABD /* CustomComponents.swift */; };
+		40A249632C8FD4970075C797 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A249622C8FD4970075C797 /* Message.swift */; };
+		40A249652C8FD4B80075C797 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A249642C8FD4B80075C797 /* ChatViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,6 +77,8 @@
 		406148182B099409004D146A /* PokeAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokeAPIManager.swift; sourceTree = "<group>"; };
 		4075FD3E2C8D4EC600C52938 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		40779B7C2A528D3200505ABD /* CustomComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomComponents.swift; sourceTree = "<group>"; };
+		40A249622C8FD4970075C797 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		40A249642C8FD4B80075C797 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				4011E88E2A497727003F06BF /* HomeViewModel.swift */,
+				40A249642C8FD4B80075C797 /* ChatViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -207,6 +212,7 @@
 				4011E87D2A497644003F06BF /* HomeModel.swift */,
 				1E0CBD5F2AE25C44001917B9 /* ImagePicker.swift */,
 				406148182B099409004D146A /* PokeAPIManager.swift */,
+				40A249622C8FD4970075C797 /* Message.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -376,7 +382,9 @@
 				4011E8892A4976D0003F06BF /* LocalizableStrings.swift in Sources */,
 				4011E88F2A497727003F06BF /* HomeViewModel.swift in Sources */,
 				406148192B099409004D146A /* PokeAPIManager.swift in Sources */,
+				40A249652C8FD4B80075C797 /* ChatViewModel.swift in Sources */,
 				4011E87E2A497644003F06BF /* HomeModel.swift in Sources */,
+				40A249632C8FD4970075C797 /* Message.swift in Sources */,
 				1E0CBD602AE25C44001917B9 /* ImagePicker.swift in Sources */,
 				4011E8872A4976C9003F06BF /* Assets.swift in Sources */,
 				4011E8692A49759C003F06BF /* SwiftUI_PlaygroundApp.swift in Sources */,

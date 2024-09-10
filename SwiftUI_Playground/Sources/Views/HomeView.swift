@@ -6,111 +6,87 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var viewModel = HomeViewModel()
-    private let pokeAPIManager = PokeAPIManager()
+    @StateObject var chatViewModel = ChatViewModel()
+    @State private var messageTextMichael: String = ""
+    @State private var messageTextLincoln: String = ""
+    @State private var senderNameMichael: String = "Michael"
+    @State private var senderNameLincoln: String = "Lincoln"
 
-    // MARK: - Body
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
-            }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1...100)
-            pokeAPIManager.fetchPokemon(withID: randomID) { pokemon in
-                print("PokemoDetail: \(pokemon)")
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $viewModel.selectedImage, sourceType: viewModel.sourceType ?? .photoLibrary)
-        }
-        .sheet(isPresented: $viewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $viewModel.halfModalText, isShowHalfView: $viewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $viewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    viewModel.sourceType = .camera
-                    viewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    viewModel.sourceType = .photoLibrary
-                    viewModel.isOpenImagePicker = true
+        VStack {
+            ScrollView {
+                VStack {
+                    ForEach(chatViewModel.messages) { message in
+                        HStack {
+                            if message.sender == senderNameMichael {
+                                Spacer()
+                                VStack(alignment: .trailing) {
+                                    Text("\(message.sender):")
+                                        .bold()
+                                        .font(.system(size: 12))
+                                    Text(message.text)
+                                        .padding(10)
+                                        .background(Color.blue.opacity(0.3))
+                                        .cornerRadius(8)
+                                }
+                            } else if message.sender == senderNameLincoln {
+                                VStack(alignment: .leading) {
+                                    Text("\(message.sender):")
+                                        .bold()
+                                        .font(.system(size: 12))
+                                    Text(message.text)
+                                        .padding(10)
+                                        .background(Color.green.opacity(0.3))
+                                        .cornerRadius(8)
+                                }
+                                Spacer()
+                            }
+                        }
+                        .padding([.leading, .trailing], 10)
+                    }
                 }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("Tomorrow's Quote: \(viewModel.name)")
-            .modifier(CustomLabel(foregroundColor: .black, size: 28))
-        Text(viewModel.halfModalText)
-            .modifier(CustomLabel(foregroundColor: .black, size: 20))
-        TextField("Quote", text: $viewModel.name)
-            .modifier(CustomTextField())
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = viewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show PopupView") {
-            withAnimation {
-                viewModel.isFloatingViewVisible = true
             }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                viewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                viewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if viewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    viewModel.isFloatingViewVisible = false
+            Divider().padding(.vertical, 10)
+            HStack {
+                TextField("Enter message (Michael)", text: $messageTextMichael)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .frame(minHeight: 30)
+                Button {
+                    if !messageTextMichael.isEmpty {
+                        chatViewModel.sendMessage(text: messageTextMichael, sender: senderNameMichael)
+                        messageTextMichael = ""
+                    }
+                } label: {
+                    Text("Send as Michael")
+                        .bold()
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
                 }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+            }
+            .padding()
+            HStack {
+                TextField("Enter message (Lincoln)", text: $messageTextLincoln)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .frame(minHeight: 30)
+                Button {
+                    if !messageTextLincoln.isEmpty {
+                        chatViewModel.sendMessage(text: messageTextLincoln, sender: senderNameLincoln)
+                        messageTextLincoln = ""
+                    }
+                } label: {
+                    Text("Send as Lincoln")
+                        .bold()
+                        .padding()
+                        .background(Color.green)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
+            }
+            .padding()
         }
     }
 }
