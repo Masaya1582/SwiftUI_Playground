@@ -10,21 +10,40 @@ import Foundation
 import APIKit
 
 struct UserRequest: Request {
-    typealias Response = UserResponse
+    typealias Response = User
+    let id: Int
 
     var baseURL: URL {
-        return URL(string: "https://api.example.com")!
+        guard let url = URL(string: "https://jsonplaceholder.typicode.com") else { fatalError("URL not Found") }
+        return url
     }
 
     var path: String {
-        return "/users"
+        return "/users/\(id)"
     }
 
     var method: HTTPMethod {
         return .get
     }
 
-    func response(from object: Any, urlResponse: HTTPURLResponse) throws -> UserResponse {
-        return try JSONDecoder().decode(UserResponse.self, from: object as! Data)
+    var dataParser: DataParser {
+        return JSONDataParser()
+    }
+
+    func response(from object: Any, urlResponse: HTTPURLResponse) throws -> User {
+        guard let data = object as? Data else {
+            throw APIError.invalidData
+        }
+        guard (200...299).contains(urlResponse.statusCode) else {
+            throw APIError.invalidStatusCode(urlResponse.statusCode)
+        }
+        do {
+            let decoder = JSONDecoder()
+            return try decoder.decode(User.self, from: data)
+        } catch let decodingError as DecodingError {
+            throw APIError.decodingFailed(decodingError.localizedDescription)
+        } catch {
+            throw APIError.unknownError(error.localizedDescription)
+        }
     }
 }
