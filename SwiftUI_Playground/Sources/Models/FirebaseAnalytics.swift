@@ -33,7 +33,7 @@ struct FirebaseAnalytics {
                 return "event_two"
             case .eventThree:
                 return "event_three"
-            case .eventWithParameter(let parameter):
+            case .eventWithParameter:
                 return "event_with_parameter"
             }
         }
@@ -42,9 +42,9 @@ struct FirebaseAnalytics {
         var parameters: [String: Any?]? {
             switch self {
             case .eventOne,
-                    .eventTwo,
-                    .eventThree:
-                return nil
+                 .eventTwo,
+                 .eventThree:
+                 return nil
             case .eventWithParameter(let parameter):
                 return ["parameter": parameter]
             }
