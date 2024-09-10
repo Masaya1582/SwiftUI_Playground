@@ -27,3 +27,21 @@ enum APIError: Error {
         }
     }
 }
+
+func apiResponse<T: Decodable>(object: Any, urlResponse: HTTPURLResponse, to type: T.Type) throws -> T {
+    guard let data = object as? Data else {
+        throw APIError.invalidData
+    }
+    guard (200...299).contains(urlResponse.statusCode) else {
+        throw APIError.invalidStatusCode(urlResponse.statusCode)
+    }
+    do {
+        let decoder = JSONDecoder()
+        return try decoder.decode(T.self, from: data)
+    } catch let decodingError as DecodingError {
+        throw APIError.decodingFailed(decodingError.localizedDescription)
+    } catch {
+        throw APIError.unknownError(error.localizedDescription)
+    }
+
+}
