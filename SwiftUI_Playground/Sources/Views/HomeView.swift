@@ -26,6 +26,7 @@ struct HomeView: View {
         }
         .onAppear {
             let randomID = Int.random(in: 1 ... 10)
+            viewModel.fetchPosts()
             pokemonViewModel.fetchPokemon(id: randomID)
             userViewModel.fetchUsers(id: randomID)
         }
