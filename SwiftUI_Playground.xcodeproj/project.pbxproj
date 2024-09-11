@@ -92,6 +92,7 @@
 		406148182B099409004D146A /* PokemonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonViewModel.swift; sourceTree = "<group>"; };
 		4075FD3E2C8D4EC600C52938 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		40779B7C2A528D3200505ABD /* CustomComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomComponents.swift; sourceTree = "<group>"; };
+		40D60B1F2C912A0700D17765 /* SwiftUI_Playground.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SwiftUI_Playground.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +170,7 @@
 		4011E8672A49759C003F06BF /* SwiftUI_Playground */ = {
 			isa = PBXGroup;
 			children = (
+				40D60B1F2C912A0700D17765 /* SwiftUI_Playground.entitlements */,
 				1EF7E5942ADCD9210032015B /* SwiftUI-Playground-Info.plist */,
 				4011E8782A497608003F06BF /* Resources */,
 				4011E8772A497604003F06BF /* Sources */,
@@ -557,6 +559,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SwiftUI_Playground/SwiftUI_Playground.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.0.0;
 				DEVELOPMENT_ASSET_PATHS = "\"SwiftUI_Playground/Preview Content\"";
@@ -596,6 +599,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SwiftUI_Playground/SwiftUI_Playground.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.0.0;
 				DEVELOPMENT_ASSET_PATHS = "\"SwiftUI_Playground/Preview Content\"";
