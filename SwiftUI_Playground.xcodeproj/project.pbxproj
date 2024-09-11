@@ -14,6 +14,7 @@
 		1E78EB2E2C903C7700AE68EB /* PokemonRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E78EB2D2C903C7700AE68EB /* PokemonRequest.swift */; };
 		1E78EB302C903E8C00AE68EB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E78EB2F2C903E8C00AE68EB /* AppDelegate.swift */; };
 		1E78EB322C903E9C00AE68EB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E78EB312C903E9C00AE68EB /* SceneDelegate.swift */; };
+		1E8125E42C915F67006D0772 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1E8125E32C915F67006D0772 /* LaunchScreen.storyboard */; };
 		1E883AA52C8ADF7C00729FDC /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1E883AA42C8ADF7C00729FDC /* SwiftyJSON */; };
 		1E883AA82C8ADF8700729FDC /* APIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1E883AA72C8ADF8700729FDC /* APIKit */; };
 		1EE40DAB2C9020E400AFA0E0 /* FirebaseAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE40DAA2C9020E400AFA0E0 /* FirebaseAnalytics.swift */; };
@@ -70,6 +71,7 @@
 		1E78EB2D2C903C7700AE68EB /* PokemonRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonRequest.swift; sourceTree = "<group>"; };
 		1E78EB2F2C903E8C00AE68EB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1E78EB312C903E9C00AE68EB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		1E8125E32C915F67006D0772 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1EE40DAA2C9020E400AFA0E0 /* FirebaseAnalytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAnalytics.swift; sourceTree = "<group>"; };
 		1EE40DB02C902E7200AFA0E0 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		1EE40DB32C902E8D00AFA0E0 /* UserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRequest.swift; sourceTree = "<group>"; };
@@ -131,6 +133,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1E8125E02C915E30006D0772 /* LaunchScreen */ = {
+			isa = PBXGroup;
+			children = (
+				1E8125E32C915F67006D0772 /* LaunchScreen.storyboard */,
+			);
+			path = LaunchScreen;
+			sourceTree = "<group>";
+		};
 		1EE40DAF2C902E6600AFA0E0 /* APIRequest */ = {
 			isa = PBXGroup;
 			children = (
@@ -238,6 +248,7 @@
 				4011E86A2A49759C003F06BF /* HomeView.swift */,
 				1E62EE702AD8D0080031CB1B /* FloatingView.swift */,
 				1E771AD92AF35B1C00119B16 /* HalfModalView.swift */,
+				1E8125E02C915E30006D0772 /* LaunchScreen */,
 				40779B7B2A528D2800505ABD /* Modifiers */,
 			);
 			path = Views;
@@ -373,6 +384,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4011E88D2A4976EC003F06BF /* Caprasimo-Regular.ttf in Resources */,
+				1E8125E42C915F67006D0772 /* LaunchScreen.storyboard in Resources */,
 				4011E8822A49769B003F06BF /* Colors.xcassets in Resources */,
 				401E4F1E2B3E675D0004D507 /* RubikDoodleShadow-Regular.ttf in Resources */,
 				4011E8842A4976AA003F06BF /* Localizable.strings in Resources */,
@@ -570,7 +582,6 @@
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Allow Album to select a photo";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
@@ -609,7 +620,6 @@
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Allow Album to select a photo";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;

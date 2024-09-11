@@ -15,5 +15,12 @@
 			<string>com.run.button</string>
 		</dict>
 	</array>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>LaunchBackgroundColor</string>
+		<key>UIImageName</key>
+		<string>LaunchScreenImage</string>
+	</dict>
 </dict>
 </plist>
