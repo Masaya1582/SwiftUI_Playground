@@ -7,20 +7,6 @@
 
 import Foundation
 
-final class HomeModel {
-    var name: String
-    var age: Int
-    var height: Double
-    var isMan: Bool
-
-    init(name: String, age: Int, height: Double, isMen: Bool) {
-        self.name = name
-        self.age = age
-        self.height = height
-        isMan = isMen
-    }
-}
-
 struct Post: Codable {
     let id: Int
     let userId: Int
