@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemIconSymbolName</key>
+			<string>figure.run</string>
+			<key>UIApplicationShortcutItemSubtitle</key>
+			<string>ランニングを始める</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>ワークアウト</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.run.button</string>
+		</dict>
+	</array>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>LaunchBackgroundColor</string>
+		<key>UIImageName</key>
+		<string>LaunchScreenImage</string>
+	</dict>
+</dict>
+</plist>

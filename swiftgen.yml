@@ -1,0 +1,18 @@
+xcassets:
+  inputs:
+     - SwiftUI_Playground/Resources/Assets.xcassets
+     - SwiftUI_Playground/Resources/Colors.xcassets
+  outputs:
+    templateName: swift5
+    output: SwiftUI_Playground/Generated/Assets.swift
+strings:
+  inputs: SwiftUI_Playground/Resources/Localizable.strings
+  outputs:
+    templateName: structured-swift5
+    output: SwiftUI_Playground/Generated/LocalizableStrings.swift
+fonts:
+  inputs: SwiftUI_Playground/Resources/Fonts
+  outputs:
+    templateName: swift5
+    output: SwiftUI_Playground/Generated/Fonts.swift
+
