@@ -11,7 +11,6 @@
 		1E62EE712AD8D0080031CB1B /* FloatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E62EE702AD8D0080031CB1B /* FloatingView.swift */; };
 		1E771ADA2AF35B1C00119B16 /* HalfModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E771AD92AF35B1C00119B16 /* HalfModalView.swift */; };
 		1E78EB2A2C9033F700AE68EB /* APIGeneral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E78EB292C9033F700AE68EB /* APIGeneral.swift */; };
-		1E78EB2E2C903C7700AE68EB /* PokemonRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E78EB2D2C903C7700AE68EB /* PokemonRequest.swift */; };
 		1E78EB302C903E8C00AE68EB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E78EB2F2C903E8C00AE68EB /* AppDelegate.swift */; };
 		1E78EB322C903E9C00AE68EB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E78EB312C903E9C00AE68EB /* SceneDelegate.swift */; };
 		1E8125E42C915F67006D0772 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1E8125E32C915F67006D0772 /* LaunchScreen.storyboard */; };
@@ -20,22 +19,17 @@
 		1EE40DAB2C9020E400AFA0E0 /* FirebaseAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE40DAA2C9020E400AFA0E0 /* FirebaseAnalytics.swift */; };
 		1EE40DAE2C902A3900AFA0E0 /* SwiftFormat in Frameworks */ = {isa = PBXBuildFile; productRef = 1EE40DAD2C902A3900AFA0E0 /* SwiftFormat */; };
 		1EE40DB12C902E7200AFA0E0 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE40DB02C902E7200AFA0E0 /* APIClient.swift */; };
-		1EE40DB42C902E8D00AFA0E0 /* UserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE40DB32C902E8D00AFA0E0 /* UserRequest.swift */; };
-		1EE40DB62C902ECA00AFA0E0 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE40DB52C902ECA00AFA0E0 /* UserViewModel.swift */; };
 		4011E8692A49759C003F06BF /* SwiftUI_PlaygroundApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E8682A49759C003F06BF /* SwiftUI_PlaygroundApp.swift */; };
 		4011E86B2A49759C003F06BF /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E86A2A49759C003F06BF /* HomeView.swift */; };
 		4011E86D2A49759D003F06BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4011E86C2A49759D003F06BF /* Assets.xcassets */; };
 		4011E8702A49759D003F06BF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4011E86F2A49759D003F06BF /* Preview Assets.xcassets */; };
-		4011E87E2A497644003F06BF /* HomeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E87D2A497644003F06BF /* HomeModel.swift */; };
 		4011E8822A49769B003F06BF /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4011E8812A49769B003F06BF /* Colors.xcassets */; };
 		4011E8842A4976AA003F06BF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4011E8832A4976AA003F06BF /* Localizable.strings */; };
 		4011E8872A4976C9003F06BF /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E8862A4976C9003F06BF /* Assets.swift */; };
 		4011E8892A4976D0003F06BF /* LocalizableStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E8882A4976D0003F06BF /* LocalizableStrings.swift */; };
 		4011E88B2A4976DA003F06BF /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E88A2A4976DA003F06BF /* Fonts.swift */; };
 		4011E88D2A4976EC003F06BF /* Caprasimo-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4011E88C2A4976EC003F06BF /* Caprasimo-Regular.ttf */; };
-		4011E88F2A497727003F06BF /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E88E2A497727003F06BF /* HomeViewModel.swift */; };
 		401E4F1E2B3E675D0004D507 /* RubikDoodleShadow-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 401E4F1D2B3E675D0004D507 /* RubikDoodleShadow-Regular.ttf */; };
-		406148192B099409004D146A /* PokemonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406148182B099409004D146A /* PokemonViewModel.swift */; };
 		4075FD102C8D4EB500C52938 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 4075FD0F2C8D4EB500C52938 /* FirebaseAnalytics */; };
 		4075FD122C8D4EB500C52938 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 4075FD112C8D4EB500C52938 /* FirebaseAnalyticsOnDeviceConversion */; };
 		4075FD142C8D4EB500C52938 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 4075FD132C8D4EB500C52938 /* FirebaseAnalyticsWithoutAdIdSupport */; };
@@ -61,6 +55,10 @@
 		4075FD3C2C8D4EB500C52938 /* FirebaseVertexAI-Preview in Frameworks */ = {isa = PBXBuildFile; productRef = 4075FD3B2C8D4EB500C52938 /* FirebaseVertexAI-Preview */; };
 		4075FD3F2C8D4EC600C52938 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4075FD3E2C8D4EC600C52938 /* GoogleService-Info.plist */; };
 		40779B7D2A528D3200505ABD /* CustomComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40779B7C2A528D3200505ABD /* CustomComponents.swift */; };
+		40D60B212C926CAF00D17765 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D60B202C926CAF00D17765 /* Post.swift */; };
+		40D60B232C926CDE00D17765 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D60B222C926CDE00D17765 /* FirebaseService.swift */; };
+		40D60B252C926D2B00D17765 /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D60B242C926D2B00D17765 /* PostView.swift */; };
+		40D60B272C926E3600D17765 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D60B262C926E3600D17765 /* ContentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,32 +66,30 @@
 		1E62EE702AD8D0080031CB1B /* FloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingView.swift; sourceTree = "<group>"; };
 		1E771AD92AF35B1C00119B16 /* HalfModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfModalView.swift; sourceTree = "<group>"; };
 		1E78EB292C9033F700AE68EB /* APIGeneral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIGeneral.swift; sourceTree = "<group>"; };
-		1E78EB2D2C903C7700AE68EB /* PokemonRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonRequest.swift; sourceTree = "<group>"; };
 		1E78EB2F2C903E8C00AE68EB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1E78EB312C903E9C00AE68EB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		1E8125E32C915F67006D0772 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1EE40DAA2C9020E400AFA0E0 /* FirebaseAnalytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAnalytics.swift; sourceTree = "<group>"; };
 		1EE40DB02C902E7200AFA0E0 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
-		1EE40DB32C902E8D00AFA0E0 /* UserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRequest.swift; sourceTree = "<group>"; };
-		1EE40DB52C902ECA00AFA0E0 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		1EF7E5942ADCD9210032015B /* SwiftUI-Playground-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "SwiftUI-Playground-Info.plist"; sourceTree = SOURCE_ROOT; };
 		4011E8652A49759C003F06BF /* SwiftUI_Playground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftUI_Playground.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4011E8682A49759C003F06BF /* SwiftUI_PlaygroundApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUI_PlaygroundApp.swift; sourceTree = "<group>"; };
 		4011E86A2A49759C003F06BF /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		4011E86C2A49759D003F06BF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4011E86F2A49759D003F06BF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		4011E87D2A497644003F06BF /* HomeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeModel.swift; sourceTree = "<group>"; };
 		4011E8812A49769B003F06BF /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		4011E8832A4976AA003F06BF /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		4011E8862A4976C9003F06BF /* Assets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
 		4011E8882A4976D0003F06BF /* LocalizableStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizableStrings.swift; sourceTree = "<group>"; };
 		4011E88A2A4976DA003F06BF /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		4011E88C2A4976EC003F06BF /* Caprasimo-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Caprasimo-Regular.ttf"; sourceTree = "<group>"; };
-		4011E88E2A497727003F06BF /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		401E4F1D2B3E675D0004D507 /* RubikDoodleShadow-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RubikDoodleShadow-Regular.ttf"; sourceTree = "<group>"; };
-		406148182B099409004D146A /* PokemonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonViewModel.swift; sourceTree = "<group>"; };
 		4075FD3E2C8D4EC600C52938 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		40779B7C2A528D3200505ABD /* CustomComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomComponents.swift; sourceTree = "<group>"; };
+		40D60B202C926CAF00D17765 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		40D60B222C926CDE00D17765 /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
+		40D60B242C926D2B00D17765 /* PostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
+		40D60B262C926E3600D17765 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,18 +142,8 @@
 			children = (
 				1EE40DB02C902E7200AFA0E0 /* APIClient.swift */,
 				1E78EB292C9033F700AE68EB /* APIGeneral.swift */,
-				1EE40DB22C902E8600AFA0E0 /* Request */,
 			);
 			path = APIRequest;
-			sourceTree = "<group>";
-		};
-		1EE40DB22C902E8600AFA0E0 /* Request */ = {
-			isa = PBXGroup;
-			children = (
-				1EE40DB32C902E8D00AFA0E0 /* UserRequest.swift */,
-				1E78EB2D2C903C7700AE68EB /* PokemonRequest.swift */,
-			);
-			path = Request;
 			sourceTree = "<group>";
 		};
 		4011E85C2A49759C003F06BF = {
@@ -235,9 +221,6 @@
 		4011E87A2A497628003F06BF /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				4011E88E2A497727003F06BF /* HomeViewModel.swift */,
-				1EE40DB52C902ECA00AFA0E0 /* UserViewModel.swift */,
-				406148182B099409004D146A /* PokemonViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -248,6 +231,8 @@
 				4011E86A2A49759C003F06BF /* HomeView.swift */,
 				1E62EE702AD8D0080031CB1B /* FloatingView.swift */,
 				1E771AD92AF35B1C00119B16 /* HalfModalView.swift */,
+				40D60B242C926D2B00D17765 /* PostView.swift */,
+				40D60B262C926E3600D17765 /* ContentView.swift */,
 				1E8125E02C915E30006D0772 /* LaunchScreen */,
 				40779B7B2A528D2800505ABD /* Modifiers */,
 			);
@@ -257,9 +242,10 @@
 		4011E87C2A497630003F06BF /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				4011E87D2A497644003F06BF /* HomeModel.swift */,
 				1E0CBD5F2AE25C44001917B9 /* ImagePicker.swift */,
 				1EE40DAA2C9020E400AFA0E0 /* FirebaseAnalytics.swift */,
+				40D60B202C926CAF00D17765 /* Post.swift */,
+				40D60B222C926CDE00D17765 /* FirebaseService.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -430,17 +416,15 @@
 				1E78EB2A2C9033F700AE68EB /* APIGeneral.swift in Sources */,
 				4011E86B2A49759C003F06BF /* HomeView.swift in Sources */,
 				1E771ADA2AF35B1C00119B16 /* HalfModalView.swift in Sources */,
-				1E78EB2E2C903C7700AE68EB /* PokemonRequest.swift in Sources */,
+				40D60B232C926CDE00D17765 /* FirebaseService.swift in Sources */,
+				40D60B252C926D2B00D17765 /* PostView.swift in Sources */,
 				40779B7D2A528D3200505ABD /* CustomComponents.swift in Sources */,
 				1E78EB322C903E9C00AE68EB /* SceneDelegate.swift in Sources */,
 				1E78EB302C903E8C00AE68EB /* AppDelegate.swift in Sources */,
 				4011E8892A4976D0003F06BF /* LocalizableStrings.swift in Sources */,
-				4011E88F2A497727003F06BF /* HomeViewModel.swift in Sources */,
-				1EE40DB42C902E8D00AFA0E0 /* UserRequest.swift in Sources */,
-				1EE40DB62C902ECA00AFA0E0 /* UserViewModel.swift in Sources */,
+				40D60B212C926CAF00D17765 /* Post.swift in Sources */,
 				1EE40DAB2C9020E400AFA0E0 /* FirebaseAnalytics.swift in Sources */,
-				406148192B099409004D146A /* PokemonViewModel.swift in Sources */,
-				4011E87E2A497644003F06BF /* HomeModel.swift in Sources */,
+				40D60B272C926E3600D17765 /* ContentView.swift in Sources */,
 				1E0CBD602AE25C44001917B9 /* ImagePicker.swift in Sources */,
 				4011E8872A4976C9003F06BF /* Assets.swift in Sources */,
 				4011E8692A49759C003F06BF /* SwiftUI_PlaygroundApp.swift in Sources */,
