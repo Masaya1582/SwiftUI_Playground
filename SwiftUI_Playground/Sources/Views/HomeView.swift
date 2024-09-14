@@ -6,118 +6,63 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var homeviewModel = HomeViewModel()
-    @StateObject private var userViewModel = UserViewModel()
-    @StateObject private var pokemonViewModel = PokemonViewModel()
+    // State variable to track if the card is flipped
+    @State private var isFlipped = false
 
-    // MARK: - Body
     var body: some View {
         ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
+            // Front View
+            if !isFlipped {
+                CardFront()
+            } else {
+                // Back View
+                CardBack()
             }
         }
-        .onAppear {
-            let randomID = Int.random(in: 1 ... 10)
-            homeviewModel.fetchPosts()
-            pokemonViewModel.fetchPokemon(id: randomID)
-            userViewModel.fetchUsers(id: randomID)
-        }
-        .fullScreenCover(isPresented: $homeviewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $homeviewModel.selectedImage, sourceType: homeviewModel.sourceType ?? .photoLibrary)
-                .ignoresSafeArea()
-        }
-        .sheet(isPresented: $homeviewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $homeviewModel.halfModalText, isShowHalfView: $homeviewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $homeviewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    homeviewModel.sourceType = .camera
-                    homeviewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    homeviewModel.sourceType = .photoLibrary
-                    homeviewModel.isOpenImagePicker = true
-                }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("API Fetched Pokemon: \(pokemonViewModel.pokemon?.name ?? "")")
-            .modifier(CustomLabel(foregroundColor: .black, size: 16))
-        Text("API Fetched UserName: \(userViewModel.users?.userName ?? "")")
-            .modifier(CustomLabel(foregroundColor: .black, size: 16))
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = homeviewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show PopupView") {
-            withAnimation {
-                homeviewModel.isFloatingViewVisible = true
+        .frame(width: 250, height: 150)
+        .background(Color.clear)
+        .cornerRadius(15)
+        .shadow(radius: 5)
+        // Apply the 3D rotation effect
+        .rotation3DEffect(
+            .degrees(isFlipped ? 180 : 0),
+            axis: (x: 0, y: 1, z: 0)
+        )
+        // Toggle the isFlipped state on tap
+        .onTapGesture {
+            withAnimation(.easeInOut(duration: 0.6)) {
+                isFlipped.toggle()
             }
         }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                homeviewModel.isShowSourceTypeAlert = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                homeviewModel.isShowHalfModalView = true
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-
-        Button("API Request") {
-            let randomID = Int.random(in: 1 ... 10)
-            pokemonViewModel.fetchPokemon(id: randomID)
-            userViewModel.fetchUsers(id: randomID)
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.pink.swiftUIColor))
     }
+}
 
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.blue, Color.green]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if homeviewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    homeviewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+// Front side of the card
+struct CardFront: View {
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color.blue)
+                .frame(width: 250, height: 150)
+            Text("Front Side")
+                .font(.title)
+                .foregroundColor(.white)
+        }
+    }
+}
+
+// Back side of the card
+struct CardBack: View {
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color.green)
+                .frame(width: 250, height: 150)
+            Text("Back Side")
+                .font(.title)
+                .foregroundColor(.white)
         }
     }
 }
