@@ -26,6 +26,7 @@ struct APIClient {
     private static func logRequestStart<T: Request>(_ request: T) {
         print("---- Start API Request ----")
         print("URL: \(request.baseURL)\(request.path)")
+        print("Request Type: \(request.method.rawValue)")
         if let parameters = request.bodyParameters {
             print("Parameters: \(parameters)")
         } else {
@@ -42,6 +43,7 @@ struct APIClient {
             print("---- API Request Failed ----")
         }
         print("URL: \(request.baseURL)\(request.path)")
+        print("Request Type: \(request.method.rawValue)")
         if let parameters = request.bodyParameters {
             print("Parameters: \(parameters)")
         } else {
