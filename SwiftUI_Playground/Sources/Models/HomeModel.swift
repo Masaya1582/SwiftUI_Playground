@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Post: Codable {
+struct Post: Decodable {
     let id: Int
     let userId: Int
     let title: String
@@ -21,7 +21,7 @@ struct Post: Codable {
     }
 }
 
-struct Pokemon: Codable {
+struct Pokemon: Decodable {
     let id: Int
     let name: String
 }
