@@ -29,6 +29,7 @@ struct HomeView: View {
             homeviewModel.fetchPosts()
             pokemonViewModel.fetchPokemon(id: randomID)
             userViewModel.fetchUsers(id: randomID)
+            print("Pull Request Summary Test")
         }
         .fullScreenCover(isPresented: $homeviewModel.isOpenImagePicker) {
             ImagePicker(selectedImage: $homeviewModel.selectedImage, sourceType: homeviewModel.sourceType ?? .photoLibrary)

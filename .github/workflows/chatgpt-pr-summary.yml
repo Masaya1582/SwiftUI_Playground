@@ -19,4 +19,4 @@ jobs:
         with:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
           target: 'swift,yml'
-          language: English
+          language: Japanese
