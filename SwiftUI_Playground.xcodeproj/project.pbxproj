@@ -22,6 +22,7 @@
 		1EE40DB12C902E7200AFA0E0 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE40DB02C902E7200AFA0E0 /* APIClient.swift */; };
 		1EE40DB42C902E8D00AFA0E0 /* UserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE40DB32C902E8D00AFA0E0 /* UserRequest.swift */; };
 		1EE40DB62C902ECA00AFA0E0 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE40DB52C902ECA00AFA0E0 /* UserViewModel.swift */; };
+		1EF7FD822C97AD1B001DBB5A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1EF7FD812C97AD1B001DBB5A /* GoogleService-Info.plist */; };
 		4011E8692A49759C003F06BF /* SwiftUI_PlaygroundApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E8682A49759C003F06BF /* SwiftUI_PlaygroundApp.swift */; };
 		4011E86B2A49759C003F06BF /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E86A2A49759C003F06BF /* HomeView.swift */; };
 		4011E86D2A49759D003F06BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4011E86C2A49759D003F06BF /* Assets.xcassets */; };
@@ -59,7 +60,6 @@
 		4075FD382C8D4EB500C52938 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 4075FD372C8D4EB500C52938 /* FirebaseStorage */; };
 		4075FD3A2C8D4EB500C52938 /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 4075FD392C8D4EB500C52938 /* FirebaseStorageCombine-Community */; };
 		4075FD3C2C8D4EB500C52938 /* FirebaseVertexAI-Preview in Frameworks */ = {isa = PBXBuildFile; productRef = 4075FD3B2C8D4EB500C52938 /* FirebaseVertexAI-Preview */; };
-		4075FD3F2C8D4EC600C52938 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4075FD3E2C8D4EC600C52938 /* GoogleService-Info.plist */; };
 		40779B7D2A528D3200505ABD /* CustomComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40779B7C2A528D3200505ABD /* CustomComponents.swift */; };
 /* End PBXBuildFile section */
 
@@ -77,6 +77,7 @@
 		1EE40DB32C902E8D00AFA0E0 /* UserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRequest.swift; sourceTree = "<group>"; };
 		1EE40DB52C902ECA00AFA0E0 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		1EF7E5942ADCD9210032015B /* SwiftUI-Playground-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "SwiftUI-Playground-Info.plist"; sourceTree = SOURCE_ROOT; };
+		1EF7FD812C97AD1B001DBB5A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4011E8652A49759C003F06BF /* SwiftUI_Playground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftUI_Playground.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4011E8682A49759C003F06BF /* SwiftUI_PlaygroundApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUI_PlaygroundApp.swift; sourceTree = "<group>"; };
 		4011E86A2A49759C003F06BF /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -92,7 +93,6 @@
 		4011E88E2A497727003F06BF /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		401E4F1D2B3E675D0004D507 /* RubikDoodleShadow-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RubikDoodleShadow-Regular.ttf"; sourceTree = "<group>"; };
 		406148182B099409004D146A /* PokemonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonViewModel.swift; sourceTree = "<group>"; };
-		4075FD3E2C8D4EC600C52938 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		40779B7C2A528D3200505ABD /* CustomComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomComponents.swift; sourceTree = "<group>"; };
 		40D60B2B2C95A52E00D17765 /* SwiftUI_Playground.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SwiftUI_Playground.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -278,7 +278,7 @@
 		4075FD3D2C8D4EBB00C52938 /* Firebase */ = {
 			isa = PBXGroup;
 			children = (
-				4075FD3E2C8D4EC600C52938 /* GoogleService-Info.plist */,
+				1EF7FD812C97AD1B001DBB5A /* GoogleService-Info.plist */,
 			);
 			path = Firebase;
 			sourceTree = "<group>";
@@ -302,6 +302,7 @@
 				4011E8622A49759C003F06BF /* Frameworks */,
 				4011E8632A49759C003F06BF /* Resources */,
 				40779B5A2A4EDE0700505ABD /* SwiftLint */,
+				1EF7FD802C97ABB8001DBB5A /* Firebase Crasylytics */,
 			);
 			buildRules = (
 			);
@@ -386,19 +387,39 @@
 			buildActionMask = 2147483647;
 			files = (
 				4011E88D2A4976EC003F06BF /* Caprasimo-Regular.ttf in Resources */,
+				1EF7FD822C97AD1B001DBB5A /* GoogleService-Info.plist in Resources */,
 				1E8125E42C915F67006D0772 /* LaunchScreen.storyboard in Resources */,
 				4011E8822A49769B003F06BF /* Colors.xcassets in Resources */,
 				401E4F1E2B3E675D0004D507 /* RubikDoodleShadow-Regular.ttf in Resources */,
 				4011E8842A4976AA003F06BF /* Localizable.strings in Resources */,
 				4011E8702A49759D003F06BF /* Preview Assets.xcassets in Resources */,
 				4011E86D2A49759D003F06BF /* Assets.xcassets in Resources */,
-				4075FD3F2C8D4EC600C52938 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		1EF7FD802C97ABB8001DBB5A /* Firebase Crasylytics */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"${SRCROOT}/${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\n",
+			);
+			name = "Firebase Crasylytics";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
+		};
 		40779B5A2A4EDE0700505ABD /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -574,6 +595,7 @@
 				CODE_SIGN_ENTITLEMENTS = SwiftUI_Playground/SwiftUI_Playground.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.0.0;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"SwiftUI_Playground/Preview Content\"";
 				DEVELOPMENT_TEAM = L6Q3MJXV23;
 				ENABLE_PREVIEWS = YES;
