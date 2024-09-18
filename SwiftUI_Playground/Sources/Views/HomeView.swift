@@ -80,6 +80,7 @@ struct HomeView: View {
         Button("Show PopupView") {
             withAnimation {
                 homeviewModel.isFloatingViewVisible = true
+                FirebaseAnalytics.logEvent(.eventOne)
             }
         }
         .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
@@ -87,6 +88,7 @@ struct HomeView: View {
         Button("Select an Image") {
             withAnimation {
                 homeviewModel.isShowSourceTypeAlert = true
+                FirebaseAnalytics.logEvent(.eventTwo)
             }
         }
         .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
@@ -94,6 +96,7 @@ struct HomeView: View {
         Button("Show HalfModalView") {
             withAnimation {
                 homeviewModel.isShowHalfModalView = true
+                FirebaseAnalytics.logEvent(.eventThree)
             }
         }
         .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
@@ -102,6 +105,7 @@ struct HomeView: View {
             let randomID = Int.random(in: 1 ... 10)
             pokemonViewModel.fetchPokemon(id: randomID)
             userViewModel.fetchUsers(id: randomID)
+            FirebaseAnalytics.logEvent(.eventFour("API Request"))
         }
         .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.pink.swiftUIColor))
     }
