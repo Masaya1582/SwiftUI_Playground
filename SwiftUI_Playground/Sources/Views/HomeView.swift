@@ -11,24 +11,27 @@ import UIKit
 struct HomeView: View {
     // MARK: - Properties
     @StateObject private var homeviewModel = HomeViewModel()
-    @StateObject private var userViewModel = UserViewModel()
     @StateObject private var pokemonViewModel = PokemonViewModel()
 
     // MARK: - Body
     var body: some View {
-        ZStack {
-            backgroundField()
-            VStack(spacing: 8) {
-                topField()
-                middleField()
-                bottomField()
+        NavigationView {
+            ZStack {
+                backgroundField()
+                VStack(spacing: 4) {
+                    topField()
+                    middleField()
+                    bottomField()
+                    NavigationLink(destination: UserDetailView()) {
+                        Text("Navigation遷移")
+                    }
+                }
             }
         }
         .onAppear {
             let randomID = Int.random(in: 1 ... 10)
             homeviewModel.fetchPosts()
             pokemonViewModel.fetchPokemon(id: randomID)
-            userViewModel.fetchUsers(id: randomID)
         }
         .fullScreenCover(isPresented: $homeviewModel.isOpenImagePicker) {
             ImagePicker(selectedImage: $homeviewModel.selectedImage, sourceType: homeviewModel.sourceType ?? .photoLibrary)
@@ -57,8 +60,6 @@ struct HomeView: View {
     @ViewBuilder
     private func topField() -> some View {
         Text("API Fetched Pokemon: \(pokemonViewModel.pokemon?.name ?? "")")
-            .modifier(CustomLabel(foregroundColor: .black, size: 16))
-        Text("API Fetched UserName: \(userViewModel.users?.userName ?? "")")
             .modifier(CustomLabel(foregroundColor: .black, size: 16))
     }
 
@@ -104,7 +105,6 @@ struct HomeView: View {
         Button("API Request") {
             let randomID = Int.random(in: 1 ... 10)
             pokemonViewModel.fetchPokemon(id: randomID)
-            userViewModel.fetchUsers(id: randomID)
             FirebaseAnalytics.logEvent(.eventFour("API Request"))
         }
         .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.pink.swiftUIColor))

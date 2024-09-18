@@ -61,6 +61,7 @@
 		4075FD3C2C8D4EB500C52938 /* FirebaseVertexAI-Preview in Frameworks */ = {isa = PBXBuildFile; productRef = 4075FD3B2C8D4EB500C52938 /* FirebaseVertexAI-Preview */; };
 		4075FD3F2C8D4EC600C52938 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4075FD3E2C8D4EC600C52938 /* GoogleService-Info.plist */; };
 		40779B7D2A528D3200505ABD /* CustomComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40779B7C2A528D3200505ABD /* CustomComponents.swift */; };
+		408BE0D42C9A680C00B10CD6 /* UserDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 408BE0D32C9A680C00B10CD6 /* UserDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -94,6 +95,7 @@
 		406148182B099409004D146A /* PokemonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonViewModel.swift; sourceTree = "<group>"; };
 		4075FD3E2C8D4EC600C52938 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		40779B7C2A528D3200505ABD /* CustomComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomComponents.swift; sourceTree = "<group>"; };
+		408BE0D32C9A680C00B10CD6 /* UserDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailView.swift; sourceTree = "<group>"; };
 		40D60B2B2C95A52E00D17765 /* SwiftUI_Playground.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SwiftUI_Playground.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -250,6 +252,7 @@
 				4011E86A2A49759C003F06BF /* HomeView.swift */,
 				1E62EE702AD8D0080031CB1B /* FloatingView.swift */,
 				1E771AD92AF35B1C00119B16 /* HalfModalView.swift */,
+				408BE0D32C9A680C00B10CD6 /* UserDetailView.swift */,
 				1E8125E02C915E30006D0772 /* LaunchScreen */,
 				40779B7B2A528D2800505ABD /* Modifiers */,
 			);
@@ -430,6 +433,7 @@
 				1EE40DB12C902E7200AFA0E0 /* APIClient.swift in Sources */,
 				4011E88B2A4976DA003F06BF /* Fonts.swift in Sources */,
 				1E78EB2A2C9033F700AE68EB /* APIGeneral.swift in Sources */,
+				408BE0D42C9A680C00B10CD6 /* UserDetailView.swift in Sources */,
 				4011E86B2A49759C003F06BF /* HomeView.swift in Sources */,
 				1E771ADA2AF35B1C00119B16 /* HalfModalView.swift in Sources */,
 				1E78EB2E2C903C7700AE68EB /* PokemonRequest.swift in Sources */,

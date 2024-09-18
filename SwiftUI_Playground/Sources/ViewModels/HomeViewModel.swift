@@ -15,6 +15,7 @@ final class HomeViewModel: ObservableObject {
     @Published var isOpenImagePicker = false
     @Published var isShowSourceTypeAlert = false
     @Published var isShowHalfModalView = false
+    @Published var isShowUserDetailView = false
     @Published var sourceType: UIImagePickerController.SourceType?
     @Published var selectedImage: UIImage?
     @Published var posts: [Post] = []
