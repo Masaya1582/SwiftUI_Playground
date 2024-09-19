@@ -14,23 +14,19 @@ struct UserDetailView: View {
         NavigationView {
             Form {
                 if let user = userViewModel.users {
-                    // User Info Section
                     userInformationField(user)
-                    // Address Section
                     addressField(user)
-                    // Company Section
                     companyInformationField(user)
-                    // Fetch Button
                     fetchButton()
                 } else {
                     loadingField()
                 }
             }
-            .navigationTitle("User Detail")
             .onAppear {
                 let userID = Int.random(in: 1 ... 10)
                 userViewModel.fetchUsers(id: userID)
             }
+            .navigationTitle("User Detail")
         }
     }
 
