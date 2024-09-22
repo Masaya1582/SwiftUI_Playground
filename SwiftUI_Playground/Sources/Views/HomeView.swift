@@ -6,122 +6,97 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var homeviewModel = HomeViewModel()
-    @StateObject private var pokemonViewModel = PokemonViewModel()
+    @State private var showCheckmark = false
+    @State private var animateCheckmark = false
+    @State private var showConfetti = false
 
-    // MARK: - Body
     var body: some View {
-        NavigationView {
-            ZStack {
-                backgroundField()
-                VStack(spacing: 4) {
-                    topField()
-                    middleField()
-                    bottomField()
-                    NavigationLink(destination: UserDetailView()) {
-                        Text("Navigation遷移")
+        VStack(spacing: 40) {
+            Spacer()
+
+            // Animated Checkmark
+            if showCheckmark {
+                Image(systemName: "checkmark.circle.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 150, height: 150)
+                    .foregroundColor(.green)
+                    .scaleEffect(animateCheckmark ? 1.0 : 0.5)
+                    .opacity(animateCheckmark ? 1.0 : 0)
+                    .animation(.spring(response: 0.6, dampingFraction: 0.4, blendDuration: 0.5), value: animateCheckmark)
+                    .onAppear {
+                        animateCheckmark = true
                     }
+            }
+
+            // Registration completed message
+            Text("Registration Completed!")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .foregroundColor(.primary)
+                .transition(.opacity)
+
+            Spacer()
+
+            // Confetti animation trigger
+            if showConfetti {
+                ConfettiView()
+                    .transition(.scale)
+            }
+
+            // Finish Button
+            Button(action: {
+                withAnimation {
+                    showConfetti.toggle()
                 }
+            }) {
+                Text("Celebrate")
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+                    .shadow(radius: 5)
+            }
+        }
+        .padding()
+        .onAppear {
+            withAnimation(.easeIn(duration: 1)) {
+                showCheckmark = true
+            }
+        }
+    }
+}
+
+struct ConfettiParticle: View {
+    let colors: [Color] = [.red, .yellow, .blue, .green, .orange, .pink, .purple]
+
+    var body: some View {
+        Circle()
+            .fill(colors.randomElement()!)
+            .frame(width: 10, height: 10)
+    }
+}
+
+struct ConfettiView: View {
+    @State private var isAnimating = false
+
+    var body: some View {
+        ZStack {
+            ForEach(0..<20, id: \.self) { _ in
+                ConfettiParticle()
+                    .offset(x: isAnimating ? CGFloat.random(in: -200...200) : 0, y: isAnimating ? CGFloat.random(in: 400...600) : 0)
+                    .rotationEffect(.degrees(isAnimating ? 360 : 0))
+                    .animation(
+                        Animation.easeOut(duration: 3)
+                            .repeatForever(autoreverses: false),
+                        value: isAnimating
+                    )
             }
         }
         .onAppear {
-            let randomID = Int.random(in: 1 ... 10)
-            homeviewModel.fetchPosts()
-            pokemonViewModel.fetchPokemon(id: randomID)
-        }
-        .fullScreenCover(isPresented: $homeviewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $homeviewModel.selectedImage, sourceType: homeviewModel.sourceType ?? .photoLibrary)
-                .ignoresSafeArea()
-        }
-        .sheet(isPresented: $homeviewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $homeviewModel.halfModalText, isShowHalfView: $homeviewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $homeviewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    homeviewModel.sourceType = .camera
-                    homeviewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    homeviewModel.sourceType = .photoLibrary
-                    homeviewModel.isOpenImagePicker = true
-                }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("API Fetched Pokemon: \(pokemonViewModel.pokemon?.name ?? "")")
-            .modifier(CustomLabel(foregroundColor: .black, size: 16))
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = homeviewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show PopupView") {
-            withAnimation {
-                homeviewModel.isFloatingViewVisible = true
-                FirebaseAnalytics.logEvent(.eventOne)
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                homeviewModel.isShowSourceTypeAlert = true
-                FirebaseAnalytics.logEvent(.eventTwo)
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                homeviewModel.isShowHalfModalView = true
-                FirebaseAnalytics.logEvent(.eventThree)
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-
-        Button("API Request") {
-            let randomID = Int.random(in: 1 ... 10)
-            pokemonViewModel.fetchPokemon(id: randomID)
-            FirebaseAnalytics.logEvent(.eventFour("API Request"))
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.pink.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.blue, Color.green]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if homeviewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    homeviewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+            isAnimating = true
         }
     }
 }
