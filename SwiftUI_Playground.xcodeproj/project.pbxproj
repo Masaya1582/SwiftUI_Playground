@@ -36,6 +36,7 @@
 		4011E88F2A497727003F06BF /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E88E2A497727003F06BF /* HomeViewModel.swift */; };
 		401E4F1E2B3E675D0004D507 /* RubikDoodleShadow-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 401E4F1D2B3E675D0004D507 /* RubikDoodleShadow-Regular.ttf */; };
 		403FE3612CA01CEC000A3FEE /* SwiftUI_PlaygroundTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403FE3602CA01CEC000A3FEE /* SwiftUI_PlaygroundTests.swift */; };
+		403FE3682CA01DC8000A3FEE /* TestPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403FE3672CA01DC8000A3FEE /* TestPokemon.swift */; };
 		406148192B099409004D146A /* PokemonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406148182B099409004D146A /* PokemonViewModel.swift */; };
 		4075FD102C8D4EB500C52938 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 4075FD0F2C8D4EB500C52938 /* FirebaseAnalytics */; };
 		4075FD122C8D4EB500C52938 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 4075FD112C8D4EB500C52938 /* FirebaseAnalyticsOnDeviceConversion */; };
@@ -105,6 +106,7 @@
 		401E4F1D2B3E675D0004D507 /* RubikDoodleShadow-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RubikDoodleShadow-Regular.ttf"; sourceTree = "<group>"; };
 		403FE35E2CA01CEC000A3FEE /* SwiftUI_PlaygroundTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftUI_PlaygroundTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		403FE3602CA01CEC000A3FEE /* SwiftUI_PlaygroundTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUI_PlaygroundTests.swift; sourceTree = "<group>"; };
+		403FE3672CA01DC8000A3FEE /* TestPokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestPokemon.swift; sourceTree = "<group>"; };
 		406148182B099409004D146A /* PokemonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonViewModel.swift; sourceTree = "<group>"; };
 		4075FD3E2C8D4EC600C52938 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		40779B7C2A528D3200505ABD /* CustomComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomComponents.swift; sourceTree = "<group>"; };
@@ -287,6 +289,7 @@
 				4011E87D2A497644003F06BF /* HomeModel.swift */,
 				1E0CBD5F2AE25C44001917B9 /* ImagePicker.swift */,
 				1EE40DAA2C9020E400AFA0E0 /* FirebaseAnalytics.swift */,
+				403FE3672CA01DC8000A3FEE /* TestPokemon.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -506,6 +509,7 @@
 				1EE40DB62C902ECA00AFA0E0 /* UserViewModel.swift in Sources */,
 				1EE40DAB2C9020E400AFA0E0 /* FirebaseAnalytics.swift in Sources */,
 				406148192B099409004D146A /* PokemonViewModel.swift in Sources */,
+				403FE3682CA01DC8000A3FEE /* TestPokemon.swift in Sources */,
 				4011E87E2A497644003F06BF /* HomeModel.swift in Sources */,
 				1E0CBD602AE25C44001917B9 /* ImagePicker.swift in Sources */,
 				4011E8872A4976C9003F06BF /* Assets.swift in Sources */,
@@ -735,15 +739,19 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.masa4y44-.masaya.nakakuki.SwiftUI-PlaygroundTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftUI_Playground.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SwiftUI_Playground";
 			};
 			name = Debug;
@@ -759,14 +767,18 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.masa4y44-.masaya.nakakuki.SwiftUI-PlaygroundTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftUI_Playground.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SwiftUI_Playground";
 			};
 			name = Release;

@@ -6,29 +6,52 @@
 //
 
 import XCTest
+@testable import SwiftUI_Playground
 
 final class SwiftUI_PlaygroundTests: XCTestCase {
 
+    var pikachu: TestPokemon!
+
+    // This method is called before each test method in the class is called
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        pikachu = TestPokemon(name: "Pikachu", type: "Electric", health: 100)
     }
 
+    // This method is called after each test method in the class is finished
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        pikachu = nil
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    // Test the initial state of the Pokemon
+    func testPokemonInitialization() throws {
+        XCTAssertEqual(pikachu.name, "Pikachu")
+        XCTAssertEqual(pikachu.type, "Electric")
+        XCTAssertEqual(pikachu.health, 100)
     }
 
+    // Test the damage function
+    func testTakeDamage() throws {
+        pikachu.takeDamage(40)
+        XCTAssertEqual(pikachu.health, 60)
+
+        pikachu.takeDamage(70)
+        XCTAssertEqual(pikachu.health, 0)  // Health should not go below 0
+    }
+
+    // Test the isFainted method
+    func testIsFainted() throws {
+        XCTAssertFalse(pikachu.isFainted())
+
+        pikachu.takeDamage(100)
+        XCTAssertTrue(pikachu.isFainted())
+    }
+
+    // Test performance (optional, but shows how performance tests are structured)
     func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        measure {
-            // Put the code you want to measure the time of here.
+        self.measure {
+            for _ in 0..<1000 {
+                pikachu.takeDamage(1)
+            }
         }
     }
 
