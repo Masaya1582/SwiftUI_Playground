@@ -7,7 +7,7 @@
 
 import Foundation
 
-class TestPokemon {
+final class TestPokemon {
     var name: String
     var type: String
     var health: Int
