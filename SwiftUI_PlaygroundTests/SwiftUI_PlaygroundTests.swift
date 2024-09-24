@@ -22,6 +22,10 @@ final class SwiftUI_PlaygroundTests: XCTestCase {
         pikachu = nil
     }
 
+    func testPokemonExists() throws {
+        XCTAssertNotNil(pikachu, "Pikachu should not be nil")
+    }
+
     // Test the initial state of the Pokemon
     func testPokemonInitialization() throws {
         XCTAssertEqual(pikachu.name, "Pikachu")
