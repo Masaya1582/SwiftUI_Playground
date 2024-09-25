@@ -12,13 +12,6 @@ struct Post: Decodable {
     let userId: Int
     let title: String
     let body: String
-
-    private enum CodingKeys: CodingKey {
-        case id
-        case userId
-        case title
-        case body
-    }
 }
 
 struct Pokemon: Decodable {
