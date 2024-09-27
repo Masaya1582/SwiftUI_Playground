@@ -135,7 +135,7 @@ struct UserDetailView: View {
             Button(action: {
                 let userID = Int.random(in: 1 ... 10)
                 userViewModel.fetchUsers(id: userID)
-            }) {
+            }, label: {
                 HStack {
                     Spacer()
                     Text("Fetch Another User")
@@ -143,7 +143,7 @@ struct UserDetailView: View {
                         .fontWeight(.bold)
                     Spacer()
                 }
-            }
+            })
         }
     }
 
