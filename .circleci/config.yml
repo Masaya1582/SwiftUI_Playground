@@ -1,54 +1,40 @@
 version: 2.1
 
-executors:
-  ios-executor:
-    macos:
-      xcode: "15.3.0" # Select the appropriate Xcode version
-
 jobs:
-  build-and-test:
-    executor: ios-executor
+  build_and_test:
+    macos:
+      xcode: 15.3.0 # Xcodeのバージョンを指定
     steps:
-      - checkout # Check out the code from the repository
-
-      # Resolve Swift Package Manager dependencies (This will happen automatically with the build)
+      - checkout
       - run:
-          name: Resolve SPM Dependencies
-          command: |
-            xcodebuild -resolvePackageDependencies \
-              -project SwiftUI_Playground.xcodeproj \
-              -scheme SwiftUI_Playground
-
-      # Set up keychain (for code signing if necessary)
+          name: Install Dependencies
+          command: bundle install
       - run:
-          name: Create Keychain
+          name: Debug Environment Variables
           command: |
-            security create-keychain -p "" circle.keychain
-            security default-keychain -s circle.keychain
-            security unlock-keychain -p "" circle.keychain
-
-      # Build the app
+            echo "CI: $CI"
+            echo "CIRCLECI: $CIRCLECI"
+            echo "CIRCLE_PULL_REQUEST: $CIRCLE_PULL_REQUEST"
+            echo "CIRCLE_PROJECT_USERNAME: $CIRCLE_PROJECT_USERNAME"
+            echo "CIRCLE_PROJECT_REPONAME: $CIRCLE_PROJECT_REPONAME"
       - run:
-          name: Build the project
-          command: |
-            xcodebuild clean build \
-              -project SwiftUI_Playground.xcodeproj \
-              -scheme SwiftUI_Playground \
-              -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.0' \
-              CODE_SIGNING_ALLOWED=NO
-
-      # Run tests
+          name: Install SwiftLint
+          command: brew install swiftlint
       - run:
-          name: Run Unit Tests
-          command: |
-            xcodebuild test \
-              -project SwiftUI_Playground.xcodeproj \
-              -scheme SwiftUI_Playground \
-              -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.0'
+          name: Install IBliner
+          command: brew install iblinter
+      - run:
+          name: Run Danger
+          command: bundle exec danger
+      - run:
+          name: Run Fastlane
+          command: bundle exec fastlane test
 
 workflows:
   version: 2
-  build-and-test:
+  build_and_test:
     jobs:
-      - build-and-test
-
+      - build_and_test:
+          filters:
+            tags:
+              ignore: /.*/ # タグは無視
