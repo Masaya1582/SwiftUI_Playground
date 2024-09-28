@@ -9,6 +9,7 @@
 import Foundation
 import APIKit
 
+// MARK: - API Error Handling
 enum APIError: Error {
     case invalidData
     case invalidStatusCode(Int)
