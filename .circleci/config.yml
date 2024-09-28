@@ -9,15 +9,10 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Set up GoogleService-Info.plist
+          name: Setup GoogleService-Info.plist
+          working_directory: SwiftUI_Playground/SwiftUI_Playground/Resources/Firebase
           command: |
-            if [ -z "$GOOGLE_PLIST_CONTENT" ]; then
-              echo "❌ GOOGLE_PLIST_CONTENT is not set."
-              exit 1
-            fi
-            echo "$GOOGLE_PLIST_CONTENT" | base64 --decode > Resources/Firebase/GoogleService-Info.plist
-            echo "✅ GoogleService-Info.plist has been set."
-
+            echo "${GOOGLE_SERVICE_INFO_PLIST_BASE64}" | base64 -d > GoogleService-Info.plist
       - run:
           name: Install Dependencies
           command: bundle install
@@ -41,6 +36,7 @@ jobs:
       - run:
           name: Run Fastlane
           command: bundle exec fastlane test
+
 
 workflows:
   version: 2
