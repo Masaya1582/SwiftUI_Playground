@@ -20,6 +20,9 @@ jobs:
               exit 1
             fi
       - run:
+          name: Resolve Swift Packages
+          command: xcodebuild -resolvePackageDependencies -scheme "SwiftUI_Playground"
+      - run:
           name: Install Dependencies
           command: bundle install
       - run:
