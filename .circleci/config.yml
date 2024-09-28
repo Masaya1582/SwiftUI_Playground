@@ -5,7 +5,8 @@ jobs:
     macos:
       xcode: 15.3.0 # Specify the Xcode version
     environment:
-      GOOGLE_PLIST_CONTENT: ${GOOGLE_PLIST_CONTENT} # Make sure this is set in CircleCI Project Settings
+      GOOGLE_SERVICE_INFO_PLIST_BASE64: ${GOOGLE_SERVICE_INFO_PLIST_BASE64}
+
     steps:
       - checkout
       - run:
