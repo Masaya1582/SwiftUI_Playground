@@ -3,9 +3,21 @@ version: 2.1
 jobs:
   build_and_test:
     macos:
-      xcode: 15.3.0 # Xcodeのバージョンを指定
+      xcode: 15.3.0 # Specify the Xcode version
+    environment:
+      GOOGLE_PLIST_CONTENT: ${GOOGLE_PLIST_CONTENT} # Make sure this is set in CircleCI Project Settings
     steps:
       - checkout
+      - run:
+          name: Set up GoogleService-Info.plist
+          command: |
+            if [ -z "$GOOGLE_PLIST_CONTENT" ]; then
+              echo "❌ GOOGLE_PLIST_CONTENT is not set."
+              exit 1
+            fi
+            echo "$GOOGLE_PLIST_CONTENT" | base64 --decode > ./SwiftUI_Playground/Resources/Firebase/GoogleService-Info.plist
+            echo "✅ GoogleService-Info.plist has been set."
+
       - run:
           name: Install Dependencies
           command: bundle install
@@ -37,4 +49,4 @@ workflows:
       - build_and_test:
           filters:
             tags:
-              ignore: /.*/ # タグは無視
+              ignore: /.*/ # Ignore tags
