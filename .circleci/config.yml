@@ -15,7 +15,7 @@ jobs:
               echo "❌ GOOGLE_PLIST_CONTENT is not set."
               exit 1
             fi
-            echo "$GOOGLE_PLIST_CONTENT" | base64 --decode > ./SwiftUI_Playground/Resources/Firebase/GoogleService-Info.plist
+            echo "$GOOGLE_PLIST_CONTENT" | base64 --decode > SwiftUI_Playground/SwiftUI_Playground/Resources/Firebase/GoogleService-Info.plist
             echo "✅ GoogleService-Info.plist has been set."
 
       - run:
