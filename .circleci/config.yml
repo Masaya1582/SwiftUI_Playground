@@ -7,14 +7,6 @@ jobs:
 
     steps:
       - checkout
-      
-      # Restore SPM Cache
-      - restore_cache:
-          keys:
-            - spm-dependency-cache-{{ checksum "Package.resolved" }}
-            - bundle-cache-{{ checksum "Gemfile.lock" }}
-            - homebrew-cache-v1
-
       - run:
           name: Setup GoogleService-Info.plist
           working_directory: SwiftUI_Playground/Resources/Firebase
@@ -26,29 +18,12 @@ jobs:
               echo "Failed to decode GoogleService-Info.plist" >&2
               exit 1
             fi
-
       - run:
           name: Resolve Swift Packages
           command: xcodebuild -resolvePackageDependencies -scheme "SwiftUI_Playground"
-
-      # Save SPM Cache
-      - save_cache:
-          key: spm-dependency-cache-{{ checksum "Package.resolved" }}
-          paths:
-            - ~/Library/Developer/Xcode/DerivedData
-            - ~/Library/Caches/org.swift.swiftpm
-            - ~/Library/Caches/com.apple.dt.Xcode/Downloads
-
-      # Install and Cache Bundler Dependencies
       - run:
-          name: Install Bundler Dependencies
-          command: bundle install --path vendor/bundle
-
-      - save_cache:
-          key: bundle-cache-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
-
+          name: Install Dependencies
+          command: bundle install
       - run:
           name: Debug Environment Variables
           command: |
@@ -57,23 +32,14 @@ jobs:
             echo "CIRCLE_PULL_REQUEST: $CIRCLE_PULL_REQUEST"
             echo "CIRCLE_PROJECT_USERNAME: $CIRCLE_PROJECT_USERNAME"
             echo "CIRCLE_PROJECT_REPONAME: $CIRCLE_PROJECT_REPONAME"
-
-      # Install and Cache SwiftLint
       - run:
           name: Install SwiftLint
           command: brew install swiftlint
-
-      - save_cache:
-          key: homebrew-cache-v1
-          paths:
-            - /usr/local/Homebrew
-
       - run:
           name: Run Danger
           command: bundle exec danger
-
       - run:
-          name: Run Fastlane Tests
+          name: Run Fastlane
           command: bundle exec fastlane test
 
 workflows:
