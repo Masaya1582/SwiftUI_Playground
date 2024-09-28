@@ -12,7 +12,7 @@ jobs:
           name: Setup GoogleService-Info.plist
           working_directory: SwiftUI_Playground/Resources/Firebase
           command: |
-            echo "${GOOGLE_SERVICE_INFO_PLIST_BASE64}" | base64 -d > GoogleService-Info.plist
+            echo "${GOOGLE_PLIST_CONTENT}" | base64 -d > GoogleService-Info.plist
             if [ $? -eq 0 ]; then
               echo "GoogleService-Info.plist decoded successfully"
             else
