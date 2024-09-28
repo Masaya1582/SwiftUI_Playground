@@ -23,7 +23,7 @@ struct HomeView: View {
                     middleField()
                     bottomField()
                     NavigationLink(destination: UserDetailView()) {
-                        Text("Navigation遷移"
+                        Text("Navigation遷移")
                     }
                 }
             }
