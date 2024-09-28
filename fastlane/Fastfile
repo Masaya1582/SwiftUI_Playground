@@ -1,9 +1,7 @@
-default_platform(:ios)
-
-platform :ios do
-  lane :test do
-    scan(
-      scheme: "SwiftUI_Playground" 
-    )
-  end
+desc "Run tests for the SwiftUI_Playground app"
+lane :test do
+  run_tests(
+    workspace: "SwiftUI_Playground.xcodeproj",
+    scheme: "SwiftUI_Playground"
+  )
 end
