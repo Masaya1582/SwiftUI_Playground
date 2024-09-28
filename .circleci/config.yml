@@ -10,9 +10,9 @@ jobs:
       - checkout
       - run:
           name: Setup GoogleService-Info.plist
-          working_directory: SwiftUI_Playground/SwiftUI_Playground/Resources/Firebase
           command: |
-            echo "${GOOGLE_SERVICE_INFO_PLIST_BASE64}" | base64 -d > GoogleService-Info.plist
+            mkdir -p SwiftUI_Playground/Resources/Firebase
+            echo "${GOOGLE_SERVICE_INFO_PLIST_BASE64}" | base64 -d > SwiftUI_Playground/Resources/Firebase/GoogleService-Info.plist
       - run:
           name: Install Dependencies
           command: bundle install
@@ -36,7 +36,6 @@ jobs:
       - run:
           name: Run Fastlane
           command: bundle exec fastlane test
-
 
 workflows:
   version: 2
