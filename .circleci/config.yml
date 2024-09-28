@@ -4,8 +4,6 @@ jobs:
   build_and_test:
     macos:
       xcode: 15.3.0 # Specify the Xcode version
-    environment:
-      GOOGLE_SERVICE_INFO_PLIST_BASE64: ${GOOGLE_SERVICE_INFO_PLIST_BASE64}
 
     steps:
       - checkout
