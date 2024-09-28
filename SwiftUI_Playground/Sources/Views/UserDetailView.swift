@@ -10,6 +10,7 @@ import SwiftUI
 struct UserDetailView: View {
     @StateObject private var userViewModel = UserViewModel()
 
+    // MARK: - Body
     var body: some View {
         NavigationView {
             Form {
@@ -30,6 +31,7 @@ struct UserDetailView: View {
         }
     }
 
+    // ユーザ情報
     @ViewBuilder
     private func userInformationField(_ user: User) -> some View {
         Section(header: Text("User Information")) {
@@ -63,6 +65,7 @@ struct UserDetailView: View {
         }
     }
 
+    // アドレス情報
     @ViewBuilder
     private func addressField(_ user: User) -> some View {
         Section(header: Text("Address")) {
@@ -103,6 +106,7 @@ struct UserDetailView: View {
         }
     }
 
+    // 会社情報
     @ViewBuilder
     private func companyInformationField(_ user: User) -> some View {
         Section(header: Text("Company Information")) {
@@ -129,6 +133,7 @@ struct UserDetailView: View {
         }
     }
 
+    // API再取得
     @ViewBuilder
     private func fetchButton() -> some View {
         Section {
@@ -147,6 +152,7 @@ struct UserDetailView: View {
         }
     }
 
+    // ローディング
     @ViewBuilder
     private func loadingField() -> some View {
         Section {
@@ -160,6 +166,7 @@ struct UserDetailView: View {
 
 }
 
+// MARK: - Preview
 #Preview {
     UserDetailView()
 }
