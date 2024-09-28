@@ -23,7 +23,7 @@ struct HomeView: View {
                     middleField()
                     bottomField()
                     NavigationLink(destination: UserDetailView()) {
-                        Text ("Navigation遷移")
+                        Text("Navigation遷移")
                     }
                 }
             }
@@ -32,8 +32,6 @@ struct HomeView: View {
             let randomID = Int.random(in: 1 ... 10)
             homeviewModel.fetchPosts()
             pokemonViewModel.fetchPokemon(id: randomID)
-
-
         }
         .fullScreenCover(isPresented: $homeviewModel.isOpenImagePicker) {
             ImagePicker(selectedImage: $homeviewModel.selectedImage, sourceType: homeviewModel.sourceType ?? .photoLibrary)
