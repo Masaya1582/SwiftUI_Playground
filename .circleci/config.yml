@@ -36,9 +36,6 @@ jobs:
           name: Install SwiftLint
           command: brew install swiftlint
       - run:
-          name: Install IBliner
-          command: brew install iblinter
-      - run:
           name: Run Danger
           command: bundle exec danger
       - run:

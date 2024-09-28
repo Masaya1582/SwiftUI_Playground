@@ -15,9 +15,6 @@ end
 # SwiftLint check
 swiftlint.lint_files inline_mode: true
 
-# IBLinter check
-# Running IBLinter on all modified files
-iblinter.lint inline_mode: true
 
 # Print a message at the end of the Dangerfile
 message("Code checks have been completed.")

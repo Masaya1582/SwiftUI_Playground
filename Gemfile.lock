@@ -50,10 +50,6 @@ GEM
       kramdown-parser-gfm (~> 1.0)
       octokit (>= 4.0)
       terminal-table (>= 1, < 4)
-    danger-iblinter (0.0.5)
-      danger-plugin-api (~> 1.0)
-    danger-plugin-api (1.0.0)
-      danger (> 2.0)
     danger-swiftlint (0.36.1)
       danger
       rake (> 10)
@@ -258,7 +254,6 @@ PLATFORMS
 
 DEPENDENCIES
   danger
-  danger-iblinter
   danger-swiftlint
   fastlane
   rb-readline
