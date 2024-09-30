@@ -6,122 +6,113 @@
 //
 
 import SwiftUI
-import UIKit
+import AVFoundation
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var homeviewModel = HomeViewModel()
-    @StateObject private var pokemonViewModel = PokemonViewModel()
+    @State private var isPlaying = false
+    @State private var currentTime: Double = 0
+    @State private var duration: Double = 100
+    @State private var audioPlayer: AVAudioPlayer?
 
-    // MARK: - Body
     var body: some View {
-        NavigationView {
-            ZStack {
-                backgroundField()
-                VStack(spacing: 4) {
-                    topField()
-                    middleField()
-                    bottomField()
-                    NavigationLink(destination: UserDetailView()) {
-                        Text("Navigation遷移")
-                    }
-                }
-            }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1 ... 10)
-            homeviewModel.fetchPosts()
-            pokemonViewModel.fetchPokemon(id: randomID)
-        }
-        .fullScreenCover(isPresented: $homeviewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $homeviewModel.selectedImage, sourceType: homeviewModel.sourceType ?? .photoLibrary)
-                .ignoresSafeArea()
-        }
-        .sheet(isPresented: $homeviewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $homeviewModel.halfModalText, isShowHalfView: $homeviewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $homeviewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    homeviewModel.sourceType = .camera
-                    homeviewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    homeviewModel.sourceType = .photoLibrary
-                    homeviewModel.isOpenImagePicker = true
-                }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("API Fetched Pokemon: \(pokemonViewModel.pokemon?.name ?? "")")
-            .modifier(CustomLabel(foregroundColor: .black, size: 16))
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = homeviewModel.selectedImage {
-            Image(uiImage: image)
+        VStack {
+            // Album Artwork
+            Image(systemName: "music.note")
                 .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 200, height: 200)
+                .padding()
 
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show PopupView") {
-            withAnimation {
-                homeviewModel.isFloatingViewVisible = true
-                FirebaseAnalytics.logEvent(.eventOne)
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
+            // Song Title and Artist
+            Text("Song Title")
+                .font(.title)
+                .padding(.top, 10)
 
-        Button("Select an Image") {
-            withAnimation {
-                homeviewModel.isShowSourceTypeAlert = true
-                FirebaseAnalytics.logEvent(.eventTwo)
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
+            Text("Artist Name")
+                .font(.subheadline)
+                .foregroundColor(.gray)
 
-        Button("Show HalfModalView") {
-            withAnimation {
-                homeviewModel.isShowHalfModalView = true
-                FirebaseAnalytics.logEvent(.eventThree)
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-
-        Button("API Request") {
-            let randomID = Int.random(in: 1 ... 10)
-            pokemonViewModel.fetchPokemon(id: randomID)
-            FirebaseAnalytics.logEvent(.eventFour("API Request"))
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.pink.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.blue, Color.green]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if homeviewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    homeviewModel.isFloatingViewVisible = false
+            // Slider for Progress
+            Slider(value: $currentTime, in: 0...duration, onEditingChanged: { _ in
+                // Update the player's current time when user interacts with the slider
+                if let player = audioPlayer {
+                    player.currentTime = currentTime
                 }
             })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+            .padding()
+
+            // Current Time and Duration
+            HStack {
+                Text(formatTime(seconds: currentTime))
+                    .font(.caption)
+                Spacer()
+                Text(formatTime(seconds: duration))
+                    .font(.caption)
+            }
+            .padding([.leading, .trailing])
+
+            // Control Buttons
+            HStack(spacing: 40) {
+                // Previous Button
+                Button(action: {
+                    // Handle Previous Action
+                    print("Previous pressed")
+                }) {
+                    Image(systemName: "backward.fill")
+                        .font(.largeTitle)
+                }
+
+                // Play/Pause Button
+                Button(action: {
+                    if isPlaying {
+                        audioPlayer?.pause()
+                    } else {
+                        audioPlayer?.play()
+                    }
+                    isPlaying.toggle()
+                }) {
+                    Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+                        .font(.largeTitle)
+                }
+
+                // Next Button
+                Button(action: {
+                    // Handle Next Action
+                    print("Next pressed")
+                }) {
+                    Image(systemName: "forward.fill")
+                        .font(.largeTitle)
+                }
+            }
+            .padding(.top, 30)
+        }
+        .onAppear {
+            setupAudioPlayer()
+        }
+    }
+
+    // Helper Method to Format Time in mm:ss
+    private func formatTime(seconds: Double) -> String {
+        let minutes = Int(seconds) / 60
+        let seconds = Int(seconds) % 60
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
+
+    // Setup Audio Player
+    private func setupAudioPlayer() {
+        if let path = Bundle.main.path(forResource: "bgm", ofType: "mp3") {
+            let url = URL(fileURLWithPath: path)
+            do {
+                audioPlayer = try AVAudioPlayer(contentsOf: url)
+                duration = audioPlayer?.duration ?? 100
+                Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+                    if let player = audioPlayer {
+                        currentTime = player.currentTime
+                    }
+                }
+            } catch {
+                print("Error loading audio file: \(error.localizedDescription)")
+            }
         }
     }
 }

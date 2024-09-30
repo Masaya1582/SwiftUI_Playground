@@ -22,6 +22,7 @@
 		1EE40DB12C902E7200AFA0E0 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE40DB02C902E7200AFA0E0 /* APIClient.swift */; };
 		1EE40DB42C902E8D00AFA0E0 /* UserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE40DB32C902E8D00AFA0E0 /* UserRequest.swift */; };
 		1EE40DB62C902ECA00AFA0E0 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE40DB52C902ECA00AFA0E0 /* UserViewModel.swift */; };
+		400A5F652CAA25C000C8D421 /* bgm.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 400A5F642CAA25C000C8D421 /* bgm.mp3 */; };
 		4011E8692A49759C003F06BF /* SwiftUI_PlaygroundApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E8682A49759C003F06BF /* SwiftUI_PlaygroundApp.swift */; };
 		4011E86B2A49759C003F06BF /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011E86A2A49759C003F06BF /* HomeView.swift */; };
 		4011E86D2A49759D003F06BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4011E86C2A49759D003F06BF /* Assets.xcassets */; };
@@ -90,6 +91,7 @@
 		1EE40DB32C902E8D00AFA0E0 /* UserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRequest.swift; sourceTree = "<group>"; };
 		1EE40DB52C902ECA00AFA0E0 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		1EF7E5942ADCD9210032015B /* SwiftUI-Playground-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "SwiftUI-Playground-Info.plist"; sourceTree = SOURCE_ROOT; };
+		400A5F642CAA25C000C8D421 /* bgm.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bgm.mp3; sourceTree = "<group>"; };
 		4011E8652A49759C003F06BF /* SwiftUI_Playground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftUI_Playground.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4011E8682A49759C003F06BF /* SwiftUI_PlaygroundApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUI_PlaygroundApp.swift; sourceTree = "<group>"; };
 		4011E86A2A49759C003F06BF /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -255,6 +257,7 @@
 				4011E86C2A49759D003F06BF /* Assets.xcassets */,
 				4011E8812A49769B003F06BF /* Colors.xcassets */,
 				4011E8832A4976AA003F06BF /* Localizable.strings */,
+				400A5F642CAA25C000C8D421 /* bgm.mp3 */,
 				4011E8852A4976B2003F06BF /* Fonts */,
 			);
 			path = Resources;
@@ -447,6 +450,7 @@
 				4011E88D2A4976EC003F06BF /* Caprasimo-Regular.ttf in Resources */,
 				1E8125E42C915F67006D0772 /* LaunchScreen.storyboard in Resources */,
 				4011E8822A49769B003F06BF /* Colors.xcassets in Resources */,
+				400A5F652CAA25C000C8D421 /* bgm.mp3 in Resources */,
 				401E4F1E2B3E675D0004D507 /* RubikDoodleShadow-Regular.ttf in Resources */,
 				4011E8842A4976AA003F06BF /* Localizable.strings in Resources */,
 				4011E8702A49759D003F06BF /* Preview Assets.xcassets in Resources */,
