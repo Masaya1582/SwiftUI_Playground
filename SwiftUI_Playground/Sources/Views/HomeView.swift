@@ -6,122 +6,58 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var homeviewModel = HomeViewModel()
-    @StateObject private var pokemonViewModel = PokemonViewModel()
+    // State variables to hold the user input and calculated result
+    @State private var userInput: String = ""
+    @State private var result: String = ""
 
-    // MARK: - Body
     var body: some View {
-        NavigationView {
-            ZStack {
-                backgroundField()
-                VStack(spacing: 4) {
-                    topField()
-                    middleField()
-                    bottomField()
-                    NavigationLink(destination: UserDetailView()) {
-                        Text("Navigation遷移")
-                    }
-                }
+        VStack(spacing: 20) {
+            Text("Square Root Calculator")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .padding()
+
+            TextField("Enter a number", text: $userInput)
+                .padding()
+                .keyboardType(.decimalPad)
+                .background(Color(UIColor.systemGray6))
+                .cornerRadius(10)
+                .shadow(radius: 5)
+
+            Button(action: calculateSquareRoot) {
+                Text("Calculate")
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.blue)
+                    .cornerRadius(10)
+                    .shadow(radius: 5)
             }
+            .padding(.horizontal)
+
+            if !result.isEmpty {
+                Text("Result: \(result)")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .padding()
+                    .background(Color.green.opacity(0.1))
+                    .cornerRadius(10)
+            }
+
+            Spacer()
         }
-        .onAppear {
-            let randomID = Int.random(in: 1 ... 10)
-            homeviewModel.fetchPosts()
-            pokemonViewModel.fetchPokemon(id: randomID)
-        }
-        .fullScreenCover(isPresented: $homeviewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $homeviewModel.selectedImage, sourceType: homeviewModel.sourceType ?? .photoLibrary)
-                .ignoresSafeArea()
-        }
-        .sheet(isPresented: $homeviewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $homeviewModel.halfModalText, isShowHalfView: $homeviewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $homeviewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    homeviewModel.sourceType = .camera
-                    homeviewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    homeviewModel.sourceType = .photoLibrary
-                    homeviewModel.isOpenImagePicker = true
-                }
-            )
-        }
+        .padding()
     }
 
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("API Fetched Pokemon: \(pokemonViewModel.pokemon?.name ?? "")")
-            .modifier(CustomLabel(foregroundColor: .black, size: 16))
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = homeviewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
+    // Function to calculate the square root
+    func calculateSquareRoot() {
+        if let number = Double(userInput), number >= 0 {
+            let squareRoot = sqrt(number)
+            result = String(format: "%.4f", squareRoot)
         } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show PopupView") {
-            withAnimation {
-                homeviewModel.isFloatingViewVisible = true
-                FirebaseAnalytics.logEvent(.eventOne)
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                homeviewModel.isShowSourceTypeAlert = true
-                FirebaseAnalytics.logEvent(.eventTwo)
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                homeviewModel.isShowHalfModalView = true
-                FirebaseAnalytics.logEvent(.eventThree)
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-
-        Button("API Request") {
-            let randomID = Int.random(in: 1 ... 10)
-            pokemonViewModel.fetchPokemon(id: randomID)
-            FirebaseAnalytics.logEvent(.eventFour("API Request"))
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.pink.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.blue, Color.green]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if homeviewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    homeviewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+            result = "Invalid input. Please enter a non-negative number."
         }
     }
 }
