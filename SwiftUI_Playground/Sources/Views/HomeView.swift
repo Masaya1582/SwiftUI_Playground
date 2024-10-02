@@ -9,119 +9,95 @@ import SwiftUI
 import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var homeviewModel = HomeViewModel()
-    @StateObject private var pokemonViewModel = PokemonViewModel()
+    // Define length units and the user input
+    @State private var inputValue: String = ""
+    @State private var selectedUnit: LengthUnit = .millimeter
 
-    // MARK: - Body
+    // Enum to define different length units
+    enum LengthUnit: String, CaseIterable, Identifiable {
+        case millimeter = "Millimeters (mm)"
+        case centimeter = "Centimeters (cm)"
+        case meter = "Meters (m)"
+        case kilometer = "Kilometers (km)"
+        var id: String { self.rawValue }
+    }
+
+    // Function to convert the input value to millimeters
+    private func convertToMillimeters(value: Double, unit: LengthUnit) -> Double {
+        switch unit {
+        case .millimeter:
+            return value
+        case .centimeter:
+            return value * 10
+        case .meter:
+            return value * 1000
+        case .kilometer:
+            return value * 1_000_000
+        }
+    }
+
+    // Function to convert millimeters to other units
+    private func convertFromMillimeters(_ millimeters: Double, to unit: LengthUnit) -> Double {
+        switch unit {
+        case .millimeter:
+            return millimeters
+        case .centimeter:
+            return millimeters / 10
+        case .meter:
+            return millimeters / 1000
+        case .kilometer:
+            return millimeters / 1_000_000
+        }
+    }
+
+    // Computed property for converting the input value
+    private var convertedValues: [LengthUnit: Double] {
+        guard let input = Double(inputValue) else {
+            return [:] // Return an empty dictionary if input is invalid
+        }
+
+        let valueInMillimeters = convertToMillimeters(value: input, unit: selectedUnit)
+        var results = [LengthUnit: Double]()
+
+        for unit in LengthUnit.allCases {
+            results[unit] = convertFromMillimeters(valueInMillimeters, to: unit)
+        }
+
+        return results
+    }
+
     var body: some View {
         NavigationView {
-            ZStack {
-                backgroundField()
-                VStack(spacing: 4) {
-                    topField()
-                    middleField()
-                    bottomField()
-                    NavigationLink(destination: UserDetailView()) {
-                        Text("Navigation遷移")
+            VStack(spacing: 20) {
+                // User input section
+                TextField("Enter value", text: $inputValue)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .keyboardType(.decimalPad)
+                    .padding()
+
+                // Picker to select the unit of the input value
+                Picker("Select Unit", selection: $selectedUnit) {
+                    ForEach(LengthUnit.allCases) { unit in
+                        Text(unit.rawValue).tag(unit)
+                    }
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding()
+
+                // Display converted values
+                List {
+                    ForEach(LengthUnit.allCases) { unit in
+                        if let value = convertedValues[unit] {
+                            HStack {
+                                Text("\(unit.rawValue):")
+                                Spacer()
+                                Text(String(format: "%.4f", value))
+                            }
+                        }
                     }
                 }
             }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1 ... 10)
-            homeviewModel.fetchPosts()
-            pokemonViewModel.fetchPokemon(id: randomID)
-        }
-        .fullScreenCover(isPresented: $homeviewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $homeviewModel.selectedImage, sourceType: homeviewModel.sourceType ?? .photoLibrary)
-                .ignoresSafeArea()
-        }
-        .sheet(isPresented: $homeviewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $homeviewModel.halfModalText, isShowHalfView: $homeviewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $homeviewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    homeviewModel.sourceType = .camera
-                    homeviewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    homeviewModel.sourceType = .photoLibrary
-                    homeviewModel.isOpenImagePicker = true
-                }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("API Fetched Pokemon: \(pokemonViewModel.pokemon?.name ?? "")")
-            .modifier(CustomLabel(foregroundColor: .black, size: 16))
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = homeviewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show PopupView") {
-            withAnimation {
-                homeviewModel.isFloatingViewVisible = true
-                FirebaseAnalytics.logEvent(.eventOne)
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                homeviewModel.isShowSourceTypeAlert = true
-                FirebaseAnalytics.logEvent(.eventTwo)
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                homeviewModel.isShowHalfModalView = true
-                FirebaseAnalytics.logEvent(.eventThree)
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-
-        Button("API Request") {
-            let randomID = Int.random(in: 1 ... 10)
-            pokemonViewModel.fetchPokemon(id: randomID)
-            FirebaseAnalytics.logEvent(.eventFour("API Request"))
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.pink.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.blue, Color.green]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if homeviewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    homeviewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+            .navigationTitle("Length Converter")
         }
     }
 }
