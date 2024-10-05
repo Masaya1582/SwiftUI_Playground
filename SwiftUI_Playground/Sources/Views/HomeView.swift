@@ -6,122 +6,70 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct HomeView: View {
-    // MARK: - Properties
-    @StateObject private var homeviewModel = HomeViewModel()
-    @StateObject private var pokemonViewModel = PokemonViewModel()
+    @State private var inputNumber: String = ""
+    @State private var selectedBase: Base = .decimal
 
-    // MARK: - Body
+    enum Base: String, CaseIterable, Identifiable {
+        case binary = "Binary (2)"
+        case octal = "Octal (8)"
+        case decimal = "Decimal (10)"
+        case hexadecimal = "Hexadecimal (16)"
+
+        var id: String { self.rawValue }
+
+        var base: Int {
+            switch self {
+            case .binary: return 2
+            case .octal: return 8
+            case .decimal: return 10
+            case .hexadecimal: return 16
+            }
+        }
+    }
+
+    var convertedValues: [Base: String] {
+        var values: [Base: String] = [:]
+        guard let number = Int(inputNumber, radix: selectedBase.base) else {
+            return Base.allCases.reduce(into: [:]) { $0[$1] = "Invalid Input" }
+        }
+
+        for base in Base.allCases {
+            values[base] = String(number, radix: base.base).uppercased()
+        }
+
+        return values
+    }
+
     var body: some View {
         NavigationView {
-            ZStack {
-                backgroundField()
-                VStack(spacing: 4) {
-                    topField()
-                    middleField()
-                    bottomField()
-                    NavigationLink(destination: UserDetailView()) {
-                        Text("Navigation遷移")
+            Form {
+                Section(header: Text("Input")) {
+                    TextField("Enter number", text: $inputNumber)
+                        .keyboardType(.default)
+                        .disableAutocorrection(true)
+                    Picker("Select Base", selection: $selectedBase) {
+                        ForEach(Base.allCases) { base in
+                            Text(base.rawValue).tag(base)
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                }
+
+                Section(header: Text("Conversions")) {
+                    ForEach(Base.allCases) { base in
+                        if base != selectedBase {
+                            HStack {
+                                Text("\(base.rawValue):")
+                                Spacer()
+                                Text(convertedValues[base] ?? "Invalid Input")
+                            }
+                        }
                     }
                 }
             }
-        }
-        .onAppear {
-            let randomID = Int.random(in: 1 ... 10)
-            homeviewModel.fetchPosts()
-            pokemonViewModel.fetchPokemon(id: randomID)
-        }
-        .fullScreenCover(isPresented: $homeviewModel.isOpenImagePicker) {
-            ImagePicker(selectedImage: $homeviewModel.selectedImage, sourceType: homeviewModel.sourceType ?? .photoLibrary)
-                .ignoresSafeArea()
-        }
-        .sheet(isPresented: $homeviewModel.isShowHalfModalView) {
-            HalfModalView(halfModalText: $homeviewModel.halfModalText, isShowHalfView: $homeviewModel.isShowHalfModalView)
-                .presentationDetents([.medium])
-        }
-        .alert(isPresented: $homeviewModel.isShowSourceTypeAlert) {
-            Alert(
-                title: Text("Choose SourceType"),
-                message: nil,
-                primaryButton: .default(Text("Camera")) {
-                    homeviewModel.sourceType = .camera
-                    homeviewModel.isOpenImagePicker = true
-                },
-                secondaryButton: .default(Text("Library")) {
-                    homeviewModel.sourceType = .photoLibrary
-                    homeviewModel.isOpenImagePicker = true
-                }
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func topField() -> some View {
-        Text("API Fetched Pokemon: \(pokemonViewModel.pokemon?.name ?? "")")
-            .modifier(CustomLabel(foregroundColor: .black, size: 16))
-    }
-
-    @ViewBuilder
-    private func middleField() -> some View {
-        if let image = homeviewModel.selectedImage {
-            Image(uiImage: image)
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        } else {
-            Asset.Assets.imgDio.swiftUIImage
-                .resizable()
-                .modifier(CustomImage(width: 200, height: 200))
-        }
-    }
-
-    @ViewBuilder
-    private func bottomField() -> some View {
-        Button("Show PopupView") {
-            withAnimation {
-                homeviewModel.isFloatingViewVisible = true
-                FirebaseAnalytics.logEvent(.eventOne)
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.blue.swiftUIColor))
-
-        Button("Select an Image") {
-            withAnimation {
-                homeviewModel.isShowSourceTypeAlert = true
-                FirebaseAnalytics.logEvent(.eventTwo)
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.alertRed.swiftUIColor))
-
-        Button("Show HalfModalView") {
-            withAnimation {
-                homeviewModel.isShowHalfModalView = true
-                FirebaseAnalytics.logEvent(.eventThree)
-            }
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.black.swiftUIColor))
-
-        Button("API Request") {
-            let randomID = Int.random(in: 1 ... 10)
-            pokemonViewModel.fetchPokemon(id: randomID)
-            FirebaseAnalytics.logEvent(.eventFour("API Request"))
-        }
-        .modifier(CustomButton(foregroundColor: .white, backgroundColor: Asset.Colors.pink.swiftUIColor))
-    }
-
-    @ViewBuilder
-    private func backgroundField() -> some View {
-        LinearGradient(gradient: Gradient(colors: [Color.blue, Color.green]), startPoint: .top, endPoint: .bottom)
-            .edgesIgnoringSafeArea(.all)
-        if homeviewModel.isFloatingViewVisible {
-            FloatingView(dismissAction: {
-                withAnimation {
-                    homeviewModel.isFloatingViewVisible = false
-                }
-            })
-            .transition(.asymmetric(insertion: .opacity, removal: .opacity))
-            .zIndex(1)
+            .navigationTitle("Base Converter")
         }
     }
 }
